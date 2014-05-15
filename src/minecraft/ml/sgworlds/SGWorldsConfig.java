@@ -9,4 +9,5 @@ public class SGWorldsConfig extends Config {
 		super(cfg);
 	}
 
+	public @Prop int worldProviderId = 151398428; 
 }
