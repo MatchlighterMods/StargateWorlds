@@ -6,10 +6,10 @@ import net.minecraftforge.client.IRenderHandler;
 
 public class SGWorldSkyRenderer extends IRenderHandler {
 	
-	private final SGWorldController worldData;
+	private final SGWorldController worldController;
 	
 	public SGWorldSkyRenderer(SGWorldController wdata) {
-		worldData = wdata;
+		worldController = wdata;
 	}
 
 	@Override

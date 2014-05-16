@@ -8,6 +8,8 @@ import stargatetech2.api.stargate.IStargatePlacer;
 
 public class SGWorldsList implements IDynamicWorldLoader {
 
+	public static SGWorldsList instance;
+	
 	private Map<Address, SGWorldData> worlds;
 	
 	public boolean addressRegistered(Address address) {
@@ -16,6 +18,15 @@ public class SGWorldsList implements IDynamicWorldLoader {
 	
 	public SGWorldData getWorldData(Address address) {
 		return worlds.get(address);
+	}
+	
+	public Map<Address, SGWorldData> getSGWorlds() {
+		return worlds;
+	}
+	
+	public Address findAddressForDim(int dimId) {
+		// TODO
+		return null;
 	}
 	
 	public void save() {

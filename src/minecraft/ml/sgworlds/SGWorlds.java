@@ -11,7 +11,7 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerAboutToStartEvent;
+import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
@@ -60,8 +60,8 @@ public class SGWorlds {
 		}
 		
 		@EventHandler
-		public void serverStart(FMLServerAboutToStartEvent evt) {
-			
+		public void serverStart(FMLServerStartingEvent evt) {
+			// TODO Register Dimensions. Load WorldData.
 		}
 		
 		@EventHandler
