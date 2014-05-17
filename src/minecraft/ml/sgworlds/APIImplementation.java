@@ -4,6 +4,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import cpw.mods.fml.common.FMLLog;
 import ml.sgworlds.api.SGWorldsAPI;
 import ml.sgworlds.api.world.IWorldFeatureAPI;
+import ml.sgworlds.dimension.FeatureManager;
 
 public class APIImplementation extends SGWorldsAPI {
 
@@ -14,8 +15,7 @@ public class APIImplementation extends SGWorldsAPI {
 	
 	@Override
 	public IWorldFeatureAPI getWorldFeatureAPI() {
-		// TODO Auto-generated method stub
-		return null;
+		return FeatureManager.instance;
 	}
 
 	@Override

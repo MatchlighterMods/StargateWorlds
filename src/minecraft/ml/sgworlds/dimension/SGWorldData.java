@@ -1,6 +1,13 @@
 package ml.sgworlds.dimension;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import ml.sgworlds.api.world.IWorldFeatureProvider;
+import ml.sgworlds.api.world.IWorldFeatureProvider.IWorldFeature;
+import ml.sgworlds.api.world.WorldFeatureType;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
 import net.minecraftforge.common.DimensionManager;
@@ -18,11 +25,13 @@ public class SGWorldData extends WorldSavedData {
 	private String designation;
 	private Address primaryAddress;
 	private int dimensionId = 0;
+	private List<IWorldFeature> features;
 	
-	public SGWorldData(String designation, Address address) {
+	public SGWorldData(String designation, Address address, List<IWorldFeature> features) {
 		super(getUID(designation));
 		this.designation = designation;
 		this.primaryAddress = address;
+		this.features = features;
 	}
 
 	public String getDisplayName() {
@@ -33,12 +42,38 @@ public class SGWorldData extends WorldSavedData {
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 		// TODO Auto-generated method stub
 		
+		NBTTagList list = nbttagcompound.getTagList("features");
+		for (int i=0; i<list.tagCount(); i++) {
+			NBTTagCompound ftag = (NBTTagCompound)list.tagAt(i);
+			String id = ftag.getString("identifier");
+			IWorldFeatureProvider prov = FeatureManager.instance.getFeatureProvider(id);
+			if (prov != null) {
+				features.add(prov.loadFeatureFromNBT(ftag.getCompoundTag("data")));
+			} else {
+				//if (Registry.config.ignoreMissingFeature)
+				FMLLog.severe("Could not find the Feature Provider for \"%s\"", id);
+				//else
+				//	throw new RuntimeException(String.format("Could not find the Feature Provider for \"%s\".", id));
+			}
+		}
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
 		// TODO Auto-generated method stub
 		
+		NBTTagList list = new NBTTagList();
+		for (IWorldFeature ft : features) {
+			NBTTagCompound ftag = new NBTTagCompound();
+			ftag.setString("identifier", ft.getFeatureIdentifier());
+			
+			NBTTagCompound dataTag = new NBTTagCompound();
+			ft.writeNBTData(dataTag);
+			ftag.setCompoundTag("data", dataTag);
+			
+			list.appendTag(ftag);
+		}
+		nbttagcompound.setTag("features", list);
 	}
 	
 	public int getDimensionId() {
@@ -59,6 +94,16 @@ public class SGWorldData extends WorldSavedData {
 	
 	public String getUID() {
 		return getUID(designation);
+	}
+	
+	private List<IWorldFeature> getFeatures(WorldFeatureType type) {
+		List<IWorldFeature> fts = new ArrayList<IWorldFeatureProvider.IWorldFeature>();
+		for (IWorldFeature ft : features) {
+			if ((type.clazz != null && type.clazz.isAssignableFrom(ft.getClass())) || type == WorldFeatureType.ALL) {
+				fts.add(ft);
+			}
+		}
+		return fts;
 	}
 
 	public static String getUID(String designation) {
