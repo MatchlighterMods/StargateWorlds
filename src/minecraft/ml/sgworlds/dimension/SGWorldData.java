@@ -19,9 +19,10 @@ public class SGWorldData extends WorldSavedData {
 	private Address primaryAddress;
 	private int dimensionId = 0;
 	
-	public SGWorldData(String Designation, Address address) {
-		super(getUID(address));
-		// TODO Auto-generated constructor stub
+	public SGWorldData(String designation, Address address) {
+		super(getUID(designation));
+		this.designation = designation;
+		this.primaryAddress = address;
 	}
 
 	public String getDisplayName() {
@@ -39,19 +40,39 @@ public class SGWorldData extends WorldSavedData {
 		// TODO Auto-generated method stub
 		
 	}
-
-	public static String getUID(Address sga) {
-		return "sgworlddata_"+sga.toString().replace(" ", "");
+	
+	public int getDimensionId() {
+		return dimensionId;
 	}
 	
-	public static SGWorldData loadData(Address sga) {
+	public void setDimensionId(int dimensionId) {
+		if (this.dimensionId == 0) this.dimensionId = dimensionId;
+	}
+	
+	public Address getPrimaryAddress() {
+		return primaryAddress;
+	}
+	
+	public String getDesignation() {
+		return designation;
+	}
+	
+	public String getUID() {
+		return getUID(designation);
+	}
+
+	public static String getUID(String designation) {
+		return "sgworlddata_" + designation;
+	}
+	
+	public static SGWorldData loadData(String designation) {
 		World overWorld = DimensionManager.getWorld(0);
-		String ufn = getUID(sga);
+		String ufn = getUID(designation);
 		SGWorldData data = (SGWorldData)overWorld.loadItemData(SGWorldData.class, ufn);
 		
 		if (data == null) { //Somebody did something stupid.
-			FMLLog.severe("Could not load world data for SGWorlds world %s", sga.toString());
-			data = WorldGenerator.instance.generateRandomWorld();
+			FMLLog.severe("Could not load world data for SGWorlds world %s", designation);
+			data = WorldDataGenerator.instance.generateRandomWorld();
 			overWorld.setItemData(ufn, data);
 			data.markDirty();
 		}

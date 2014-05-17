@@ -1,6 +1,7 @@
 package ml.sgworlds;
 
 import ml.sgworlds.dimension.SGWorldProvider;
+import ml.sgworlds.dimension.SGWorldManager;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.DimensionManager;
@@ -61,11 +62,15 @@ public class SGWorlds {
 		
 		@EventHandler
 		public void serverStart(FMLServerStartingEvent evt) {
-			// TODO Register Dimensions. Load WorldData.
+			SGWorldManager.loadData();
+			SGWorldManager.instance.registerDimensions();
 		}
 		
 		@EventHandler
 		public void serverStopping(FMLServerStoppingEvent evt) {
-			
+			if (SGWorldManager.instance != null) {
+				SGWorldManager.instance.unregisterDimensions();
+			}
+			SGWorldManager.instance = null;
 		}
 }

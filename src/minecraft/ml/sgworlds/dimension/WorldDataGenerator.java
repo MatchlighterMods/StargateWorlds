@@ -2,16 +2,19 @@ package ml.sgworlds.dimension;
 
 import java.util.Random;
 
+import stargatetech2.transport.stargates.LoreAddresses;
+
 /**
  * Helper class for generating {@link SGWorldData}
  * @author Matchlighter
  */
-public class WorldGenerator {
+public class WorldDataGenerator {
 	
-	public static WorldGenerator instance;
+	public static WorldDataGenerator instance;
 	
 	public SGWorldData generateRandomWorld() {
 		// TODO Remember to pass it to World.setItemData() (But not here)
+		return new SGWorldData(getRandomDesignation(), LoreAddresses.ABYDOS);
 	}
 
 	public static String getRandomDesignation() {
@@ -27,7 +30,7 @@ public class WorldGenerator {
 			sb.append(random.nextInt(9)+1);
 			sb.append(random.nextInt(9)+1);
 			designation = sb.toString();
-		} while (designation == null); // TODO Add check against existing worlds
+		} while (designation == null || SGWorldManager.instance.getWorldData(designation) != null);
 		return designation;
 	}
 }

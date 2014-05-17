@@ -1,26 +1,29 @@
 package ml.sgworlds.dimension;
 
 import net.minecraft.world.World;
-import stargatetech2.api.stargate.Address;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class SGWorldController {
 
-	private Address sgAddress;
+	private World worldObj;
 	private SGWorldData worldData;
 	
 	@SideOnly(Side.CLIENT)
 	private SGWorldSkyRenderer skyRenderer;
 	
 	public SGWorldController(World world) {
-		sgAddress = SGWorldsList.instance.findAddressForDim(world.provider.dimensionId);
-		worldData = SGWorldsList.instance.getWorldData(sgAddress);
+		this.worldObj = world;
+		this.worldData = SGWorldManager.instance.getWorldData(world.provider.dimensionId);
 		// TODO Auto-generated constructor stub
 	}
 	
 	public String getName() {
 		return worldData.getDisplayName();
+	}
+	
+	public SGWorldData getWorldData() {
+		return worldData;
 	}
 	
 

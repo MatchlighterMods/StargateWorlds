@@ -13,7 +13,7 @@ public class SGWorldProvider extends WorldProvider {
 	
 	@Override
 	protected void registerWorldChunkManager() {
-		
+		worldController = new SGWorldController(worldObj);
 		super.registerWorldChunkManager();
 	}
 	
