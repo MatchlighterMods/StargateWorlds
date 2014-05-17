@@ -3,6 +3,9 @@ package ml.sgworlds.dimension;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
+
 import ml.sgworlds.api.world.IWorldFeatureProvider;
 import ml.sgworlds.api.world.IWorldFeatureProvider.IWorldFeature;
 import ml.sgworlds.api.world.WorldFeatureType;
@@ -25,30 +28,39 @@ public class SGWorldData extends WorldSavedData {
 	private String designation;
 	private Address primaryAddress;
 	private int dimensionId = 0;
-	private List<IWorldFeature> features;
+	private Multimap<WorldFeatureType, IWorldFeature> features;
 	
-	public SGWorldData(String designation, Address address, List<IWorldFeature> features) {
+	public SGWorldData(String designation, Address address, Multimap<WorldFeatureType, IWorldFeature> features) {
 		super(getUID(designation));
 		this.designation = designation;
 		this.primaryAddress = address;
 		this.features = features;
 	}
+	
+	/** Constructor used when Loading from NBT */
+	public SGWorldData(String uid) {
+		super(uid);
+		features = HashMultimap.create();
+	}
 
 	public String getDisplayName() {
-		return name != null ? name : designation;
+		return (name == null || name.equals("")) ? designation : name;
 	}
 	
 	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		// TODO Auto-generated method stub
+	public void readFromNBT(NBTTagCompound nbt) {
+		this.designation = nbt.getString("designation");
+		this.name = nbt.getString("name");
+		// TODO Load Address
+		this.dimensionId = nbt.getInteger("dim");
 		
-		NBTTagList list = nbttagcompound.getTagList("features");
+		NBTTagList list = nbt.getTagList("features");
 		for (int i=0; i<list.tagCount(); i++) {
 			NBTTagCompound ftag = (NBTTagCompound)list.tagAt(i);
 			String id = ftag.getString("identifier");
 			IWorldFeatureProvider prov = FeatureManager.instance.getFeatureProvider(id);
 			if (prov != null) {
-				features.add(prov.loadFeatureFromNBT(ftag.getCompoundTag("data")));
+				features.put(prov.getFeatureType(), prov.loadFeatureFromNBT(ftag.getCompoundTag("data")));
 			} else {
 				//if (Registry.config.ignoreMissingFeature)
 				FMLLog.severe("Could not find the Feature Provider for \"%s\"", id);
@@ -59,11 +71,14 @@ public class SGWorldData extends WorldSavedData {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		// TODO Auto-generated method stub
+	public void writeToNBT(NBTTagCompound nbt) {
+		nbt.setString("designation", designation);
+		nbt.setString("name", name);
+		// TODO Save Address
+		nbt.setInteger("dim", dimensionId);
 		
 		NBTTagList list = new NBTTagList();
-		for (IWorldFeature ft : features) {
+		for (IWorldFeature ft : features.values()) {
 			NBTTagCompound ftag = new NBTTagCompound();
 			ftag.setString("identifier", ft.getFeatureIdentifier());
 			
@@ -73,7 +88,7 @@ public class SGWorldData extends WorldSavedData {
 			
 			list.appendTag(ftag);
 		}
-		nbttagcompound.setTag("features", list);
+		nbt.setTag("features", list);
 	}
 	
 	public int getDimensionId() {
@@ -92,20 +107,18 @@ public class SGWorldData extends WorldSavedData {
 		return designation;
 	}
 	
+	/**
+	 * Should never return null
+	 */
+	public List<IWorldFeature> getFeatures(WorldFeatureType type) {
+		if (type == WorldFeatureType.ALL) return new ArrayList<IWorldFeatureProvider.IWorldFeature>(features.values());
+		return new ArrayList<IWorldFeatureProvider.IWorldFeature>(features.get(type));
+	}
+
 	public String getUID() {
 		return getUID(designation);
 	}
 	
-	private List<IWorldFeature> getFeatures(WorldFeatureType type) {
-		List<IWorldFeature> fts = new ArrayList<IWorldFeatureProvider.IWorldFeature>();
-		for (IWorldFeature ft : features) {
-			if ((type.clazz != null && type.clazz.isAssignableFrom(ft.getClass())) || type == WorldFeatureType.ALL) {
-				fts.add(ft);
-			}
-		}
-		return fts;
-	}
-
 	public static String getUID(String designation) {
 		return "sgworlddata_" + designation;
 	}

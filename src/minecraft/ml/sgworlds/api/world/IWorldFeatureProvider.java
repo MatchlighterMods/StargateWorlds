@@ -30,6 +30,8 @@ public interface IWorldFeatureProvider {
 	 */
 	public int getWeight();
 	
+	public WorldFeatureType getFeatureType();
+	
 	public static interface IWorldFeature {
 		
 		/**

@@ -5,6 +5,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
+
 import ml.sgworlds.api.world.IWorldFeatureProvider;
 import ml.sgworlds.api.world.IWorldFeatureProvider.IWorldFeature;
 import ml.sgworlds.api.world.WorldFeatureType;
@@ -29,7 +32,7 @@ public class WorldDataGenerator {
 	
 	public SGWorldData generateRandomWorld() {
 		Random rand = new Random();
-		List<IWorldFeature> features = new ArrayList<IWorldFeatureProvider.IWorldFeature>();
+		Multimap<WorldFeatureType, IWorldFeature> features = HashMultimap.create();
 		
 		for (WorldFeatureType type : WorldFeatureType.values()) {
 			if (type == WorldFeatureType.ALL) continue;
@@ -42,7 +45,7 @@ public class WorldDataGenerator {
 				IWorldFeature feature = provider.generateRandomFeature();
 				
 				if (type.clazz != null && type.clazz.isAssignableFrom(feature.getClass())) {
-					features.add(feature);
+					features.put(type, feature);
 				} else {
 					throw new RuntimeException(String.format("The class \"%s\" tried to provide \"%s\" as the wrong Feature Type (%s)",
 							provider.getClass().getName(), feature.getClass().getName(), type.name()));
