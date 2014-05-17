@@ -20,7 +20,7 @@ import stargatetech2.api.stargate.IStargatePlacer;
 public class SGWorldManager extends WorldSavedData implements IDynamicWorldLoader {
 	public static final String FILE_NAME = "SGWorldsData";
 
-	public SGWorldManager() {
+	private SGWorldManager() {
 		super(FILE_NAME);
 	}
 

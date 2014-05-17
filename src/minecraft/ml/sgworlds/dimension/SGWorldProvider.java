@@ -73,4 +73,10 @@ public class SGWorldProvider extends WorldProvider {
 		// TODO Auto-generated method stub
 		return super.getRespawnDimension(player);
 	}
+	
+	@Override
+	public float calculateCelestialAngle(long par1, float par3) {
+		// TODO Auto-generated method stub
+		return super.calculateCelestialAngle(par1, par3);
+	}
 }

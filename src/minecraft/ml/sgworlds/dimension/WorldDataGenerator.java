@@ -12,8 +12,7 @@ public class WorldDataGenerator {
 	
 	public static WorldDataGenerator instance;
 	
-	public SGWorldData generateRandomWorld() {
-		// TODO Remember to pass it to World.setItemData() (But not here)
+	public SGWorldData generateRandomWorld() { // TODO
 		return new SGWorldData(getRandomDesignation(), LoreAddresses.ABYDOS);
 	}
 
