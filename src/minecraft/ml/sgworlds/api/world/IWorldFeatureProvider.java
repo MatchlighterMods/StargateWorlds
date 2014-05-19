@@ -1,5 +1,7 @@
 package ml.sgworlds.api.world;
 
+import java.util.Collection;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.WeightedRandom;
 
@@ -14,6 +16,11 @@ public interface IWorldFeatureProvider {
 	 * @return Whether this provider can crate a {@link IWorldFeature} for the identifier.
 	 */
 	public boolean willProvideFeatureFor(String identifier);
+	
+	/**
+	 * Determine if this feature is compatible with all already generated. Only features of the {@link WorldFeatureType} are passed.
+	 */
+	public boolean compatibleWith(Collection<IWorldFeature> existingFeatures);
 	
 	/**
 	 * Generate a random instance of this feature.

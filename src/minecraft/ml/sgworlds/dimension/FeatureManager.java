@@ -17,16 +17,16 @@ public class FeatureManager implements IWorldFeatureAPI {
 	private Multimap<WorldFeatureType, IWorldFeatureProvider> featureProviders = HashMultimap.create();
 
 	@Override
-	public boolean registerFeatureProvider(WorldFeatureType type, IWorldFeatureProvider provider) {
+	public boolean registerFeatureProvider(IWorldFeatureProvider provider) {
 		if (featureProviders.containsValue(provider)) return false;
-		featureProviders.put(type, provider);
+		featureProviders.put(provider.getFeatureType(), provider);
 		return true;
 	}
 	
 	@Override
-	public boolean unregisterFeatureProvider(WorldFeatureType type, IWorldFeatureProvider provider) {
+	public boolean unregisterFeatureProvider(IWorldFeatureProvider provider) {
 		if (!featureProviders.containsValue(provider)) return false;
-		featureProviders.remove(type, provider);
+		featureProviders.remove(provider.getFeatureType(), provider);
 		return true;
 	}
 	
