@@ -1,5 +1,7 @@
 package ml.sgworlds.api.world.feature;
 
-public interface ISkyFeature {
+import ml.sgworlds.api.world.IWorldFeatureProvider.IWorldFeature;
+
+public interface ISkyFeature extends IWorldFeature {
 
 }

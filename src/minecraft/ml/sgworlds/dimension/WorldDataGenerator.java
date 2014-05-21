@@ -8,6 +8,11 @@ import ml.sgworlds.api.world.IWorldFeatureProvider.IWorldFeature;
 import ml.sgworlds.api.world.WorldFeatureType;
 import net.minecraft.util.WeightedRandom;
 import net.minecraft.util.WeightedRandomItem;
+import scala.actors.threadpool.Arrays;
+import stargatetech2.api.StargateTechAPI;
+import stargatetech2.api.stargate.Address;
+import stargatetech2.api.stargate.IStargateNetwork;
+import stargatetech2.api.stargate.Symbol;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
@@ -60,7 +65,33 @@ public class WorldDataGenerator {
 				cnt--;
 			}
 		}
-		return new SGWorldData(getRandomDesignation(), null, features); // TODO Random Address
+		
+		return new SGWorldData(getRandomDesignation(), generateAddress(true), features);
+	}
+	
+	public Address generateAddress(boolean reserveIt) {
+		Random random = new Random();
+		Symbol[] symbols;
+		Address address;
+		IStargateNetwork sgn = StargateTechAPI.api().getStargateNetwork();
+		
+		do{
+			boolean used[] = new boolean[40];
+			used[0] = true;
+			symbols = new Symbol[8];
+			for(int i = 0; i < symbols.length; i++){
+				int s;
+				do{
+					s = random.nextInt(39) + 1;
+				}while(used[s]);
+				symbols[i] = Symbol.values()[s];
+				used[s] = true;
+			}
+			address = Address.create(symbols);
+		} while(address == null
+				|| sgn.addressExists(address)
+				|| (reserveIt && !sgn.reserveDimensionPrefix(SGWorldManager.instance, (Symbol[])Arrays.copyOfRange(symbols, 0, 3))));
+		return address;
 	}
 
 	public String getRandomDesignation() {

@@ -31,7 +31,7 @@ public enum WorldFeatureType {
 	SUNSET_COLOR(1, IColorProvider.class),
 	
 	/**
-	 * Registering a {@link IWorldFeatureProvider} as {@link WorldFeatureType#ALL} will have no effect.
+	 * Registering a {@link IWorldFeatureProvider} as {@link WorldFeatureType#ALL} will throw an IllegalArgumentException.
 	 */
 	ALL(0, null);
 

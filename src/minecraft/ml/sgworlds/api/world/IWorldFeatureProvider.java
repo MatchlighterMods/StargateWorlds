@@ -2,8 +2,13 @@ package ml.sgworlds.api.world;
 
 import java.util.Collection;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.WeightedRandom;
+import net.minecraft.world.World;
 
 
 /**
@@ -33,7 +38,7 @@ public interface IWorldFeatureProvider {
 	public IWorldFeature loadFeatureFromNBT(NBTTagCompound featureTag);
 	
 	/**
-	 * Gets the amount of weight this feature will carry in the {@link WeightedRandom} during random generation of worlds.
+	 * Gets the amount of weight this feature will carry in the {@link WeightedRandom} during random generation of worlds. Average is 100.
 	 */
 	public int getWeight();
 	
@@ -51,5 +56,10 @@ public interface IWorldFeatureProvider {
 		 */
 		public void writeNBTData(NBTTagCompound tag);
 		
+	}
+	
+	public static interface IWorldFeatureRender extends IWorldFeature {
+		@SideOnly(Side.CLIENT)
+		public void render(float partialTicks, World world, Minecraft mc);
 	}
 }

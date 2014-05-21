@@ -12,22 +12,27 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
-
+import stargatetech2.api.StargateTechAPI;
 import stargatetech2.api.stargate.Address;
 import stargatetech2.api.stargate.IDynamicWorldLoader;
 import stargatetech2.api.stargate.IStargatePlacer;
+import stargatetech2.api.stargate.Symbol;
 
 public class SGWorldManager extends WorldSavedData implements IDynamicWorldLoader {
 	public static final String FILE_NAME = "SGWorldsData";
 
+	public static SGWorldManager instance;
+	private Map<Address, SGWorldData> worlds = new HashMap<Address, SGWorldData>();
+	
 	private SGWorldManager() {
 		super(FILE_NAME);
 	}
+	
+	/** Constructor used when Loading from NBT */
+	public SGWorldManager(String uid) {
+		super(uid);
+	}
 
-	public static SGWorldManager instance;
-	
-	private Map<Address, SGWorldData> worlds = new HashMap<Address, SGWorldData>();
-	
 	public boolean addressRegistered(Address address) {
 		return (worlds.containsKey(address));
 	}
@@ -58,8 +63,15 @@ public class SGWorldManager extends WorldSavedData implements IDynamicWorldLoade
 		return worlds.values();
 	}
 
-	public void registerWorld(SGWorldData worldData) {
+	public void registerSGWorld(SGWorldData worldData) {
 		worlds.put(worldData.getPrimaryAddress(), worldData);
+		
+		Address addr = worldData.getPrimaryAddress();
+		Symbol[] pfx = new Symbol[3];
+		for (int i=0; i<3; i++) {
+			pfx[i] = addr.getSymbol(i);
+		}
+		StargateTechAPI.api().getStargateNetwork().reserveDimensionPrefix(this, pfx);
 	}
 	
 	public void registerDimensions() {
@@ -111,7 +123,9 @@ public class SGWorldManager extends WorldSavedData implements IDynamicWorldLoade
 	public static void loadData() {
 		World overWorld = DimensionManager.getWorld(0);
 		instance = (SGWorldManager)overWorld.loadItemData(SGWorldManager.class, FILE_NAME);
-		if (instance == null) {
+		if (instance != null) {
+			// TODO Load WorldDatas
+		} else {
 			instance = new SGWorldManager();
 			overWorld.setItemData(FILE_NAME, instance);
 			instance.markDirty();
@@ -119,7 +133,7 @@ public class SGWorldManager extends WorldSavedData implements IDynamicWorldLoade
 				SGWorldData ndata = WorldDataGenerator.instance.generateRandomWorld();
 				overWorld.setItemData(ndata.getUID(), ndata);
 				ndata.markDirty();
-				instance.registerWorld(ndata);
+				instance.registerSGWorld(ndata);
 			}
 		}
 	}

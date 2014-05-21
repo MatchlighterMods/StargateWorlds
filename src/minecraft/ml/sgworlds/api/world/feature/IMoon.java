@@ -1,5 +1,7 @@
 package ml.sgworlds.api.world.feature;
 
-public interface IMoon {
+import ml.sgworlds.api.world.IWorldFeatureProvider.IWorldFeature;
+
+public interface IMoon extends IWorldFeature {
 
 }

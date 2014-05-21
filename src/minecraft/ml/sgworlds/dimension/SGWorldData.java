@@ -14,6 +14,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
 import net.minecraftforge.common.DimensionManager;
+import stargatetech2.api.StargateTechAPI;
 import stargatetech2.api.stargate.Address;
 import cpw.mods.fml.common.FMLLog;
 
@@ -51,7 +52,7 @@ public class SGWorldData extends WorldSavedData {
 	public void readFromNBT(NBTTagCompound nbt) {
 		this.designation = nbt.getString("designation");
 		this.name = nbt.getString("name");
-		// TODO Load Address
+		this.primaryAddress = StargateTechAPI.api().getStargateNetwork().parseAddress(nbt.getString("address"));
 		this.dimensionId = nbt.getInteger("dim");
 		
 		NBTTagList list = nbt.getTagList("features");
@@ -68,13 +69,15 @@ public class SGWorldData extends WorldSavedData {
 				//	throw new RuntimeException(String.format("Could not find the Feature Provider for \"%s\".", id));
 			}
 		}
+		
+		SGWorldManager.instance.registerSGWorld(this);
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
 		nbt.setString("designation", designation);
 		nbt.setString("name", name);
-		// TODO Save Address
+		nbt.setString("address", primaryAddress.toString());
 		nbt.setInteger("dim", dimensionId);
 		
 		NBTTagList list = new NBTTagList();

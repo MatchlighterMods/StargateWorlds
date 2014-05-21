@@ -18,6 +18,7 @@ public class FeatureManager implements IWorldFeatureAPI {
 
 	@Override
 	public boolean registerFeatureProvider(IWorldFeatureProvider provider) {
+		if (provider.getFeatureType() == WorldFeatureType.ALL) throw new IllegalArgumentException("(\""+ provider.getClass().getName() +"\").getFeatureType() cannot be ALL.");
 		if (featureProviders.containsValue(provider)) return false;
 		featureProviders.put(provider.getFeatureType(), provider);
 		return true;

@@ -1,5 +1,7 @@
 package ml.sgworlds.api.world.feature;
 
-public interface ILightingController {
+import ml.sgworlds.api.world.IWorldFeatureProvider.IWorldFeature;
+
+public interface ILightingController extends IWorldFeature {
 
 }

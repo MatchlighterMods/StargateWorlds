@@ -1,5 +1,8 @@
 package ml.sgworlds.dimension;
 
+import ml.sgworlds.api.world.IWorldFeatureProvider.IWorldFeature;
+import ml.sgworlds.api.world.WorldFeatureType;
+import ml.sgworlds.api.world.feature.ISun;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.WorldProvider;
@@ -74,9 +77,21 @@ public class SGWorldProvider extends WorldProvider {
 		return super.getRespawnDimension(player);
 	}
 	
+	
+	// Celestial angle of 0 or 1 = Noon
 	@Override
 	public float calculateCelestialAngle(long par1, float par3) {
-		// TODO Auto-generated method stub
-		return super.calculateCelestialAngle(par1, par3);
+		float min=0.5F, max=0.5F;
+		for (IWorldFeature feat : worldController.getWorldData().getFeatures(WorldFeatureType.SUN)) {
+			ISun sun = (ISun)feat;
+			float s = sun.calculateCelestialAngle(par1, par3);
+			if (s<0.0F) s++;
+			if (s>1.0F) s--;
+			if (s>max) max = s;
+			else if (s<min) min=s;
+		}
+		
+		if (1.0F - max < min) return max;
+		return min;
 	}
 }

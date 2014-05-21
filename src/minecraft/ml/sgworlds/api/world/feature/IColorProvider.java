@@ -1,5 +1,7 @@
 package ml.sgworlds.api.world.feature;
 
-public interface IColorProvider {
+import ml.sgworlds.api.world.IWorldFeatureProvider.IWorldFeature;
+
+public interface IColorProvider extends IWorldFeature {
 
 }
