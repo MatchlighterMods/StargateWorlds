@@ -1,10 +1,11 @@
 package ml.sgworlds.dimension;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import ml.sgworlds.api.world.IWorldFeatureProvider;
-import ml.sgworlds.api.world.IWorldFeatureProvider.IWorldFeature;
+import ml.sgworlds.api.world.WorldFeatureProvider;
+import ml.sgworlds.api.world.WorldFeatureProvider.IWorldFeature;
 import ml.sgworlds.api.world.WorldFeatureType;
 import net.minecraft.util.WeightedRandom;
 import net.minecraft.util.WeightedRandomItem;
@@ -25,51 +26,83 @@ import com.google.common.collect.Multimap;
  */
 public class WorldDataGenerator {
 	
-	public static WorldDataGenerator instance;
+	private String designation;
+	private Address address;
+	private Multimap<WorldFeatureType, IWorldFeature> features = HashMultimap.create();
 	
-	private BiMap<IWorldFeatureProvider, WeightedRandomFeature> mapFeatureWeights(List<IWorldFeatureProvider> providers) {
-		BiMap<IWorldFeatureProvider, WeightedRandomFeature> map = HashBiMap.create();
-		for (IWorldFeatureProvider provider : providers) {
+	public WorldDataGenerator() {
+		this(getRandomDesignation(), generateAddress(true));
+	}
+	
+	public WorldDataGenerator(String designation, Address addr) {
+		this.designation = designation;
+		this.address = addr;
+	}
+	
+	private BiMap<WorldFeatureProvider, WeightedRandomFeature> mapFeatureWeights(List<WorldFeatureProvider> providers) {
+		BiMap<WorldFeatureProvider, WeightedRandomFeature> map = HashBiMap.create();
+		for (WorldFeatureProvider provider : providers) {
 			map.put(provider, new WeightedRandomFeature(provider.getWeight(), provider));
 		}
 		return map;
 	}
 	
+	public boolean checkCompatible(WorldFeatureProvider provider) {
+		for (IWorldFeature ofeature : features.values()) {
+			WorldFeatureProvider oProvider = ofeature.getProvider();
+			if (!provider.compatibleWith(oProvider) || !oProvider.compatibleWith(provider)) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
 	public SGWorldData generateRandomWorld() {
 		Random rand = new Random();
-		Multimap<WorldFeatureType, IWorldFeature> features = HashMultimap.create();
 		
 		for (WorldFeatureType type : WorldFeatureType.values()) {
 			if (type == WorldFeatureType.ALL) continue;
 			
-			BiMap<IWorldFeatureProvider, WeightedRandomFeature> featureProviders = mapFeatureWeights(FeatureManager.instance.getFeatureProviders(type));
+			BiMap<WorldFeatureProvider, WeightedRandomFeature> featureProviders = mapFeatureWeights(FeatureManager.instance.getFeatureProviders(type));
 			
 			int cnt = type.getRandomCount(rand, featureProviders.size());
+			
 			while (cnt > 0 && featureProviders.size() > 0) {
-				IWorldFeatureProvider provider = ((WeightedRandomFeature)WeightedRandom.getRandomItem(rand, featureProviders.values())).provider;
+				WorldFeatureProvider provider = ((WeightedRandomFeature)WeightedRandom.getRandomItem(rand, featureProviders.values())).provider;
 				
-				if (!provider.compatibleWith(features.get(type))) {
+				if (!checkCompatible(provider)) {
 					featureProviders.remove(provider);
 					continue;
 				}
 				
-				IWorldFeature feature = provider.generateRandomFeature();
+				IWorldFeature feature = provider.generateRandomFeature(rand);
 				
-				if (type.clazz != null && type.clazz.isAssignableFrom(feature.getClass())) {
+				if (type.clazz == null || type.clazz.isAssignableFrom(feature.getClass())) {
 					features.put(type, feature);
+
+					List<WorldFeatureType> secondaryTypes = new ArrayList<WorldFeatureType>();
+					feature.getSecondaryTypes(secondaryTypes);
+					for (WorldFeatureType stype : secondaryTypes) {
+						if (stype == type) continue;
+						if (stype.isSingleton()) {
+							throw new IllegalArgumentException(String.format("The class \"%s\" tried to register \"%s\" (a singleton feature type) as a secondary feature type.",
+									feature.getClass().getName(), stype.name()));
+						}
+						features.put(stype, feature);
+					}
 				} else {
-					throw new RuntimeException(String.format("The class \"%s\" tried to provide \"%s\" as the wrong Feature Type (%s)",
-							provider.getClass().getName(), feature.getClass().getName(), type.name()));
+					throw new IllegalArgumentException(String.format("The class \"%s\" tried to provide \"%s\" as the wrong feature type (%s)",
+						provider.getClass().getName(), feature.getClass().getName(), type.name()));
 				}
 				
 				cnt--;
 			}
 		}
 		
-		return new SGWorldData(getRandomDesignation(), generateAddress(true), features);
+		return new SGWorldData(designation, address, features);
 	}
 	
-	public Address generateAddress(boolean reserveIt) {
+	public static Address generateAddress(boolean reserveIt) {
 		Random random = new Random();
 		Symbol[] symbols;
 		Address address;
@@ -94,7 +127,7 @@ public class WorldDataGenerator {
 		return address;
 	}
 
-	public String getRandomDesignation() {
+	public static String getRandomDesignation() {
 		String designation;
 		do {
 			Random random = new Random();
@@ -111,9 +144,18 @@ public class WorldDataGenerator {
 		return designation;
 	}
 	
+	public static List<SGWorldData> generateRandomWorlds(int count) {
+		List<SGWorldData> worlds = new ArrayList<SGWorldData>();
+		for (int i=0; i < count; i++) {
+			WorldDataGenerator generator = new WorldDataGenerator();
+			worlds.add(generator.generateRandomWorld());
+		}
+		return worlds;
+	}
+	
 	private class WeightedRandomFeature extends WeightedRandomItem {
-		public final IWorldFeatureProvider provider;
-		public WeightedRandomFeature(int par1, IWorldFeatureProvider provider) {
+		public final WorldFeatureProvider provider;
+		public WeightedRandomFeature(int par1, WorldFeatureProvider provider) {
 			super(par1);
 			this.provider = provider;
 		}

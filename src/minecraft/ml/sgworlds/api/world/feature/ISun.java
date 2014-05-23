@@ -1,6 +1,6 @@
 package ml.sgworlds.api.world.feature;
 
-import ml.sgworlds.api.world.IWorldFeatureProvider.IWorldFeatureRender;
+import ml.sgworlds.api.world.WorldFeatureProvider.IWorldFeatureRender;
 
 public interface ISun extends IWorldFeatureRender {
 

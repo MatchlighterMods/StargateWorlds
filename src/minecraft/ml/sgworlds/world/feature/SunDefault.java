@@ -1,33 +1,29 @@
 package ml.sgworlds.world.feature;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.Random;
 
-import org.lwjgl.opengl.GL11;
-
+import ml.sgworlds.api.world.IWorldData;
+import ml.sgworlds.api.world.WorldFeatureProvider;
+import ml.sgworlds.api.world.WorldFeatureType;
+import ml.sgworlds.api.world.feature.ISun;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import ml.sgworlds.api.world.IWorldFeatureProvider;
-import ml.sgworlds.api.world.WorldFeatureType;
-import ml.sgworlds.api.world.feature.ISun;
 
-public class SunDefault implements IWorldFeatureProvider {
+import org.lwjgl.opengl.GL11;
 
-	private static final String FEATURE_ID = "";
+public class SunDefault extends WorldFeatureProvider {
 
-	@Override
-	public boolean willProvideFeatureFor(String identifier) {
-		return identifier == FEATURE_ID;
+	public SunDefault() {
+		super("NormalSun", WorldFeatureType.SUN);
+		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	public boolean compatibleWith(Collection<IWorldFeature> existingFeatures) {
-		return true;
-	}
-
-	@Override
-	public IWorldFeature generateRandomFeature() {
+	public IWorldFeature generateRandomFeature(Random rand) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -38,17 +34,7 @@ public class SunDefault implements IWorldFeatureProvider {
 		return null;
 	}
 
-	@Override
-	public int getWeight() {
-		return 100;
-	}
-
-	@Override
-	public WorldFeatureType getFeatureType() {
-		return WorldFeatureType.SUN;
-	}
-
-	private class Feature implements ISun {
+	private class Feature extends WorldFeature implements ISun {
 
 		private long orbitPeriod;
 		private float yawAngle;
@@ -77,11 +63,6 @@ public class SunDefault implements IWorldFeatureProvider {
 			tess.addVertexWithUV((double)(-size), 100.0D, (double)size, 0.0D, 1.0D);
 			tess.draw();
 
-		}
-
-		@Override
-		public String getFeatureIdentifier() {
-			return FEATURE_ID;
 		}
 
 		@Override

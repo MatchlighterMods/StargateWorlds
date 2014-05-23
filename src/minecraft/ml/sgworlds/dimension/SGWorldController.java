@@ -1,16 +1,11 @@
 package ml.sgworlds.dimension;
 
 import net.minecraft.world.World;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class SGWorldController {
 
 	private World worldObj;
 	private SGWorldData worldData;
-	
-	@SideOnly(Side.CLIENT)
-	private SGWorldSkyRenderer skyRenderer;
 	
 	public SGWorldController(World world) {
 		this.worldObj = world;

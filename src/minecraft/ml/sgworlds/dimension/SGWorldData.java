@@ -1,21 +1,26 @@
 package ml.sgworlds.dimension;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
-
-import ml.sgworlds.api.world.IWorldFeatureProvider;
-import ml.sgworlds.api.world.IWorldFeatureProvider.IWorldFeature;
+import ml.sgworlds.api.world.IWorldData;
+import ml.sgworlds.api.world.WorldFeatureProvider;
+import ml.sgworlds.api.world.WorldFeatureProvider.IWorldFeature;
 import ml.sgworlds.api.world.WorldFeatureType;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldProvider;
 import net.minecraft.world.WorldSavedData;
 import net.minecraftforge.common.DimensionManager;
 import stargatetech2.api.StargateTechAPI;
 import stargatetech2.api.stargate.Address;
+
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
+
 import cpw.mods.fml.common.FMLLog;
 
 /**
@@ -23,19 +28,25 @@ import cpw.mods.fml.common.FMLLog;
  * Pre-generated when a world is started.
  * @author Matchlighter
  */
-public class SGWorldData extends WorldSavedData {
+public class SGWorldData extends WorldSavedData implements IWorldData {
 
 	private String name = null;
 	private String designation;
 	private Address primaryAddress;
 	private int dimensionId = 0;
+	private long seed;
 	private Multimap<WorldFeatureType, IWorldFeature> features;
+	private SGWorldProvider worldProvider;
 	
 	public SGWorldData(String designation, Address address, Multimap<WorldFeatureType, IWorldFeature> features) {
 		super(getUID(designation));
 		this.designation = designation;
 		this.primaryAddress = address;
 		this.features = features;
+		
+		for (IWorldFeature feat : new HashSet<IWorldFeature>(this.features.values())) {
+			feat.setWorldData(this);
+		}
 	}
 	
 	/** Constructor used when Loading from NBT */
@@ -59,9 +70,18 @@ public class SGWorldData extends WorldSavedData {
 		for (int i=0; i<list.tagCount(); i++) {
 			NBTTagCompound ftag = (NBTTagCompound)list.tagAt(i);
 			String id = ftag.getString("identifier");
-			IWorldFeatureProvider prov = FeatureManager.instance.getFeatureProvider(id);
+			
+			WorldFeatureProvider prov = FeatureManager.instance.getFeatureProvider(id);
 			if (prov != null) {
-				features.put(prov.getFeatureType(), prov.loadFeatureFromNBT(ftag.getCompoundTag("data")));
+				IWorldFeature feature = prov.loadFeatureFromNBT(ftag.getCompoundTag("data"));
+				features.put(prov.type, feature);
+				
+				List<WorldFeatureType> secondaryTypes = new ArrayList<WorldFeatureType>();
+				feature.getSecondaryTypes(secondaryTypes);
+				for (WorldFeatureType stype : secondaryTypes) {
+					if (stype == prov.type) continue;
+					features.put(stype, feature);
+				}
 			} else {
 				//if (Registry.config.ignoreMissingFeature)
 				FMLLog.severe("Could not find the Feature Provider for \"%s\"", id);
@@ -81,9 +101,10 @@ public class SGWorldData extends WorldSavedData {
 		nbt.setInteger("dim", dimensionId);
 		
 		NBTTagList list = new NBTTagList();
-		for (IWorldFeature ft : features.values()) {
+		Set<IWorldFeature> featureSet = new HashSet<WorldFeatureProvider.IWorldFeature>(features.values());
+		for (IWorldFeature ft : featureSet) {
 			NBTTagCompound ftag = new NBTTagCompound();
-			ftag.setString("identifier", ft.getFeatureIdentifier());
+			ftag.setString("identifier", ft.getProvider().identifier);
 			
 			NBTTagCompound dataTag = new NBTTagCompound();
 			ft.writeNBTData(dataTag);
@@ -110,12 +131,33 @@ public class SGWorldData extends WorldSavedData {
 		return designation;
 	}
 	
+	public long getWorldSeed() {
+		return seed;
+	}
+	
+	@Override
+	public WorldProvider getWorldProvider() {
+		return worldProvider;
+	}
+	
+	public void setWorldProvider(SGWorldProvider pvdr) {
+		this.worldProvider = pvdr;
+	}
+	
+	/**
+	 * Returns the first found feature of the specified type. Mainly for use when there is only one of that type.
+	 */
+	public IWorldFeature getFeature(WorldFeatureType type) {
+		List<IWorldFeature> tfeats = getFeatures(type);
+		return tfeats.size() > 0 ? tfeats.get(0) : null;
+	}
+	
 	/**
 	 * Should never return null
 	 */
 	public List<IWorldFeature> getFeatures(WorldFeatureType type) {
-		if (type == WorldFeatureType.ALL) return new ArrayList<IWorldFeatureProvider.IWorldFeature>(features.values());
-		return new ArrayList<IWorldFeatureProvider.IWorldFeature>(features.get(type));
+		if (type == WorldFeatureType.ALL) return new ArrayList<WorldFeatureProvider.IWorldFeature>(features.values());
+		return new ArrayList<WorldFeatureProvider.IWorldFeature>(features.get(type));
 	}
 
 	public String getUID() {
@@ -133,7 +175,7 @@ public class SGWorldData extends WorldSavedData {
 		
 		if (data == null) { //Somebody did something stupid.
 			FMLLog.severe("Could not load world data for SGWorlds world %s", designation);
-			data = WorldDataGenerator.instance.generateRandomWorld();
+			data = new WorldDataGenerator().generateRandomWorld();
 			overWorld.setItemData(ufn, data);
 			data.markDirty();
 		}

@@ -1,7 +1,9 @@
 package ml.sgworlds.dimension;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import ml.core.util.RandomUtils;
@@ -23,6 +25,7 @@ public class SGWorldManager extends WorldSavedData implements IDynamicWorldLoade
 
 	public static SGWorldManager instance;
 	private Map<Address, SGWorldData> worlds = new HashMap<Address, SGWorldData>();
+	private List<Integer> registeredDims = new ArrayList<Integer>();
 	
 	private SGWorldManager() {
 		super(FILE_NAME);
@@ -77,17 +80,17 @@ public class SGWorldManager extends WorldSavedData implements IDynamicWorldLoade
 	public void registerDimensions() {
 		for (SGWorldData data : worlds.values()) {
 			if (data.getDimensionId() != 0) {
+				registeredDims.add(data.getDimensionId());
 				DimensionManager.registerDimension(data.getDimensionId(), Registry.config.worldProviderId);
 			}
 		}
 	}
 	
 	public void unregisterDimensions() {
-		for (SGWorldData data : worlds.values()) {
-			if (data.getDimensionId() != 0) {
-				DimensionManager.unregisterDimension(data.getDimensionId());
-			}
+		for (int dimId : registeredDims) {
+			DimensionManager.unregisterDimension(dimId);
 		}
+		registeredDims.clear();
 	}
 	
 	@Override
@@ -103,6 +106,8 @@ public class SGWorldManager extends WorldSavedData implements IDynamicWorldLoade
 			data.markDirty();
 			
 			DimensionManager.registerDimension(data.getDimensionId(), Registry.config.worldProviderId);
+			registeredDims.add(data.getDimensionId());
+			
 			WorldServer world = MinecraftServer.getServer().worldServerForDimension(data.getDimensionId());
 			// TODO Place Stargate
 		}
@@ -129,11 +134,12 @@ public class SGWorldManager extends WorldSavedData implements IDynamicWorldLoade
 			instance = new SGWorldManager();
 			overWorld.setItemData(FILE_NAME, instance);
 			instance.markDirty();
-			for (int i=0; i < (Registry.config.numberWorldsToGenerate + RandomUtils.randomInt(Registry.config.numberWorldsToGenerateRandom+1)); i++) {
-				SGWorldData ndata = WorldDataGenerator.instance.generateRandomWorld();
-				overWorld.setItemData(ndata.getUID(), ndata);
-				ndata.markDirty();
-				instance.registerSGWorld(ndata);
+			int genCount = Registry.config.numberWorldsToGenerate + RandomUtils.randomInt(Registry.config.numberWorldsToGenerateRandom+1);
+			List<SGWorldData> worlds = WorldDataGenerator.generateRandomWorlds(genCount);
+			for (SGWorldData sgwd : worlds) {
+				overWorld.setItemData(sgwd.getUID(), sgwd);
+				sgwd.markDirty();
+				instance.registerSGWorld(sgwd);
 			}
 		}
 	}

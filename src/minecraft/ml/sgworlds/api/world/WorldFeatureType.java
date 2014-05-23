@@ -2,14 +2,17 @@ package ml.sgworlds.api.world;
 
 import java.util.Random;
 
-import ml.sgworlds.api.world.feature.IBiomeController;
 import ml.sgworlds.api.world.feature.IColorProvider;
 import ml.sgworlds.api.world.feature.ILightingController;
 import ml.sgworlds.api.world.feature.IMoon;
 import ml.sgworlds.api.world.feature.ISkyFeature;
 import ml.sgworlds.api.world.feature.ISun;
-import ml.sgworlds.api.world.feature.ITerrainGenerator;
 import ml.sgworlds.api.world.feature.IWeatherController;
+import ml.sgworlds.api.world.feature.gen.IBiomeController;
+import ml.sgworlds.api.world.feature.gen.IFeatureLocator;
+import ml.sgworlds.api.world.feature.gen.IPopulate;
+import ml.sgworlds.api.world.feature.gen.ITerrainGenerator;
+import ml.sgworlds.api.world.feature.gen.ITerrainModifier;
 
 /**
  * 
@@ -25,6 +28,10 @@ public enum WorldFeatureType {
 	LIGHTING_CONTROLLER(1, ILightingController.class),
 	
 	TERRAIN_GENERATOR(1, ITerrainGenerator.class),
+	
+	TERRAIN_MODIFIFIER(0, 3, ITerrainModifier.class),
+	CHUNK_POPULATOR(0, 3, IPopulate.class),
+	FEATURE_LOCATOR(0, IFeatureLocator.class),
 	
 	FOG_COLOR(1, IColorProvider.class),
 	SKY_COLOR(1, IColorProvider.class),
@@ -47,6 +54,10 @@ public enum WorldFeatureType {
 	
 	private WorldFeatureType(int count, Class cls) {
 		this(count,count, cls);
+	}
+	
+	public boolean isSingleton() {
+		return minimum == 1 && maximum == 1;
 	}
 	
 	/**

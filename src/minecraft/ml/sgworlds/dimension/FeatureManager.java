@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ml.sgworlds.api.world.IWorldFeatureAPI;
-import ml.sgworlds.api.world.IWorldFeatureProvider;
+import ml.sgworlds.api.world.WorldFeatureProvider;
 import ml.sgworlds.api.world.WorldFeatureType;
 
 import com.google.common.collect.HashMultimap;
@@ -14,32 +14,32 @@ public class FeatureManager implements IWorldFeatureAPI {
 	
 	public static FeatureManager instance = new FeatureManager();
 	
-	private Multimap<WorldFeatureType, IWorldFeatureProvider> featureProviders = HashMultimap.create();
+	private Multimap<WorldFeatureType, WorldFeatureProvider> featureProviders = HashMultimap.create();
 
 	@Override
-	public boolean registerFeatureProvider(IWorldFeatureProvider provider) {
-		if (provider.getFeatureType() == WorldFeatureType.ALL) throw new IllegalArgumentException("(\""+ provider.getClass().getName() +"\").getFeatureType() cannot be ALL.");
+	public boolean registerFeatureProvider(WorldFeatureProvider provider) {
+		if (provider.type == WorldFeatureType.ALL) throw new IllegalArgumentException("(\""+ provider.getClass().getName() +"\").getFeatureType() cannot be ALL.");
 		if (featureProviders.containsValue(provider)) return false;
-		featureProviders.put(provider.getFeatureType(), provider);
+		featureProviders.put(provider.type, provider);
 		return true;
 	}
 	
 	@Override
-	public boolean unregisterFeatureProvider(IWorldFeatureProvider provider) {
+	public boolean unregisterFeatureProvider(WorldFeatureProvider provider) {
 		if (!featureProviders.containsValue(provider)) return false;
-		featureProviders.remove(provider.getFeatureType(), provider);
+		featureProviders.remove(provider.type, provider);
 		return true;
 	}
 	
-	public IWorldFeatureProvider getFeatureProvider(String identifier) {
-		for (IWorldFeatureProvider p : featureProviders.values()) {
-			if (p.willProvideFeatureFor(identifier)) return p;
+	public WorldFeatureProvider getFeatureProvider(String identifier) {
+		for (WorldFeatureProvider p : featureProviders.values()) {
+			if (p.identifier.equals(identifier)) return p;
 		}
 		return null;
 	}
 	
-	public List<IWorldFeatureProvider> getFeatureProviders(WorldFeatureType type) {
-		return new ArrayList<IWorldFeatureProvider>(featureProviders.get(type));
+	public List<WorldFeatureProvider> getFeatureProviders(WorldFeatureType type) {
+		return new ArrayList<WorldFeatureProvider>(featureProviders.get(type));
 	}
 
 }

@@ -1,6 +1,6 @@
 package ml.sgworlds.dimension;
 
-import ml.sgworlds.api.world.IWorldFeatureProvider.IWorldFeature;
+import ml.sgworlds.api.world.WorldFeatureProvider.IWorldFeature;
 import ml.sgworlds.api.world.WorldFeatureType;
 import ml.sgworlds.api.world.feature.ISun;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -13,6 +13,7 @@ import net.minecraftforge.client.IRenderHandler;
 public class SGWorldProvider extends WorldProvider {
 
 	private SGWorldController worldController;
+	private SGWorldSkyRenderer skyRenderer;
 	
 	@Override
 	protected void registerWorldChunkManager() {
@@ -27,7 +28,7 @@ public class SGWorldProvider extends WorldProvider {
 	
 	@Override
 	public IChunkProvider createChunkGenerator() {
-		return super.createChunkGenerator();
+		return new SGChunkGenerator(worldObj, worldController);
 	}
 	
 	@Override
@@ -67,8 +68,10 @@ public class SGWorldProvider extends WorldProvider {
 
 	@Override
 	public IRenderHandler getSkyRenderer() {
-		// TODO Auto-generated method stub
-		return super.getSkyRenderer();
+		if (skyRenderer == null) {
+			skyRenderer = new SGWorldSkyRenderer(worldController);
+		}
+		return skyRenderer;
 	}
 	
 	@Override

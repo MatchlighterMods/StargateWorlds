@@ -20,6 +20,7 @@ public class SGWorldSkyRenderer extends IRenderHandler {
 
     private int glSkyList;
     private int glSkyList2;
+    private boolean setup;
 	
 	public SGWorldSkyRenderer(SGWorldController wdata) {
 		worldController = wdata;
@@ -27,6 +28,8 @@ public class SGWorldSkyRenderer extends IRenderHandler {
 
 	@SideOnly(Side.CLIENT)
 	private void setup() {
+		setup = true;
+		
 		Tessellator tessellator = Tessellator.instance;
         this.glSkyList = GLAllocation.generateDisplayLists(2);
         GL11.glNewList(this.glSkyList, GL11.GL_COMPILE);
@@ -72,6 +75,8 @@ public class SGWorldSkyRenderer extends IRenderHandler {
 	
 	@Override
 	public void render(float partialTicks, WorldClient world, Minecraft mc) {
+		if (!setup) setup();
+		
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		Vec3 vec3 = world.getSkyColor(mc.renderViewEntity, partialTicks);
 		float skyRed = (float)vec3.xCoord;
