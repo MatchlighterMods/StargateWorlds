@@ -4,24 +4,40 @@ import java.util.Random;
 
 import ml.sgworlds.api.world.feature.IColorProvider;
 import ml.sgworlds.api.world.feature.ILightingController;
-import ml.sgworlds.api.world.feature.IMoon;
-import ml.sgworlds.api.world.feature.ISkyFeature;
-import ml.sgworlds.api.world.feature.ISun;
 import ml.sgworlds.api.world.feature.IWeatherController;
-import ml.sgworlds.api.world.feature.gen.IBiomeController;
-import ml.sgworlds.api.world.feature.gen.IFeatureLocator;
-import ml.sgworlds.api.world.feature.gen.IPopulate;
-import ml.sgworlds.api.world.feature.gen.ITerrainGenerator;
-import ml.sgworlds.api.world.feature.gen.ITerrainModifier;
+import ml.sgworlds.api.world.feature.earth.IBiomeController;
+import ml.sgworlds.api.world.feature.earth.IFeatureLocator;
+import ml.sgworlds.api.world.feature.earth.IPopulate;
+import ml.sgworlds.api.world.feature.earth.ITerrainGenerator;
+import ml.sgworlds.api.world.feature.earth.ITerrainModifier;
+import ml.sgworlds.api.world.feature.sky.ICelestialObject;
+import ml.sgworlds.api.world.feature.sky.ISkyFeature;
 
 /**
  * 
  * @author Matchlighter
  */
 public enum WorldFeatureType {
-	SUN(1, 4, ISun.class),
-	MOON(0, 4, IMoon.class),
-	SKY_FEATURE(0, 4, ISkyFeature.class),
+	SUN(1, 4, ICelestialObject.class),
+	MOON(0, 4, ICelestialObject.class),
+	STARS(1, ICelestialObject.class),
+	SKY_FEATURE(-1, ISkyFeature.class) {
+		@Override
+		public int getRandomCount(Random rand, int registeredTypes) { // Weigh results toward lower numbers
+			registeredTypes += 1;
+			int sum = 0;
+			for (int i=1; i<=registeredTypes; i++) {
+				sum += i;
+			}
+			int randInt = rand.nextInt(sum+1);
+			for (int i=registeredTypes; i>0; i--) {
+				randInt -= i;
+				if (randInt <= 0) return registeredTypes - i;
+				
+			}
+			return 0;
+		}
+	},
 	
 	BIOME_CONTROLLER(1, IBiomeController.class),
 	WEATHER_CONTROLLER(1, IWeatherController.class),

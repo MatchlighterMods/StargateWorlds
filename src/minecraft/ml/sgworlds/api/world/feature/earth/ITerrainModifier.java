@@ -1,4 +1,4 @@
-package ml.sgworlds.api.world.feature.gen;
+package ml.sgworlds.api.world.feature.earth;
 
 import ml.sgworlds.api.world.WorldFeatureProvider.IWorldFeature;
 import net.minecraft.world.World;

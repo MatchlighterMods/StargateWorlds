@@ -3,7 +3,7 @@ package ml.sgworlds.world.feature;
 import java.util.List;
 
 import ml.sgworlds.api.world.WorldFeatureType;
-import ml.sgworlds.api.world.feature.gen.ITerrainGenerator;
+import ml.sgworlds.api.world.feature.earth.ITerrainGenerator;
 
 public abstract class TerrainBase implements ITerrainGenerator {
 

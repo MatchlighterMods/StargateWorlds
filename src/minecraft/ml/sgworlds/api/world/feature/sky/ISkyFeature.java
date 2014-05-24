@@ -1,4 +1,4 @@
-package ml.sgworlds.api.world.feature;
+package ml.sgworlds.api.world.feature.sky;
 
 import ml.sgworlds.api.world.WorldFeatureProvider.IWorldFeature;
 

@@ -3,10 +3,10 @@ package ml.sgworlds.api.world;
 import java.util.List;
 import java.util.Random;
 
-import ml.sgworlds.api.world.feature.gen.IFeatureLocator;
-import ml.sgworlds.api.world.feature.gen.IPopulate;
-import ml.sgworlds.api.world.feature.gen.ITerrainGenerator;
-import ml.sgworlds.api.world.feature.gen.ITerrainModifier;
+import ml.sgworlds.api.world.feature.earth.IFeatureLocator;
+import ml.sgworlds.api.world.feature.earth.IPopulate;
+import ml.sgworlds.api.world.feature.earth.ITerrainGenerator;
+import ml.sgworlds.api.world.feature.earth.ITerrainModifier;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.WeightedRandom;

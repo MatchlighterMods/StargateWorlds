@@ -5,7 +5,7 @@ import java.util.Random;
 import ml.sgworlds.api.world.IWorldData;
 import ml.sgworlds.api.world.WorldFeatureProvider;
 import ml.sgworlds.api.world.WorldFeatureType;
-import ml.sgworlds.api.world.feature.gen.ITerrainGenerator;
+import ml.sgworlds.api.world.feature.earth.ITerrainGenerator;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.biome.BiomeGenBase;

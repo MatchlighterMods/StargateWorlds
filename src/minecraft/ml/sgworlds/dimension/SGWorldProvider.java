@@ -2,7 +2,7 @@ package ml.sgworlds.dimension;
 
 import ml.sgworlds.api.world.WorldFeatureProvider.IWorldFeature;
 import ml.sgworlds.api.world.WorldFeatureType;
-import ml.sgworlds.api.world.feature.ISun;
+import ml.sgworlds.api.world.feature.sky.ICelestialObject;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.WorldProvider;
@@ -86,7 +86,7 @@ public class SGWorldProvider extends WorldProvider {
 	public float calculateCelestialAngle(long par1, float par3) {
 		float min=0.5F, max=0.5F;
 		for (IWorldFeature feat : worldController.getWorldData().getFeatures(WorldFeatureType.SUN)) {
-			ISun sun = (ISun)feat;
+			ICelestialObject sun = (ICelestialObject)feat;
 			float s = sun.calculateCelestialAngle(par1, par3);
 			if (s<0.0F) s++;
 			if (s>1.0F) s--;

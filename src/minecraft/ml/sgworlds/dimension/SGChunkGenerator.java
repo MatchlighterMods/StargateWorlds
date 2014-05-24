@@ -10,10 +10,10 @@ import java.util.Random;
 
 import ml.sgworlds.api.world.WorldFeatureProvider.IWorldFeature;
 import ml.sgworlds.api.world.WorldFeatureType;
-import ml.sgworlds.api.world.feature.gen.IFeatureLocator;
-import ml.sgworlds.api.world.feature.gen.IPopulate;
-import ml.sgworlds.api.world.feature.gen.ITerrainGenerator;
-import ml.sgworlds.api.world.feature.gen.ITerrainModifier;
+import ml.sgworlds.api.world.feature.earth.IFeatureLocator;
+import ml.sgworlds.api.world.feature.earth.IPopulate;
+import ml.sgworlds.api.world.feature.earth.ITerrainGenerator;
+import ml.sgworlds.api.world.feature.earth.ITerrainModifier;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSand;
 import net.minecraft.entity.EnumCreatureType;

@@ -5,9 +5,9 @@ import java.util.Random;
 
 import ml.sgworlds.api.world.WorldFeatureProvider;
 import ml.sgworlds.api.world.WorldFeatureType;
-import ml.sgworlds.api.world.feature.gen.IFeatureLocator;
-import ml.sgworlds.api.world.feature.gen.IPopulate;
-import ml.sgworlds.api.world.feature.gen.ITerrainModifier;
+import ml.sgworlds.api.world.feature.earth.IFeatureLocator;
+import ml.sgworlds.api.world.feature.earth.IPopulate;
+import ml.sgworlds.api.world.feature.earth.ITerrainModifier;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;

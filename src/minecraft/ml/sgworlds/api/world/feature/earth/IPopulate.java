@@ -1,4 +1,4 @@
-package ml.sgworlds.api.world.feature.gen;
+package ml.sgworlds.api.world.feature.earth;
 
 import java.util.Random;
 

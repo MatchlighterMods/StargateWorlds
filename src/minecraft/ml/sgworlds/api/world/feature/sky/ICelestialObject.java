@@ -1,8 +1,8 @@
-package ml.sgworlds.api.world.feature;
+package ml.sgworlds.api.world.feature.sky;
 
 import ml.sgworlds.api.world.WorldFeatureProvider.IWorldFeatureRender;
 
-public interface ISun extends IWorldFeatureRender {
+public interface ICelestialObject extends IWorldFeatureRender {
 
 	/**
 	 * @param worldTime

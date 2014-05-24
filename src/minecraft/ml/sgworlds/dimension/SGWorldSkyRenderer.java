@@ -5,6 +5,9 @@ import org.lwjgl.opengl.GL11;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+import ml.sgworlds.api.world.WorldFeatureProvider.IWorldFeature;
+import ml.sgworlds.api.world.WorldFeatureProvider.IWorldFeatureRender;
+import ml.sgworlds.api.world.WorldFeatureType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.GLAllocation;
@@ -71,6 +74,16 @@ public class SGWorldSkyRenderer extends IRenderHandler {
 
         tessellator.draw();
         GL11.glEndList();
+	}
+	
+	private void renderType(WorldFeatureType type, float partialTicks, WorldClient world, Minecraft mc) {
+		for (IWorldFeature feat : this.worldController.getWorldData().getFeatures(type)) {
+			if (feat instanceof IWorldFeatureRender) {
+				GL11.glPushMatrix();
+				((IWorldFeatureRender)feat).render(partialTicks, world, mc);
+				GL11.glPopMatrix();
+			}
+		}
 	}
 	
 	@Override
@@ -155,6 +168,11 @@ public class SGWorldSkyRenderer extends IRenderHandler {
 			GL11.glShadeModel(GL11.GL_FLAT);
 		}
 
+		renderType(WorldFeatureType.STARS, partialTicks, world, mc);
+		renderType(WorldFeatureType.SUN, partialTicks, world, mc);
+		renderType(WorldFeatureType.MOON, partialTicks, world, mc);
+		renderType(WorldFeatureType.SKY_FEATURE, partialTicks, world, mc);
+		
 		// Prepare render Sun/Moon
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
