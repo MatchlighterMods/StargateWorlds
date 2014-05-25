@@ -73,7 +73,8 @@ public class SGWorldData extends WorldSavedData implements IWorldData {
 			
 			WorldFeatureProvider prov = FeatureManager.instance.getFeatureProvider(id);
 			if (prov != null) {
-				IWorldFeature feature = prov.loadFeatureFromNBT(ftag.getCompoundTag("data"));
+				IWorldFeature feature = prov.constructFeature();
+				feature.readNBTData(ftag.getCompoundTag("data"));
 				features.put(prov.type, feature);
 				
 				List<WorldFeatureType> secondaryTypes = new ArrayList<WorldFeatureType>();

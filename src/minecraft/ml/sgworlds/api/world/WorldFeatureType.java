@@ -24,18 +24,7 @@ public enum WorldFeatureType {
 	SKY_FEATURE(-1, ISkyFeature.class) {
 		@Override
 		public int getRandomCount(Random rand, int registeredTypes) { // Weigh results toward lower numbers
-			registeredTypes += 1;
-			int sum = 0;
-			for (int i=1; i<=registeredTypes; i++) {
-				sum += i;
-			}
-			int randInt = rand.nextInt(sum+1);
-			for (int i=registeredTypes; i>0; i--) {
-				randInt -= i;
-				if (randInt <= 0) return registeredTypes - i;
-				
-			}
-			return 0;
+			return getLowEndWeightedInt(rand, 0, registeredTypes+1);
 		}
 	},
 	
@@ -83,6 +72,23 @@ public enum WorldFeatureType {
 		if (minimum == maximum) return minimum;
 		int rnd = rand.nextInt(maximum - minimum +1)+minimum;
 		return rnd;
+	}
+	
+	/**
+	 * Gets a weighted-random integer between min (inclusive) and max (exclusive). Results are weighted toward lower numbers.
+	 */
+	protected static int getLowEndWeightedInt(Random rand, int min, int max) {
+		max -= min;
+		int sum = 0;
+		for (int i=1; i<=max; i++) {
+			sum += i;
+		}
+		int randInt = rand.nextInt(sum+1);
+		for (int i=max; i>0; i--) {
+			randInt -= i;
+			if (randInt <= 0) return (max - i + min);
+		}
+		return min;
 	}
 	
 }

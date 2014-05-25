@@ -12,23 +12,23 @@ import net.minecraftforge.client.IRenderHandler;
 
 public class SGWorldProvider extends WorldProvider {
 
-	private SGWorldController worldController;
+	private SGWorldData worldData;
 	private SGWorldSkyRenderer skyRenderer;
 	
 	@Override
 	protected void registerWorldChunkManager() {
-		worldController = new SGWorldController(worldObj);
-		super.registerWorldChunkManager();
+		worldData = SGWorldManager.instance.getWorldData(dimensionId);
+		this.worldChunkMgr = new SGChunkManager(worldData);
 	}
 	
 	@Override
 	public String getDimensionName() {
-		return worldController.getName();
+		return worldData.getDisplayName();
 	}
 	
 	@Override
 	public IChunkProvider createChunkGenerator() {
-		return new SGChunkGenerator(worldObj, worldController);
+		return new SGChunkGenerator(worldObj, worldData);
 	}
 	
 	@Override
@@ -69,7 +69,7 @@ public class SGWorldProvider extends WorldProvider {
 	@Override
 	public IRenderHandler getSkyRenderer() {
 		if (skyRenderer == null) {
-			skyRenderer = new SGWorldSkyRenderer(worldController);
+			skyRenderer = new SGWorldSkyRenderer(worldData);
 		}
 		return skyRenderer;
 	}
@@ -85,7 +85,7 @@ public class SGWorldProvider extends WorldProvider {
 	@Override
 	public float calculateCelestialAngle(long par1, float par3) {
 		float min=0.5F, max=0.5F;
-		for (IWorldFeature feat : worldController.getWorldData().getFeatures(WorldFeatureType.SUN)) {
+		for (IWorldFeature feat : worldData.getFeatures(WorldFeatureType.SUN)) {
 			ICelestialObject sun = (ICelestialObject)feat;
 			float s = sun.calculateCelestialAngle(par1, par3);
 			if (s<0.0F) s++;

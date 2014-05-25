@@ -1,7 +1,5 @@
 package ml.sgworlds.world.feature;
 
-import java.util.Random;
-
 import ml.sgworlds.api.world.IWorldData;
 import ml.sgworlds.api.world.WorldFeatureProvider;
 import ml.sgworlds.api.world.WorldFeatureType;
@@ -14,19 +12,7 @@ import net.minecraft.world.gen.NoiseGeneratorOctaves;
 public class TerrainDefault extends WorldFeatureProvider {
 
 	public TerrainDefault() {
-		super("DefaultTerrain", WorldFeatureType.TERRAIN_GENERATOR);
-	}
-
-	@Override
-	public IWorldFeature generateRandomFeature(Random rand) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public IWorldFeature loadFeatureFromNBT(NBTTagCompound featureTag) {
-		// TODO Auto-generated method stub
-		return null;
+		super("DefaultTerrain", WorldFeatureType.TERRAIN_GENERATOR, Feature.class);
 	}
 
 	private class Feature extends TerrainBase implements ITerrainGenerator {
@@ -61,6 +47,12 @@ public class TerrainDefault extends WorldFeatureProvider {
 		@Override
 		public void writeNBTData(NBTTagCompound tag) {
 			// TODO
+		}
+		
+		@Override
+		public void readNBTData(NBTTagCompound tag) {
+			// TODO Auto-generated method stub
+			
 		}
 
 		@Override

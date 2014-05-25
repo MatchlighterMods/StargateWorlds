@@ -1,5 +1,6 @@
 package ml.sgworlds.api.world;
 
+import java.lang.reflect.Constructor;
 import java.util.List;
 import java.util.Random;
 
@@ -19,14 +20,26 @@ import cpw.mods.fml.relauncher.SideOnly;
  * It is encouraged that implementors of {@link WorldFeatureProvider} and {@link IWorldFeature} be one-to-one.
  * @author Matchlighter
  */
-public abstract class WorldFeatureProvider {
+public class WorldFeatureProvider {
 	
 	public final String identifier;
 	public final WorldFeatureType type;
+	public final Class clazz;
+	public int weight = 100;
 	
-	public WorldFeatureProvider(String identifier, WorldFeatureType type) {
+	public WorldFeatureProvider(String identifier, WorldFeatureType type, Class<? extends IWorldFeature> cls) {
 		this.identifier = identifier;
 		this.type = type;
+		this.clazz = cls;
+	}
+	
+	public WorldFeatureProvider(String identifier, WorldFeatureType type, Class<? extends IWorldFeature> cls, int weight) {
+		this(identifier, type, cls);
+		this.weight = weight;
+	}
+	
+	protected WorldFeatureProvider(String identifier, WorldFeatureType type) {
+		this(identifier, type, null);
 	}
 	
 	/**
@@ -38,21 +51,34 @@ public abstract class WorldFeatureProvider {
 	
 	/**
 	 * Generate a random instance of this feature.
-	 * @param rand TODO
 	 */
-	public abstract IWorldFeature generateRandomFeature(Random rand);
+	public IWorldFeature generateRandomFeature(Random rand) {
+		return constructFeature();
+	}
 	
 	/**
-	 * Create the appropriate implementor of {@link IWorldFeature} and assign it data from the passed NBTTag. 
-	 * @param featureTag The NBTTag with the data
+	 * Construct a new Feature of the associated type. Override if you need a parameterized constructor.
 	 */
-	public abstract IWorldFeature loadFeatureFromNBT(NBTTagCompound featureTag);
+	public IWorldFeature constructFeature() {
+		if (clazz == null) throw new IllegalStateException(
+				String.format("FeatureProvider for \"%s\" does not have a feature class associated with it! Did you mean to override constructFeature()?", identifier));
+		try {
+			Constructor<IWorldFeature> constructor = clazz.getConstructor();
+			IWorldFeature nfeat = constructor.newInstance();
+			return nfeat;
+		} catch (NoSuchMethodError e) {
+			throw new IllegalStateException(
+					String.format("Could not find an appropriate constructor for Feature \"%s\"! Did you mean to override constructFeature()?", clazz.getName()), e);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
 	
 	/**
 	 * Gets the amount of weight this feature will carry in the {@link WeightedRandom} during random generation of worlds. Average is 100.
 	 */
 	public int getWeight() {
-		return 100;
+		return weight;
 	}
 	
 	/**
@@ -89,6 +115,11 @@ public abstract class WorldFeatureProvider {
 		 * Save this feature's properties to NBT
 		 */
 		public void writeNBTData(NBTTagCompound tag);
+		
+		/**
+		 * Loads feature properties from NBT
+		 */
+		public void readNBTData(NBTTagCompound tag);
 		
 		/**
 		 * Sometimes features need to implement multiple types.<br/>

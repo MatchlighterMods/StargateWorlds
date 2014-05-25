@@ -33,7 +33,6 @@ import net.minecraftforge.event.terraingen.TerrainGen;
 
 public class SGChunkGenerator implements IChunkProvider {
 
-	private SGWorldController controller;
 	private SGWorldData worldData;
 	private World worldObj;
 
@@ -42,10 +41,9 @@ public class SGChunkGenerator implements IChunkProvider {
 	private double[] stoneNoise = new double[256];
 	private BiomeGenBase[] biomesForGeneration;
 	
-	public SGChunkGenerator(World world, SGWorldController controller) {
+	public SGChunkGenerator(World world, SGWorldData worldData) {
 		this.worldObj = world;
-		this.controller = controller;
-		this.worldData = controller.getWorldData();
+		this.worldData = worldData;
 		this.rand = new Random(worldData.getWorldSeed());
 		this.noiseGen4 = new NoiseGeneratorOctaves(this.rand, 4);
 	}

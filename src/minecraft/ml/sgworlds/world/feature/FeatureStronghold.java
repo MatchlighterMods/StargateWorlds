@@ -16,17 +16,7 @@ import net.minecraft.world.gen.structure.MapGenStronghold;
 public class FeatureStronghold extends WorldFeatureProvider {
 
 	public FeatureStronghold() {
-		super("Strongholds", WorldFeatureType.CHUNK_POPULATOR);
-	}
-
-	@Override
-	public IWorldFeature generateRandomFeature(Random rand) {
-		return new Feature();
-	}
-
-	@Override
-	public IWorldFeature loadFeatureFromNBT(NBTTagCompound featureTag) {
-		return new Feature();
+		super("Strongholds", WorldFeatureType.CHUNK_POPULATOR, Feature.class);
 	}
 	
 	private class Feature extends WorldFeature implements IPopulate, IFeatureLocator, ITerrainModifier {
@@ -35,6 +25,9 @@ public class FeatureStronghold extends WorldFeatureProvider {
 
 		@Override
 		public void writeNBTData(NBTTagCompound tag) {}
+		
+		@Override
+		public void readNBTData(NBTTagCompound tag) {}
 
 		@Override
 		public void generate(World world, int chunkX, int chunkY, short[] blockIds, byte[] blockMetas) {
