@@ -8,12 +8,12 @@ import static net.minecraftforge.event.terraingen.PopulateChunkEvent.Populate.Ev
 import java.util.List;
 import java.util.Random;
 
-import ml.sgworlds.api.world.WorldFeatureProvider.IWorldFeature;
-import ml.sgworlds.api.world.WorldFeatureType;
-import ml.sgworlds.api.world.feature.earth.IFeatureLocator;
-import ml.sgworlds.api.world.feature.earth.IPopulate;
-import ml.sgworlds.api.world.feature.earth.ITerrainGenerator;
-import ml.sgworlds.api.world.feature.earth.ITerrainModifier;
+import ml.sgworlds.api.world.FeatureType;
+import ml.sgworlds.api.world.IWorldFeature;
+import ml.sgworlds.api.world.feature.IFeatureLocator;
+import ml.sgworlds.api.world.feature.IPopulate;
+import ml.sgworlds.api.world.feature.ITerrainGenerator;
+import ml.sgworlds.api.world.feature.ITerrainModifier;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSand;
 import net.minecraft.entity.EnumCreatureType;
@@ -59,11 +59,11 @@ public class SGChunkGenerator implements IChunkProvider {
 		short[] blockIds = new short[16*16*256];
 		byte[] blockMetas = new byte[blockIds.length];
 		
-		((ITerrainGenerator)worldData.getFeature(WorldFeatureType.TERRAIN_GENERATOR)).generateTerrain(chunkX, chunkZ, blockIds, blockMetas);
+		((ITerrainGenerator)worldData.getFeature(FeatureType.TERRAIN_GENERATOR)).generateTerrain(chunkX, chunkZ, blockIds, blockMetas);
 		this.biomesForGeneration = this.worldObj.getWorldChunkManager().loadBlockGeneratorData(this.biomesForGeneration, chunkX * 16, chunkZ * 16, 16, 16);
 		this.replaceBlocksForBiome(chunkX, chunkZ, blockIds, blockMetas, this.biomesForGeneration);
 		
-		for (IWorldFeature ft : worldData.getFeatures(WorldFeatureType.TERRAIN_MODIFIFIER)) {
+		for (IWorldFeature ft : worldData.getFeatures(FeatureType.TERRAIN_MODIFIFIER)) {
 			((ITerrainModifier)ft).generate(worldObj, chunkX, chunkZ, blockIds, blockMetas);
 		}
 
@@ -183,7 +183,7 @@ public class SGChunkGenerator implements IChunkProvider {
 
 		MinecraftForge.EVENT_BUS.post(new PopulateChunkEvent.Pre(ichunkprovider, worldObj, rand, chunkX, chunkZ, flag));
 
-		for (IWorldFeature ft : worldData.getFeatures(WorldFeatureType.CHUNK_POPULATOR)) {
+		for (IWorldFeature ft : worldData.getFeatures(FeatureType.CHUNK_POPULATOR)) {
 			((IPopulate)ft).populate(worldObj, rand, chunkX, chunkZ);
 		}
 
@@ -274,7 +274,7 @@ public class SGChunkGenerator implements IChunkProvider {
 	public ChunkPosition findClosestStructure(World world, String s, int x, int y, int z) {
 		ChunkPosition closest = null;
 		long dist = -1;
-		for (IWorldFeature loc : worldData.getFeatures(WorldFeatureType.FEATURE_LOCATOR)) {
+		for (IWorldFeature loc : worldData.getFeatures(FeatureType.FEATURE_LOCATOR)) {
 			ChunkPosition cp = ((IFeatureLocator)loc).locateFeature(world, s, x, y, z);
 			if (cp == null) continue;
 

@@ -2,22 +2,22 @@ package ml.sgworlds.api.world;
 
 import java.util.Random;
 
+import ml.sgworlds.api.world.feature.IBiomeController;
+import ml.sgworlds.api.world.feature.ICelestialObject;
 import ml.sgworlds.api.world.feature.IColorProvider;
+import ml.sgworlds.api.world.feature.IFeatureLocator;
 import ml.sgworlds.api.world.feature.ILightingController;
+import ml.sgworlds.api.world.feature.IPopulate;
+import ml.sgworlds.api.world.feature.ISkyFeature;
+import ml.sgworlds.api.world.feature.ITerrainGenerator;
+import ml.sgworlds.api.world.feature.ITerrainModifier;
 import ml.sgworlds.api.world.feature.IWeatherController;
-import ml.sgworlds.api.world.feature.earth.IBiomeController;
-import ml.sgworlds.api.world.feature.earth.IFeatureLocator;
-import ml.sgworlds.api.world.feature.earth.IPopulate;
-import ml.sgworlds.api.world.feature.earth.ITerrainGenerator;
-import ml.sgworlds.api.world.feature.earth.ITerrainModifier;
-import ml.sgworlds.api.world.feature.sky.ICelestialObject;
-import ml.sgworlds.api.world.feature.sky.ISkyFeature;
 
 /**
  * 
  * @author Matchlighter
  */
-public enum WorldFeatureType {
+public enum FeatureType {
 	SUN(1, 4, ICelestialObject.class),
 	MOON(0, 4, ICelestialObject.class),
 	STARS(1, ICelestialObject.class),
@@ -51,13 +51,13 @@ public enum WorldFeatureType {
 	private final int maximum;
 	public final Class clazz;
 	
-	private WorldFeatureType(int min, int max, Class cls) {
+	private FeatureType(int min, int max, Class cls) {
 		this.minimum = min;
 		this.maximum = max;
 		clazz = cls;
 	}
 	
-	private WorldFeatureType(int count, Class cls) {
+	private FeatureType(int count, Class cls) {
 		this(count,count, cls);
 	}
 	

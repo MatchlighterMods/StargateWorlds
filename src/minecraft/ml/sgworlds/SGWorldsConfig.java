@@ -14,5 +14,4 @@ public class SGWorldsConfig extends Config {
 	public @Prop int numberWorldsToGenerate = 100;
 	public @Prop int numberWorldsToGenerateRandom = 50;
 	
-	public @Prop(comment="Set to true to recover worlds after removing an addon mod.") boolean ignoreMissingFeature = false;
 }

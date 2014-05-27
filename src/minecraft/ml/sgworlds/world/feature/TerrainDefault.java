@@ -1,21 +1,22 @@
 package ml.sgworlds.world.feature;
 
 import ml.sgworlds.api.world.IWorldData;
-import ml.sgworlds.api.world.WorldFeatureProvider;
-import ml.sgworlds.api.world.WorldFeatureType;
-import ml.sgworlds.api.world.feature.earth.ITerrainGenerator;
+import ml.sgworlds.api.world.FeatureProvider;
+import ml.sgworlds.api.world.FeatureType;
+import ml.sgworlds.api.world.feature.ITerrainGenerator;
+import ml.sgworlds.api.world.feature.prefab.BaseTerrainGenerator;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.gen.NoiseGeneratorOctaves;
 
-public class TerrainDefault extends WorldFeatureProvider {
+public class TerrainDefault extends FeatureProvider {
 
 	public TerrainDefault() {
-		super("DefaultTerrain", WorldFeatureType.TERRAIN_GENERATOR, Feature.class);
+		super("DefaultTerrain", FeatureType.TERRAIN_GENERATOR, Feature.class);
 	}
 
-	private class Feature extends TerrainBase implements ITerrainGenerator {
+	private class Feature extends BaseTerrainGenerator implements ITerrainGenerator {
 
 		private NoiseGeneratorOctaves noiseGen1;
 		private NoiseGeneratorOctaves noiseGen2;
@@ -33,14 +34,13 @@ public class TerrainDefault extends WorldFeatureProvider {
 		float[] parabolicField;
 		private BiomeGenBase[] biomesForGeneration;
 		private IWorldData worldData;
-
-		@Override
-		public void setWorldData(IWorldData data) {
-			this.worldData = data;
+		
+		public Feature(FeatureProvider provider, IWorldData worldData) {
+			super(provider, worldData);
 		}
 		
 		@Override
-		public WorldFeatureProvider getProvider() {
+		public FeatureProvider getProvider() {
 			return TerrainDefault.this;
 		}
 

@@ -1,8 +1,7 @@
 package ml.sgworlds.dimension;
 
-import ml.sgworlds.api.world.WorldFeatureProvider.IWorldFeature;
-import ml.sgworlds.api.world.WorldFeatureProvider.IWorldFeatureRender;
-import ml.sgworlds.api.world.WorldFeatureType;
+import ml.sgworlds.api.world.FeatureType;
+import ml.sgworlds.api.world.IWorldFeature;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.GLAllocation;
@@ -19,10 +18,10 @@ public class SGWorldSkyRenderer extends IRenderHandler {
 
 	private final SGWorldData worldData;
 
-    private int glSkyList;
-    private int glSkyList2;
-    private boolean setup;
-	
+	private int glSkyList;
+	private int glSkyList2;
+	private boolean setup;
+
 	public SGWorldSkyRenderer(SGWorldData wdata) {
 		worldData = wdata;
 	}
@@ -30,65 +29,61 @@ public class SGWorldSkyRenderer extends IRenderHandler {
 	@SideOnly(Side.CLIENT)
 	private void setup() {
 		setup = true;
-		
+
 		Tessellator tessellator = Tessellator.instance;
-        this.glSkyList = GLAllocation.generateDisplayLists(2);
-        GL11.glNewList(this.glSkyList, GL11.GL_COMPILE);
-        byte b2 = 64;
-        int i = 256 / b2 + 2;
-        float f = 16.0F;
-        int j;
-        int k;
+		this.glSkyList = GLAllocation.generateDisplayLists(2);
+		GL11.glNewList(this.glSkyList, GL11.GL_COMPILE);
+		byte b2 = 64;
+		int i = 256 / b2 + 2;
+		float f = 16.0F;
+		int j;
+		int k;
 
-        for (j = -b2 * i; j <= b2 * i; j += b2)
-        {
-            for (k = -b2 * i; k <= b2 * i; k += b2)
-            {
-                tessellator.startDrawingQuads();
-                tessellator.addVertex((double)(j + 0), (double)f, (double)(k + 0));
-                tessellator.addVertex((double)(j + b2), (double)f, (double)(k + 0));
-                tessellator.addVertex((double)(j + b2), (double)f, (double)(k + b2));
-                tessellator.addVertex((double)(j + 0), (double)f, (double)(k + b2));
-                tessellator.draw();
-            }
-        }
+		for (j = -b2 * i; j <= b2 * i; j += b2) {
+			for (k = -b2 * i; k <= b2 * i; k += b2) {
+				tessellator.startDrawingQuads();
+				tessellator.addVertex((double)(j + 0), (double)f, (double)(k + 0));
+				tessellator.addVertex((double)(j + b2), (double)f, (double)(k + 0));
+				tessellator.addVertex((double)(j + b2), (double)f, (double)(k + b2));
+				tessellator.addVertex((double)(j + 0), (double)f, (double)(k + b2));
+				tessellator.draw();
+			}
+		}
 
-        GL11.glEndList();
-        this.glSkyList2 = glSkyList + 1;
-        GL11.glNewList(this.glSkyList2, GL11.GL_COMPILE);
-        f = -16.0F;
-        tessellator.startDrawingQuads();
+		GL11.glEndList();
+		this.glSkyList2 = glSkyList + 1;
+		GL11.glNewList(this.glSkyList2, GL11.GL_COMPILE);
+		f = -16.0F;
+		tessellator.startDrawingQuads();
 
-        for (j = -b2 * i; j <= b2 * i; j += b2)
-        {
-            for (k = -b2 * i; k <= b2 * i; k += b2)
-            {
-                tessellator.addVertex((double)(j + b2), (double)f, (double)(k + 0));
-                tessellator.addVertex((double)(j + 0), (double)f, (double)(k + 0));
-                tessellator.addVertex((double)(j + 0), (double)f, (double)(k + b2));
-                tessellator.addVertex((double)(j + b2), (double)f, (double)(k + b2));
-            }
-        }
+		for (j = -b2 * i; j <= b2 * i; j += b2) {
+			for (k = -b2 * i; k <= b2 * i; k += b2) {
+				tessellator.addVertex((double)(j + b2), (double)f, (double)(k + 0));
+				tessellator.addVertex((double)(j + 0), (double)f, (double)(k + 0));
+				tessellator.addVertex((double)(j + 0), (double)f, (double)(k + b2));
+				tessellator.addVertex((double)(j + b2), (double)f, (double)(k + b2));
+			}
+		}
 
-        tessellator.draw();
-        GL11.glEndList();
+		tessellator.draw();
+		GL11.glEndList();
 	}
-	
-	private void renderType(WorldFeatureType type, float partialTicks, WorldClient world, Minecraft mc) {
+
+	private void renderType(FeatureType type, float partialTicks, WorldClient world, Minecraft mc) {
 		for (IWorldFeature feat : this.worldData.getFeatures(type)) {
-			if (feat instanceof IWorldFeatureRender) {
+			if (feat instanceof IWorldFeature.IWorldFeatureRender) {
 				GL11.glPushMatrix();
 				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-				((IWorldFeatureRender)feat).render(partialTicks, world, mc);
+				((IWorldFeature.IWorldFeatureRender)feat).render(partialTicks, world, mc);
 				GL11.glPopMatrix();
 			}
 		}
 	}
-	
+
 	@Override
 	public void render(float partialTicks, WorldClient world, Minecraft mc) {
 		if (!setup) setup();
-		
+
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		Vec3 vec3 = world.getSkyColor(mc.renderViewEntity, partialTicks);
 		float skyRed = (float)vec3.xCoord;
@@ -96,8 +91,7 @@ public class SGWorldSkyRenderer extends IRenderHandler {
 		float skyBlue = (float)vec3.zCoord;
 		float f4;
 
-		if (mc.gameSettings.anaglyph)
-		{
+		if (mc.gameSettings.anaglyph) {
 			float f5 = (skyRed * 30.0F + skyGreen * 59.0F + skyBlue * 11.0F) / 100.0F;
 			float f6 = (skyRed * 30.0F + skyGreen * 70.0F) / 100.0F;
 			f4 = (skyRed * 30.0F + skyBlue * 70.0F) / 100.0F;
@@ -116,24 +110,23 @@ public class SGWorldSkyRenderer extends IRenderHandler {
 		GL11.glDisable(GL11.GL_ALPHA_TEST);
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		
-		renderType(WorldFeatureType.STARS, partialTicks, world, mc);
-		renderType(WorldFeatureType.SUN, partialTicks, world, mc);
-		renderType(WorldFeatureType.MOON, partialTicks, world, mc);
-		renderType(WorldFeatureType.SKY_FEATURE, partialTicks, world, mc);
+
+		renderType(FeatureType.STARS, partialTicks, world, mc);
+		renderType(FeatureType.SUN, partialTicks, world, mc);
+		renderType(FeatureType.MOON, partialTicks, world, mc);
+		renderType(FeatureType.SKY_FEATURE, partialTicks, world, mc);
 
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glEnable(GL11.GL_ALPHA_TEST);
 		GL11.glEnable(GL11.GL_FOG);
-		
+
 		// Render Void
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		GL11.glColor3f(0.0F, 0.0F, 0.0F);
 		double horizonDiff = mc.thePlayer.getPosition(partialTicks).yCoord - world.getHorizon();
 
-		if (horizonDiff < 0.0D)
-		{
+		if (horizonDiff < 0.0D) {
 			GL11.glPushMatrix();
 			GL11.glTranslatef(0.0F, 12.0F, 0.0F);
 			GL11.glCallList(this.glSkyList2);
@@ -176,7 +169,7 @@ public class SGWorldSkyRenderer extends IRenderHandler {
 		GL11.glTranslatef(0.0F, -((float)(horizonDiff - 16.0D)), 0.0F);
 		GL11.glCallList(this.glSkyList2);
 		GL11.glPopMatrix();
-		
+
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glDepthMask(true);
 

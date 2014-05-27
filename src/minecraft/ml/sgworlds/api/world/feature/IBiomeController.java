@@ -1,10 +1,10 @@
-package ml.sgworlds.api.world.feature.earth;
+package ml.sgworlds.api.world.feature;
 
 import java.util.List;
 
 import net.minecraft.world.biome.BiomeGenBase;
 
-import ml.sgworlds.api.world.WorldFeatureProvider.IWorldFeature;
+import ml.sgworlds.api.world.IWorldFeature;
 
 public interface IBiomeController extends IWorldFeature {
 

@@ -1,7 +1,8 @@
 package ml.sgworlds;
 
-import ml.sgworlds.dimension.SGWorldProvider;
 import ml.sgworlds.dimension.SGWorldManager;
+import ml.sgworlds.dimension.SGWorldProvider;
+import ml.sgworlds.network.ServerConnectionHandler;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.DimensionManager;
@@ -13,7 +14,6 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
 
@@ -26,7 +26,6 @@ public class SGWorlds {
 		
 		@Instance("sgworlds")
 		public static SGWorlds instance;
-		public static Boolean neiInstalled = false;
 		
 		public static CreativeTabs sgwTab = new SGWorldsCreativeTab();
 		
@@ -53,6 +52,8 @@ public class SGWorlds {
 			
 			DimensionManager.registerProviderType(Registry.config.worldProviderId, SGWorldProvider.class, false);
 			
+			NetworkRegistry.instance().registerConnectionHandler(new ServerConnectionHandler());
+			
 		}
 		
 		@EventHandler
@@ -66,11 +67,11 @@ public class SGWorlds {
 			SGWorldManager.instance.registerDimensions();
 		}
 		
-		@EventHandler
-		public void serverStopping(FMLServerStoppingEvent evt) {
-			if (SGWorldManager.instance != null) {
-				SGWorldManager.instance.unregisterDimensions();
-			}
-			SGWorldManager.instance = null;
-		}
+//		@EventHandler
+//		public void serverStopping(FMLServerStoppingEvent evt) {
+//			if (SGWorldManager.instance != null) {
+//				SGWorldManager.instance.unregisterDimensions();
+//			}
+//			SGWorldManager.instance = null;
+//		}
 }

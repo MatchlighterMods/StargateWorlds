@@ -3,12 +3,13 @@ package ml.sgworlds.dimension;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 import ml.sgworlds.api.world.IWorldData;
-import ml.sgworlds.api.world.WorldFeatureProvider;
-import ml.sgworlds.api.world.WorldFeatureProvider.IWorldFeature;
-import ml.sgworlds.api.world.WorldFeatureType;
+import ml.sgworlds.api.world.FeatureProvider;
+import ml.sgworlds.api.world.FeatureType;
+import ml.sgworlds.api.world.IWorldFeature;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
@@ -30,29 +31,23 @@ import cpw.mods.fml.common.FMLLog;
  */
 public class SGWorldData extends WorldSavedData implements IWorldData {
 
-	private String name = null;
+	private String name = "";
 	private String designation;
 	private Address primaryAddress;
 	private int dimensionId = 0;
 	private long seed;
-	private Multimap<WorldFeatureType, IWorldFeature> features;
+	private Multimap<FeatureType, IWorldFeature> features = HashMultimap.create();
 	private SGWorldProvider worldProvider;
 	
-	public SGWorldData(String designation, Address address, Multimap<WorldFeatureType, IWorldFeature> features) {
+	public SGWorldData(String designation, Address address) {
 		super(getUID(designation));
 		this.designation = designation;
 		this.primaryAddress = address;
-		this.features = features;
-		
-		for (IWorldFeature feat : new HashSet<IWorldFeature>(this.features.values())) {
-			feat.setWorldData(this);
-		}
 	}
 	
 	/** Constructor used when Loading from NBT */
 	public SGWorldData(String uid) {
 		super(uid);
-		features = HashMultimap.create();
 	}
 
 	public String getDisplayName() {
@@ -66,32 +61,37 @@ public class SGWorldData extends WorldSavedData implements IWorldData {
 		this.primaryAddress = StargateTechAPI.api().getStargateNetwork().parseAddress(nbt.getString("address"));
 		this.dimensionId = nbt.getInteger("dim");
 		
-		NBTTagList list = nbt.getTagList("features");
-		for (int i=0; i<list.tagCount(); i++) {
-			NBTTagCompound ftag = (NBTTagCompound)list.tagAt(i);
-			String id = ftag.getString("identifier");
-			
-			WorldFeatureProvider prov = FeatureManager.instance.getFeatureProvider(id);
-			if (prov != null) {
-				IWorldFeature feature = prov.constructFeature();
-				feature.readNBTData(ftag.getCompoundTag("data"));
-				features.put(prov.type, feature);
+		try {
+			features = HashMultimap.create();
+			NBTTagList list = nbt.getTagList("features");
+			for (int i=0; i<list.tagCount(); i++) {
+				NBTTagCompound ftag = (NBTTagCompound)list.tagAt(i);
+				String id = ftag.getString("identifier");
 				
-				List<WorldFeatureType> secondaryTypes = new ArrayList<WorldFeatureType>();
-				feature.getSecondaryTypes(secondaryTypes);
-				for (WorldFeatureType stype : secondaryTypes) {
-					if (stype == prov.type) continue;
-					features.put(stype, feature);
+				FeatureProvider prov = FeatureManager.instance.getFeatureProvider(id);
+				if (prov != null) {
+					IWorldFeature feature = prov.constructFeature(this);
+					feature.readNBTData(ftag.getCompoundTag("data"));
+					features.put(prov.type, feature);
+					
+					List<FeatureType> secondaryTypes = new ArrayList<FeatureType>();
+					feature.getSecondaryTypes(secondaryTypes);
+					for (FeatureType stype : secondaryTypes) {
+						if (stype == prov.type) continue;
+						features.put(stype, feature);
+					}
+				} else {
+					// TODO Consider other options.
+					throw new RuntimeException(String.format("Missing feature for identifier \"%s\"", id, getDisplayName()));
 				}
-			} else {
-				//if (Registry.config.ignoreMissingFeature)
-				FMLLog.severe("Could not find the Feature Provider for \"%s\"", id);
-				//else
-				//	throw new RuntimeException(String.format("Could not find the Feature Provider for \"%s\".", id));
 			}
+		
+			validateAndFix();
+		} catch (Exception e) {
+			FMLLog.severe("World \"%s\" invalid because %s. The world will not be loaded!", getDisplayName(), e.getMessage());
+			return;
 		}
 		
-		SGWorldManager.instance.registerSGWorld(this);
 	}
 
 	@Override
@@ -102,7 +102,7 @@ public class SGWorldData extends WorldSavedData implements IWorldData {
 		nbt.setInteger("dim", dimensionId);
 		
 		NBTTagList list = new NBTTagList();
-		Set<IWorldFeature> featureSet = new HashSet<WorldFeatureProvider.IWorldFeature>(features.values());
+		Set<IWorldFeature> featureSet = new HashSet<IWorldFeature>(features.values());
 		for (IWorldFeature ft : featureSet) {
 			NBTTagCompound ftag = new NBTTagCompound();
 			ftag.setString("identifier", ft.getProvider().identifier);
@@ -116,12 +116,39 @@ public class SGWorldData extends WorldSavedData implements IWorldData {
 		nbt.setTag("features", list);
 	}
 	
+	public void registerForSave() {
+		DimensionManager.getWorld(0).setItemData(getUID(), this);
+	}
+	
+	protected void validateAndFix() {
+		for (FeatureType ftype : FeatureType.values()) {
+			if (ftype == FeatureType.ALL) continue;
+			
+			// Make sure we have singleton classes
+			if (ftype.isSingleton()) {
+				int count = getFeatures(ftype).size();
+				if (count == 0) {
+					for (IWorldFeature feature : WorldDataGenerator.generateRandomFeatureType(this, ftype, 1, new Random())) {
+						addFeature(ftype, feature);
+					}
+					if (getFeature(ftype) == null) throw new RuntimeException(
+							String.format("Missing feature type %s and could not generate a new one", ftype.toString()));
+					
+				} else if (count > 1) {
+					throw new RuntimeException(
+							String.format("Had more than one instance of singelton feature type %s", ftype.toString()));
+				}
+			}
+		}
+	}
+	
 	public int getDimensionId() {
 		return dimensionId;
 	}
 	
 	public void setDimensionId(int dimensionId) {
 		if (this.dimensionId == 0) this.dimensionId = dimensionId;
+		markDirty();
 	}
 	
 	public Address getPrimaryAddress() {
@@ -148,19 +175,35 @@ public class SGWorldData extends WorldSavedData implements IWorldData {
 	/**
 	 * Returns the first found feature of the specified type. Mainly for use when there is only one of that type.
 	 */
-	public IWorldFeature getFeature(WorldFeatureType type) {
+	@Override
+	public IWorldFeature getFeature(FeatureType type) { // TODO Consider using plural and for loop all the time. Keeps us safe when the client doesn't have everything yet.
 		List<IWorldFeature> tfeats = getFeatures(type);
 		return tfeats.size() > 0 ? tfeats.get(0) : null;
 	}
 	
-	/**
-	 * Should never return null
-	 */
-	public List<IWorldFeature> getFeatures(WorldFeatureType type) {
-		if (type == WorldFeatureType.ALL) return new ArrayList<WorldFeatureProvider.IWorldFeature>(features.values());
-		return new ArrayList<WorldFeatureProvider.IWorldFeature>(features.get(type));
+	@Override
+	public List<IWorldFeature> getFeatures(FeatureType type) {
+		if (type == FeatureType.ALL) return new ArrayList<IWorldFeature>(features.values());
+		return new ArrayList<IWorldFeature>(features.get(type));
 	}
 
+	public void addFeature(FeatureType type, IWorldFeature feature) {
+		this.features.put(type, feature);
+		
+		List<FeatureType> secondaryTypes = new ArrayList<FeatureType>();
+		feature.getSecondaryTypes(secondaryTypes);
+		for (FeatureType stype : secondaryTypes) {
+			if (stype == type) continue;
+			if (stype.isSingleton()) {
+				throw new IllegalArgumentException(String.format("The class \"%s\" tried to register \"%s\" (a singleton feature type) as a secondary feature type.",
+						feature.getClass().getName(), stype.name()));
+			}
+			this.features.put(stype, feature);
+		}
+		
+		markDirty();
+	}
+	
 	public String getUID() {
 		return getUID(designation);
 	}
@@ -169,12 +212,12 @@ public class SGWorldData extends WorldSavedData implements IWorldData {
 		return "sgworlddata_" + designation;
 	}
 	
-	public static SGWorldData loadData(String designation) {
+	public static IWorldData loadData(String designation) {
 		World overWorld = DimensionManager.getWorld(0);
 		String ufn = getUID(designation);
 		SGWorldData data = (SGWorldData)overWorld.loadItemData(SGWorldData.class, ufn);
 		
-		if (data == null) { //Somebody did something stupid.
+		if (data == null) {
 			FMLLog.severe("Could not load world data for SGWorlds world %s", designation);
 			data = new WorldDataGenerator().generateRandomWorld();
 			overWorld.setItemData(ufn, data);

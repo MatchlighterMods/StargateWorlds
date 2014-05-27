@@ -1,9 +1,12 @@
-package ml.sgworlds.api.world.feature.sky;
+package ml.sgworlds.api.world.feature.prefab;
 
 import java.util.List;
 
 import ml.sgworlds.api.world.IWorldData;
-import ml.sgworlds.api.world.WorldFeatureType;
+import ml.sgworlds.api.world.FeatureProvider;
+import ml.sgworlds.api.world.WorldFeature;
+import ml.sgworlds.api.world.feature.ICelestialObject;
+import ml.sgworlds.api.world.FeatureType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
@@ -14,13 +17,17 @@ import net.minecraft.world.World;
 
 import org.lwjgl.opengl.GL11;
 
-public abstract class BaseCelestialObject implements ICelestialObject {
+public abstract class BaseCelestialObject extends WorldFeature implements ICelestialObject {
 
 	public long orbitPeriod = 2400L;
 	public int yawAngle = 0;
 	public float offset = -0.25F;
 	public int size = 30;
 	public ResourceLocation textureLocation;
+	
+	public BaseCelestialObject(FeatureProvider provider, IWorldData worldData) {
+		super(provider, worldData);
+	}
 
 	@Override
 	public void render(float partialTicks, World world, Minecraft mc) {
@@ -135,10 +142,7 @@ public abstract class BaseCelestialObject implements ICelestialObject {
 	}
 
 	@Override
-	public void getSecondaryTypes(List<WorldFeatureType> types) {}
-
-	@Override
-	public void setWorldData(IWorldData data) {}
+	public void getSecondaryTypes(List<FeatureType> types) {}
 
 	@Override
 	public void writeNBTData(NBTTagCompound tag) {

@@ -8,33 +8,45 @@ import ml.sgworlds.api.world.feature.prefab.BaseCelestialObject;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 import org.lwjgl.opengl.GL11;
 
-public class StarsDefault extends BaseCelestialObject {
+public class StarsTwinkle extends BaseCelestialObject {
 
-	protected int starGLCallList;
+	protected int[] starGLCallLists;
+	protected long[] timeOffsets;
 	private boolean setup;
 
-	public StarsDefault(FeatureProvider provider, IWorldData worldData) {
+	public StarsTwinkle(FeatureProvider provider, IWorldData worldData) {
 		super(provider, worldData);
 	}
 
 	private void setup() {
 		setup=true;
-		this.starGLCallList = GLAllocation.generateDisplayLists(1);
-		GL11.glNewList(this.starGLCallList, GL11.GL_COMPILE);
-		this.renderStars();
-		GL11.glEndList();
+		
+		Random rnd = new Random();
+		
+		this.starGLCallLists = new int[10];
+		timeOffsets = new long[starGLCallLists.length];
+		int clists = GLAllocation.generateDisplayLists(starGLCallLists.length);
+		for (int i=0; i<starGLCallLists.length; i++) {
+			starGLCallLists[i] = clists+i;
+			timeOffsets[i] = rnd.nextLong();
+			
+			GL11.glNewList(clists+i, GL11.GL_COMPILE);
+			this.renderStars(150);
+			GL11.glEndList();
+		}
 	}
 
-	protected void renderStars() {
+	protected void renderStars(int count) {
 		Random random = new Random(10842L);
 		Tessellator tessellator = Tessellator.instance;
 		tessellator.startDrawingQuads();
 
-		for (int i = 0; i < 1500; ++i) {
+		for (int i = 0; i < count; ++i) {
 			double d0 = (double)(random.nextFloat() * 2.0F - 1.0F);
 			double d1 = (double)(random.nextFloat() * 2.0F - 1.0F);
 			double d2 = (double)(random.nextFloat() * 2.0F - 1.0F);
@@ -85,11 +97,23 @@ public class StarsDefault extends BaseCelestialObject {
 		Tessellator tess = Tessellator.instance;
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		float f18 = world.getStarBrightness(partialTicks) * f4;
+
 		if (f18 > 0.0F) {
-			GL11.glColor4f(f18, f18, f18, f18);
-			GL11.glCallList(this.starGLCallList);
+			for (int i=0; i<starGLCallLists.length; i++) {
+				GL11.glColor4f(f18, f18, f18, f18 * getBrightness(i, world, partialTicks));
+				GL11.glCallList(this.starGLCallLists[i]);
+			}
 		}
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
+	}
 
+	private float getBrightness(int set, World world, float partialTicks) {
+		float f1 = (float)((world.getWorldTime() + timeOffsets[set]) % 200L) + partialTicks;
+		float f2 = 1.0F - (MathHelper.cos(f1 * (float)Math.PI * 2.0F) * 2.0F + Math.abs(0.5F-partialTicks)/2.0F);
+
+		if (f2 < 0.0F) f2 = 0.0F;
+		if (f2 > 1.0F) f2 = 1.0F;
+		
+		return f2;
 	}
 }

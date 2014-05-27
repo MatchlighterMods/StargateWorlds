@@ -1,6 +1,6 @@
-package ml.sgworlds.api.world.feature.earth;
+package ml.sgworlds.api.world.feature;
 
-import ml.sgworlds.api.world.WorldFeatureProvider.IWorldFeature;
+import ml.sgworlds.api.world.IWorldFeature;
 import net.minecraft.world.World;
 
 public interface ITerrainModifier extends IWorldFeature {

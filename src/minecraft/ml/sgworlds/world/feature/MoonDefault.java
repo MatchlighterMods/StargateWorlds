@@ -1,21 +1,30 @@
 package ml.sgworlds.world.feature;
 
-import ml.sgworlds.api.world.WorldFeatureProvider;
-import ml.sgworlds.api.world.WorldFeatureType;
-import ml.sgworlds.api.world.feature.sky.BaseCelestialObject;
+import ml.sgworlds.api.world.IWorldData;
+import ml.sgworlds.api.world.FeatureProvider;
+import ml.sgworlds.api.world.FeatureType;
+import ml.sgworlds.api.world.feature.prefab.BaseCelestialObject;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
-public class MoonDefault extends WorldFeatureProvider {
+public class MoonDefault extends FeatureProvider {
+	
+	private static final ResourceLocation locationMoonPhasesPng = new ResourceLocation("textures/environment/moon_phases.png");
 
 	public MoonDefault() {
-		super("NormalMoon", WorldFeatureType.MOON, Feature.class);
+		super("NormalMoon", FeatureType.MOON, Feature.class);
 		// TODO Auto-generated constructor stub
 	}
 
 	private class Feature extends BaseCelestialObject {
 
+		public Feature(FeatureProvider provider, IWorldData worldData) {
+			super(provider, worldData);
+			this.textureLocation = locationMoonPhasesPng;
+		}
+		
 		@Override
 		protected void doRender(float partialTicks, World world, Minecraft mc) {
 			Tessellator tess = Tessellator.instance;
@@ -40,7 +49,7 @@ public class MoonDefault extends WorldFeatureProvider {
 		}
 
 		@Override
-		public WorldFeatureProvider getProvider() {
+		public FeatureProvider getProvider() {
 			return MoonDefault.this;
 		}
 	}

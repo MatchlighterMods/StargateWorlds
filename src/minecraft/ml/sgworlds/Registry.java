@@ -1,6 +1,8 @@
 package ml.sgworlds;
 
 import ml.core.network.PacketHandler;
+import ml.sgworlds.network.packet.PacketRegisterDimensions;
+import ml.sgworlds.network.packet.PacketWorldData;
 import cpw.mods.fml.common.network.NetworkRegistry;
 
 public class Registry {
@@ -28,7 +30,8 @@ public class Registry {
 		NetworkRegistry.instance().registerChannel(pkh, SGWorlds.netChannel);
 		
 		// Packets
-
+		pkh.addHandler(PacketWorldData.class);
+		pkh.addHandler(PacketRegisterDimensions.class);
 	}
 	
 	// Recipes //

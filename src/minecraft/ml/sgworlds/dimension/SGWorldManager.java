@@ -2,12 +2,13 @@ package ml.sgworlds.dimension;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import ml.core.util.RandomUtils;
 import ml.sgworlds.Registry;
+import ml.sgworlds.api.world.IWorldData;
+import ml.sgworlds.network.packet.PacketRegisterDimensions;
+import ml.sgworlds.network.packet.PacketWorldData;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
@@ -24,8 +25,9 @@ public class SGWorldManager extends WorldSavedData implements IDynamicWorldLoade
 	public static final String FILE_NAME = "SGWorldsData";
 
 	public static SGWorldManager instance;
-	private Map<Address, SGWorldData> worlds = new HashMap<Address, SGWorldData>();
-	private List<Integer> registeredDims = new ArrayList<Integer>();
+	public final List<SGWorldData> worlds = new ArrayList<SGWorldData>();
+	public final List<Integer> registeredDims = new ArrayList<Integer>();
+	// public MapStorage worldDataStorage;
 	
 	private SGWorldManager() {
 		super(FILE_NAME);
@@ -35,17 +37,18 @@ public class SGWorldManager extends WorldSavedData implements IDynamicWorldLoade
 	public SGWorldManager(String uid) {
 		super(uid);
 	}
-
-	public boolean addressRegistered(Address address) {
-		return (worlds.containsKey(address));
-	}
 	
 	public SGWorldData getWorldData(Address address) {
-		return worlds.get(address);
+		for (SGWorldData data : worlds) {
+			if (data.getPrimaryAddress().equals(address)) {
+				return data;
+			}
+		}
+		return null;
 	}
 	
 	public SGWorldData getWorldData(int dimId) {
-		for (SGWorldData data : worlds.values()) {
+		for (SGWorldData data : worlds) {
 			if (data.getDimensionId() == dimId) {
 				return data;
 			}
@@ -53,8 +56,8 @@ public class SGWorldManager extends WorldSavedData implements IDynamicWorldLoade
 		return null;
 	}
 	
-	public SGWorldData getWorldData(String designation) {
-		for (SGWorldData data : worlds.values()) {
+	public IWorldData getWorldData(String designation) {
+		for (SGWorldData data : worlds) {
 			if (data.getDesignation() == designation) {
 				return data;
 			}
@@ -62,12 +65,23 @@ public class SGWorldManager extends WorldSavedData implements IDynamicWorldLoade
 		return null;
 	}
 	
+	public SGWorldData getClientWorldData(int dimId) {
+		SGWorldData worldData = getWorldData(dimId);
+		if (worldData == null) {
+			worldData = WorldDataGenerator.generateRandomWorld(); // TODO Default Data?
+			worlds.add(worldData);
+			new PacketWorldData(dimId).dispatchToServer();
+		}
+		return worldData;
+	}
+	
 	public Collection<SGWorldData> getSGWorlds() {
-		return worlds.values();
+		return worlds;
 	}
 
 	public void registerSGWorld(SGWorldData worldData) {
-		worlds.put(worldData.getPrimaryAddress(), worldData);
+		if (worlds.contains(worldData)) return;
+		worlds.add(worldData);
 		
 		Address addr = worldData.getPrimaryAddress();
 		Symbol[] pfx = new Symbol[3];
@@ -77,11 +91,16 @@ public class SGWorldManager extends WorldSavedData implements IDynamicWorldLoade
 		StargateTechAPI.api().getStargateNetwork().reserveDimensionPrefix(this, pfx);
 	}
 	
+	public void registerDimension(int dimId) {
+		if (registeredDims.contains(dimId)) return;
+		registeredDims.add(dimId);
+		DimensionManager.registerDimension(dimId, Registry.config.worldProviderId);
+	}
+	
 	public void registerDimensions() {
-		for (SGWorldData data : worlds.values()) {
+		for (SGWorldData data : worlds) {
 			if (data.getDimensionId() != 0) {
-				registeredDims.add(data.getDimensionId());
-				DimensionManager.registerDimension(data.getDimensionId(), Registry.config.worldProviderId);
+				registerDimension(data.getDimensionId());
 			}
 		}
 	}
@@ -95,18 +114,19 @@ public class SGWorldManager extends WorldSavedData implements IDynamicWorldLoade
 	
 	@Override
 	public boolean willCreateWorldFor(Address address) {
-		return addressRegistered(address);
+		return getWorldData(address) != null;
 	}
 
 	@Override
 	public void loadWorldFor(Address address, IStargatePlacer seedingShip) {
-		SGWorldData data = worlds.get(address);
+		SGWorldData data = getWorldData(address);
 		if (data != null) {
 			data.setDimensionId(DimensionManager.getNextFreeDimId());
 			data.markDirty();
 			
 			DimensionManager.registerDimension(data.getDimensionId(), Registry.config.worldProviderId);
 			registeredDims.add(data.getDimensionId());
+			new PacketRegisterDimensions(data.getDimensionId()).dispatchToAll();
 			
 			WorldServer world = MinecraftServer.getServer().worldServerForDimension(data.getDimensionId());
 			// TODO Place Stargate
@@ -129,17 +149,19 @@ public class SGWorldManager extends WorldSavedData implements IDynamicWorldLoade
 		World overWorld = DimensionManager.getWorld(0);
 		instance = (SGWorldManager)overWorld.loadItemData(SGWorldManager.class, FILE_NAME);
 		if (instance != null) {
+			// File dataDir = overWorld.getSaveHandler().getMapFileFromName("fake").getParentFile();
 			// TODO Load WorldDatas
+			// SGWorldManager.instance.registerSGWorld();
 		} else {
 			instance = new SGWorldManager();
 			overWorld.setItemData(FILE_NAME, instance);
 			instance.markDirty();
+			
 			int genCount = Registry.config.numberWorldsToGenerate + RandomUtils.randomInt(Registry.config.numberWorldsToGenerateRandom+1);
 			List<SGWorldData> worlds = WorldDataGenerator.generateRandomWorlds(genCount);
 			for (SGWorldData sgwd : worlds) {
-				overWorld.setItemData(sgwd.getUID(), sgwd);
-				sgwd.markDirty();
 				instance.registerSGWorld(sgwd);
+				sgwd.registerForSave();
 			}
 		}
 	}

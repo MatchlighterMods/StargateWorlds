@@ -1,4 +1,4 @@
-package ml.sgworlds.api.world.feature.earth;
+package ml.sgworlds.api.world.feature;
 
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;

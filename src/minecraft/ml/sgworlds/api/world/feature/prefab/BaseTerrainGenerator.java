@@ -1,11 +1,18 @@
-package ml.sgworlds.world.feature;
+package ml.sgworlds.api.world.feature.prefab;
 
 import java.util.List;
 
-import ml.sgworlds.api.world.WorldFeatureType;
-import ml.sgworlds.api.world.feature.earth.ITerrainGenerator;
+import ml.sgworlds.api.world.IWorldData;
+import ml.sgworlds.api.world.FeatureProvider;
+import ml.sgworlds.api.world.FeatureType;
+import ml.sgworlds.api.world.WorldFeature;
+import ml.sgworlds.api.world.feature.ITerrainGenerator;
 
-public abstract class TerrainBase implements ITerrainGenerator {
+public abstract class BaseTerrainGenerator extends WorldFeature implements ITerrainGenerator {
+
+	public BaseTerrainGenerator(FeatureProvider provider, IWorldData worldData) {
+		super(provider, worldData);
+	}
 
 	private double[] noiseArray;
 	
@@ -15,7 +22,7 @@ public abstract class TerrainBase implements ITerrainGenerator {
 	public byte oceanBlockMeta;
 	
 	@Override
-	public void getSecondaryTypes(List<WorldFeatureType> types) {}
+	public void getSecondaryTypes(List<FeatureType> types) {}
 
 	@Override
 	public void generateTerrain(int chunkX, int chunkZ, short[] blockIds, byte[] blockMetas) {

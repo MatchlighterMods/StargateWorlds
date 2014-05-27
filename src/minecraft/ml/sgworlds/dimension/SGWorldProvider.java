@@ -1,8 +1,8 @@
 package ml.sgworlds.dimension;
 
-import ml.sgworlds.api.world.WorldFeatureProvider.IWorldFeature;
-import ml.sgworlds.api.world.WorldFeatureType;
-import ml.sgworlds.api.world.feature.sky.ICelestialObject;
+import ml.sgworlds.api.world.FeatureType;
+import ml.sgworlds.api.world.IWorldFeature;
+import ml.sgworlds.api.world.feature.ICelestialObject;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.WorldProvider;
@@ -17,7 +17,8 @@ public class SGWorldProvider extends WorldProvider {
 	
 	@Override
 	protected void registerWorldChunkManager() {
-		worldData = SGWorldManager.instance.getWorldData(dimensionId);
+		worldData = SGWorldManager.instance.getClientWorldData(dimensionId);
+		worldData.setWorldProvider(this);
 		this.worldChunkMgr = new SGChunkManager(worldData);
 	}
 	
@@ -61,9 +62,14 @@ public class SGWorldProvider extends WorldProvider {
 	}
 	
 	@Override
-	public Vec3 getFogColor(float par1, float par2) {
+	public Vec3 getFogColor(float celestialAngle, float partialTime) {
 		// TODO Auto-generated method stub
-		return super.getFogColor(par1, par2);
+		return super.getFogColor(celestialAngle, partialTime);
+	}
+	
+	@Override
+	public long getSeed() {
+		return worldData.getWorldSeed();
 	}
 
 	@Override
@@ -85,7 +91,7 @@ public class SGWorldProvider extends WorldProvider {
 	@Override
 	public float calculateCelestialAngle(long par1, float par3) {
 		float min=0.5F, max=0.5F;
-		for (IWorldFeature feat : worldData.getFeatures(WorldFeatureType.SUN)) {
+		for (IWorldFeature feat : worldData.getFeatures(FeatureType.SUN)) {
 			ICelestialObject sun = (ICelestialObject)feat;
 			float s = sun.calculateCelestialAngle(par1, par3);
 			if (s<0.0F) s++;
