@@ -8,7 +8,7 @@ import com.google.common.io.ByteArrayDataInput;
 
 import ml.core.network.MLPacket;
 import ml.sgworlds.SGWorlds;
-import ml.sgworlds.dimension.SGWorldManager;
+import ml.sgworlds.world.SGWorldManager;
 
 public class PacketRegisterDimensions extends MLPacket {
 

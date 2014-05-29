@@ -1,12 +1,11 @@
 package ml.sgworlds.api.world.feature.prefab;
 
-import java.util.List;
+import java.util.Random;
 
 import ml.sgworlds.api.world.IWorldData;
-import ml.sgworlds.api.world.FeatureProvider;
-import ml.sgworlds.api.world.WorldFeature;
-import ml.sgworlds.api.world.feature.ICelestialObject;
-import ml.sgworlds.api.world.FeatureType;
+import ml.sgworlds.api.world.feature.FeatureProvider;
+import ml.sgworlds.api.world.feature.WorldFeature;
+import ml.sgworlds.api.world.feature.types.ICelestialObject;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
@@ -19,14 +18,32 @@ import org.lwjgl.opengl.GL11;
 
 public abstract class BaseCelestialObject extends WorldFeature implements ICelestialObject {
 
-	public long orbitPeriod = 2400L;
-	public int yawAngle = 0;
+	public long orbitPeriod = 24000L;
+	public int angle = 0;
 	public float offset = -0.25F;
 	public int size = 30;
 	public ResourceLocation textureLocation;
 	
 	public BaseCelestialObject(FeatureProvider provider, IWorldData worldData) {
 		super(provider, worldData);
+	}
+	
+	public BaseCelestialObject(FeatureProvider provider, IWorldData worldData, NBTTagCompound tag) {
+		super(provider, worldData);
+		
+		this.orbitPeriod = tag.getLong("period");
+		this.angle = tag.getInteger("angle");
+		this.offset = tag.getFloat("offset");
+		this.size = tag.getInteger("size");
+	}
+	
+	public BaseCelestialObject(FeatureProvider provider, IWorldData worldData, Random rnd) {
+		super(provider, worldData);
+		
+		this.orbitPeriod = (rnd.nextInt(32-6)+6) * 1000;
+		this.angle = rnd.nextInt(36)*10;
+		this.offset = rnd.nextFloat();
+		this.size = (rnd.nextInt(10-3)+3) * 5;
 	}
 
 	@Override
@@ -37,7 +54,7 @@ public abstract class BaseCelestialObject extends WorldFeature implements ICeles
 		
 		float invRainStrength = 1.0F - world.getRainStrength(partialTicks);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, invRainStrength);
-		GL11.glRotatef(yawAngle, 0.0F, 1.0F, 0.0F);
+		GL11.glRotatef(angle, 0.0F, 1.0F, 0.0F);
 		GL11.glRotatef(celestialAngle * 360.0F, 1.0F, 0.0F, 0.0F);
 
 		mc.getTextureManager().bindTexture(textureLocation);
@@ -142,22 +159,11 @@ public abstract class BaseCelestialObject extends WorldFeature implements ICeles
 	}
 
 	@Override
-	public void getSecondaryTypes(List<FeatureType> types) {}
-
-	@Override
 	public void writeNBTData(NBTTagCompound tag) {
 		tag.setLong("period", orbitPeriod);
-		tag.setInteger("yaw", yawAngle);
+		tag.setInteger("angle", angle);
 		tag.setFloat("offset", offset);
 		tag.setInteger("size", size);
 	}
-
-	@Override
-	public void readNBTData(NBTTagCompound tag) {
-		orbitPeriod = tag.getLong("period");
-		yawAngle = tag.getInteger("yaw");
-		offset = tag.getFloat("offset");
-		size = tag.getInteger("size");
-	}
-
+	
 }

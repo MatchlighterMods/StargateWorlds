@@ -1,7 +1,7 @@
 package ml.sgworlds.api;
 
+import ml.sgworlds.api.world.feature.IFeatureAPI;
 import net.minecraft.creativetab.CreativeTabs;
-import ml.sgworlds.api.world.IFeatureAPI;
 
 public abstract class SGWorldsAPI {
 	protected static SGWorldsAPI sgworldsAPI;
@@ -10,7 +10,8 @@ public abstract class SGWorldsAPI {
 		return sgworldsAPI;
 	}
 	
-	public abstract IFeatureAPI getWorldFeatureAPI();
+	public abstract IFeatureAPI getFeatureAPI();
 	
 	public abstract CreativeTabs getSGWorldsCreativeTab();
+
 }

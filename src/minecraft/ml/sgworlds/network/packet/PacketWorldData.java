@@ -4,8 +4,8 @@ import java.io.IOException;
 
 import ml.core.network.MLPacket;
 import ml.sgworlds.SGWorlds;
-import ml.sgworlds.dimension.SGWorldData;
-import ml.sgworlds.dimension.SGWorldManager;
+import ml.sgworlds.world.SGWorldData;
+import ml.sgworlds.world.SGWorldManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 

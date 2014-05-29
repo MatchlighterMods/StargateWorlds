@@ -3,10 +3,10 @@ package ml.sgworlds.api.world.feature.prefab;
 import java.util.List;
 
 import ml.sgworlds.api.world.IWorldData;
-import ml.sgworlds.api.world.FeatureProvider;
-import ml.sgworlds.api.world.FeatureType;
-import ml.sgworlds.api.world.WorldFeature;
-import ml.sgworlds.api.world.feature.ITerrainGenerator;
+import ml.sgworlds.api.world.feature.FeatureProvider;
+import ml.sgworlds.api.world.feature.FeatureType;
+import ml.sgworlds.api.world.feature.WorldFeature;
+import ml.sgworlds.api.world.feature.types.ITerrainGenerator;
 
 public abstract class BaseTerrainGenerator extends WorldFeature implements ITerrainGenerator {
 

@@ -3,8 +3,8 @@ package ml.sgworlds;
 import net.minecraft.creativetab.CreativeTabs;
 import cpw.mods.fml.common.FMLLog;
 import ml.sgworlds.api.SGWorldsAPI;
-import ml.sgworlds.api.world.IFeatureAPI;
-import ml.sgworlds.dimension.FeatureManager;
+import ml.sgworlds.api.world.feature.IFeatureAPI;
+import ml.sgworlds.world.feature.FeatureManager;
 
 public class APIImplementation extends SGWorldsAPI {
 
@@ -14,7 +14,7 @@ public class APIImplementation extends SGWorldsAPI {
 	}
 	
 	@Override
-	public IFeatureAPI getWorldFeatureAPI() {
+	public IFeatureAPI getFeatureAPI() {
 		return FeatureManager.instance;
 	}
 

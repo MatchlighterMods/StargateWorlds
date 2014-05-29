@@ -1,7 +1,7 @@
 package ml.sgworlds.network;
 
-import ml.sgworlds.dimension.SGWorldManager;
 import ml.sgworlds.network.packet.PacketRegisterDimensions;
+import ml.sgworlds.world.SGWorldManager;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.NetLoginHandler;
 import net.minecraft.network.packet.NetHandler;

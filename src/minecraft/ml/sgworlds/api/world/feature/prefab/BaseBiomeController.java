@@ -1,20 +1,27 @@
 package ml.sgworlds.api.world.feature.prefab;
 
-import ml.sgworlds.api.world.FeatureProvider;
 import ml.sgworlds.api.world.IWorldData;
-import ml.sgworlds.api.world.WorldFeature;
-import ml.sgworlds.api.world.feature.IBiomeController;
+import ml.sgworlds.api.world.feature.FeatureProvider;
+import ml.sgworlds.api.world.feature.WorldFeature;
+import ml.sgworlds.api.world.feature.types.IBiomeController;
+import net.minecraft.world.WorldProvider;
 import net.minecraft.world.biome.BiomeCache;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.gen.layer.IntCache;
 
 public abstract class BaseBiomeController extends WorldFeature implements IBiomeController {
 	
-	private BiomeCache biomeCache;
+	protected BiomeCache biomeCache;
 
 	public BaseBiomeController(FeatureProvider provider, IWorldData worldData) {
 		super(provider, worldData);
+		
+	}
+	
+	@Override
+	public void onProviderCreated(WorldProvider wprovider) {
 		this.biomeCache = new BiomeCache(worldData.getWorldProvider().worldChunkMgr);
+		super.onProviderCreated(wprovider);
 	}
 
 	@Override
