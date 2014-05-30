@@ -166,17 +166,16 @@ public class SGWorldManager implements IDynamicWorldLoader {
 			}
 			
 		} else {
-			File dataDir = SGWorlds.getSaveFile("fake").getParentFile();
-			for (String name : dataDir.list()) {
-				if (name.startsWith("sgworlddata_") && name.endsWith(".dat")) {
-					String designation = name.substring(12, name.length()-4);
+			for (String name : wdDir.list()) {
+				if (name.startsWith("world_") && name.endsWith(".dat")) {
+					String designation = name.substring(6, name.length()-4);
 					
 					try {
 						SGWorldData worldData = SGWorldData.loadData(designation);
 						instance.registerSGWorld(worldData);
 					} catch (Exception e) {
-						FMLLog.severe("The world \"%s\" could not be loaded because %s!", designation, e.getMessage());
-						e.printStackTrace();
+						FMLLog.severe("The world \"%s\" could not be loaded! (%s)", designation, e.getMessage());
+						//e.printStackTrace();
 					}
 				}
 			}

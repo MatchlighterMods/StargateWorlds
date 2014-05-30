@@ -255,20 +255,17 @@ public class SGWorldData implements IWorldData {
 	}
 	
 	public static SGWorldData loadData(String designation) {
-		
 		File wdloc = getWorldDataFile(designation);
-		if (wdloc != null && wdloc.exists()) {
-			try {
-				FileInputStream istream = new FileInputStream(wdloc);
-				NBTTagCompound loadTag = CompressedStreamTools.readCompressed(istream);
-				istream.close();
-				return new SGWorldData(loadTag);
-			} catch (RuntimeException e) {
-				throw e;
-			} catch (Exception e) {}
+		try {
+			FileInputStream istream = new FileInputStream(wdloc);
+			NBTTagCompound loadTag = CompressedStreamTools.readCompressed(istream);
+			istream.close();
+			return new SGWorldData(loadTag);
+		} catch (RuntimeException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
 		}
-		
-		return null;
 	}
 	
 	public static SGWorldData generateRandom() {
