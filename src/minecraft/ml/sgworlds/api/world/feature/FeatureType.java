@@ -19,19 +19,23 @@ import ml.sgworlds.api.world.feature.types.IWeatherController;
  * @author Matchlighter
  */
 public enum FeatureType {
-	SUN(1, 4, ICelestialObject.class, RandomMode.LOW_END_WEIGHTED),
-	MOON(0, 4, ICelestialObject.class, RandomMode.LOW_END_WEIGHTED) {
+	SUN(1, 2, ICelestialObject.class) {
 		@Override
-		public int getRandomCount(Random rand, int registeredTypes) { // Shift the result by +1, maximum becomes 0. Makes 0 possible, but less likely
-			return (super.getRandomCount(rand, registeredTypes)+1) % (maximum+1);
+		public int getRandomCount(Random rand, int registeredTypes) {
+			return getLowEndRandom(minimum, maximum, rand);
 		}
 	},
-	
+	MOON(0, 4, ICelestialObject.class) {
+		@Override
+		public int getRandomCount(Random rand, int registeredTypes) { // Shift the result by +1, maximum becomes 0. Makes 0 possible, but less likely
+			return (getLowEndRandom(minimum, maximum, rand)+1) % (maximum+1);
+		}
+	},
 	STARS(1, WorldFeatureRender.class),
 	SKY_FEATURE(-1, ISkyFeature.class) {
 		@Override
 		public int getRandomCount(Random rand, int registeredTypes) { // Weigh results toward lower numbers
-			return RandomMode.LOW_END_WEIGHTED.getRandomVal(0, registeredTypes+1, rand);
+			return getLowEndRandom(0, registeredTypes+1, rand);
 		}
 	},
 	
@@ -50,31 +54,18 @@ public enum FeatureType {
 	SUNSET_COLOR(1, IColorProvider.class),
 	
 	/**
-	 * Independent features will have a 1-in-weight chance of being added, regardless of previously generated features.<br/>
-	 * Use {@link WorldFeature#getSecondaryTypes(java.util.List)} to get the actual type.<br/>
-	 * You can only use non-singleton feature types with independent features.
-	 */
-	INDEPENDENT(-1, null),
-	
-	/**
 	 * Registering a {@link WorldFeatureProvider} as {@link WorldFeatureType#ALL} will throw an IllegalArgumentException.
 	 */
 	ALL(0, null);
 
 	final int minimum;
 	final int maximum;
-	final RandomMode rMode;
 	public final Class clazz;
 	
-	private FeatureType(int min, int max, Class cls, RandomMode rm) {
+	private FeatureType(int min, int max, Class cls) {
 		this.minimum = min;
 		this.maximum = max;
 		this.clazz = cls;
-		this.rMode = rm;
-	}
-	
-	private FeatureType(int min, int max, Class cls) {
-		this(min, max, cls, RandomMode.NORMAL);
 	}
 	
 	private FeatureType(int count, Class cls) {
@@ -98,33 +89,26 @@ public enum FeatureType {
 	 */
 	public int getRandomCount(Random rand, int registeredTypes) {
 		if (minimum == maximum) return minimum;
-		return rMode.getRandomVal(minimum, maximum+1, rand);
+		return getNormalRandom(minimum, maximum+1, rand);
 	}
 	
-	private enum RandomMode {
-		LOW_END_WEIGHTED {
-			@Override
-			int getRandomVal(int min, int max, Random rand) {
-				max -= min;
-				int sum = 0;
-				for (int i=1; i<=max; i++) {
-					sum += i;
-				}
-				int randInt = rand.nextInt(sum+1);
-				for (int i=max; i>0; i--) {
-					randInt -= i;
-					if (randInt <= 0) return (max - i + min);
-				}
-				return min;
-			}
-		},
-		NORMAL {
-			@Override
-			int getRandomVal(int min, int max, Random rand) {
-				return rand.nextInt(max-min)+min;
-			}
-		};
-		
-		abstract int getRandomVal(int min, int max, Random rand);
+	
+	
+	private static int getNormalRandom(int min, int max, Random rand) {
+		return rand.nextInt(max-min)+min;
+	}
+	
+	private static int getLowEndRandom(int min, int max, Random rand) {
+		max -= min;
+		int sum = 0;
+		for (int i=1; i<=max; i++) {
+			sum += i;
+		}
+		int randInt = rand.nextInt(sum+1);
+		for (int i=max; i>0; i--) {
+			randInt -= i;
+			if (randInt <= 0) return (max - i + min);
+		}
+		return min;
 	}
 }

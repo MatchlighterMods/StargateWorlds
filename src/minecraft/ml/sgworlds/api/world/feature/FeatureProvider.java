@@ -21,17 +21,20 @@ public class FeatureProvider {
 	public final String identifier;
 	public final FeatureType type;
 	public final Class clazz;
-	public int weight = 100;
+	protected int weight = 100;
+	public final boolean independent;
 	
-	public FeatureProvider(String identifier, FeatureType type, Class<? extends WorldFeature> cls) {
+	public FeatureProvider(String identifier, FeatureType type, Class<? extends WorldFeature> cls, int weight, boolean independent) {
 		this.identifier = identifier;
 		this.type = type;
 		this.clazz = cls;
+		
+		this.weight = weight;
+		this.independent = independent;
 	}
 	
-	public FeatureProvider(String identifier, FeatureType type, Class<? extends WorldFeature> cls, int weight) {
-		this(identifier, type, cls);
-		this.weight = weight;
+	public FeatureProvider(String identifier, FeatureType type, Class<? extends WorldFeature> cls) {
+		this(identifier, type, cls, 100, false);
 	}
 	
 	protected FeatureProvider(String identifier, FeatureType type) {

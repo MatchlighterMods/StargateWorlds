@@ -261,7 +261,7 @@ public class SGWorldData extends WorldSavedData implements IWorldData {
 		SGWorldData sgd = new SGWorldData(WorldDataGenerator.getRandomDesignation(), WorldDataGenerator.generateAddress(true));
 		sgd.seed = (new Random()).nextLong();
 		
-		for (WorldFeature feat : WorldDataGenerator.generateRandomWorldFeatures(sgd).values()) {
+		for (WorldFeature feat : WorldDataGenerator.generateRandomFeatures(sgd).values()) {
 			sgd.addFeature(feat);
 		}
 		return sgd;
