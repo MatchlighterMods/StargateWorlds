@@ -14,4 +14,6 @@ public class SGWorldsConfig extends Config {
 	public @Prop int numberWorldsToGenerate = 100;
 	public @Prop int numberWorldsToGenerateRandom = 50;
 	
+	public @Prop boolean preventOverworldNaquadahGen = true;
+	
 }

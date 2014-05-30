@@ -15,6 +15,8 @@ import cpw.mods.fml.common.network.Player;
 
 public class ServerConnectionHandler implements IConnectionHandler {
 
+	private boolean connectedToRemote = false;
+	
 	@Override
 	public void playerLoggedIn(Player player, NetHandler netHandler, INetworkManager manager) {}
 
@@ -26,7 +28,8 @@ public class ServerConnectionHandler implements IConnectionHandler {
 
 	@Override
 	public void connectionOpened(NetHandler netClientHandler, String server, int port, INetworkManager manager) {
-		SGWorldManager.instance = new SGWorldManager("client_worldmanager");
+		connectedToRemote = true;
+		SGWorldManager.instance = new SGWorldManager();
 	}
 
 	@Override
@@ -34,8 +37,10 @@ public class ServerConnectionHandler implements IConnectionHandler {
 
 	@Override
 	public void connectionClosed(INetworkManager manager) {
-		SGWorldManager.instance.unregisterDimensions();
-		SGWorldManager.instance = null;
+		if (connectedToRemote) {
+			SGWorldManager.instance.unregisterDimensions();
+			SGWorldManager.instance = null;
+		}
 	}
 
 	@Override

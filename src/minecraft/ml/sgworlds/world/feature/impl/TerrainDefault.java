@@ -38,9 +38,9 @@ public class TerrainDefault extends BaseTerrainGenerator implements ITerrainGene
 
 	@Override
 	public double[] initializeNoiseField(double[] par1ArrayOfDouble, int subX, int subY, int subZ, int sizeX, int sizeY, int sizeZ) {
-		//			ChunkProviderEvent.InitNoiseField event = new ChunkProviderEvent.InitNoiseField(this, par1ArrayOfDouble, par2, par3, par4, par5, par6, par7);
-		//			MinecraftForge.EVENT_BUS.post(event);
-		//			if (event.getResult() == Result.DENY) return event.noisefield;
+		//ChunkProviderEvent.InitNoiseField event = new ChunkProviderEvent.InitNoiseField(this, par1ArrayOfDouble, par2, par3, par4, par5, par6, par7);
+		//MinecraftForge.EVENT_BUS.post(event);
+		//if (event.getResult() == Result.DENY) return event.noisefield;
 
 		this.biomesForGeneration = worldData.getWorldProvider().worldChunkMgr.getBiomesForGeneration(null, subX-2, subZ-2, sizeX+5, sizeZ+5);
 

@@ -17,6 +17,8 @@ public interface IFeatureManager {
 	 * @return The new {@link FeatureProvider}, or null
 	 */
 	public FeatureProvider registerFeature(String identifier, FeatureType type, Class<? extends WorldFeature> featureClass);
+	
+	public FeatureProvider registerFeature(String identifier, FeatureType type, Class<? extends WorldFeature> featureClass, int weight, boolean independent);
 
 	public FeatureProvider getFeatureProvider(String identifier);
 	

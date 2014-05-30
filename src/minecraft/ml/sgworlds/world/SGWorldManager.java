@@ -1,19 +1,19 @@
 package ml.sgworlds.world;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import ml.core.util.RandomUtils;
 import ml.sgworlds.Registry;
+import ml.sgworlds.SGWorlds;
 import ml.sgworlds.api.world.IStaticWorld;
 import ml.sgworlds.api.world.IWorldData;
 import ml.sgworlds.network.packet.PacketRegisterDimensions;
 import ml.sgworlds.network.packet.PacketWorldData;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldSavedData;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
 import stargatetech2.api.StargateTechAPI;
@@ -21,23 +21,15 @@ import stargatetech2.api.stargate.Address;
 import stargatetech2.api.stargate.IDynamicWorldLoader;
 import stargatetech2.api.stargate.IStargatePlacer;
 import stargatetech2.api.stargate.Symbol;
+import cpw.mods.fml.common.FMLLog;
 
-public class SGWorldManager extends WorldSavedData implements IDynamicWorldLoader {
+public class SGWorldManager implements IDynamicWorldLoader {
 	public static final String FILE_NAME = "SGWorldsData";
 
 	public static SGWorldManager instance;
 	public static final List<IStaticWorld> staticWorlds = new ArrayList<IStaticWorld>();
 	public final List<SGWorldData> worlds = new ArrayList<SGWorldData>();
 	public final List<Integer> registeredDims = new ArrayList<Integer>();
-	
-	private SGWorldManager() {
-		super(FILE_NAME);
-	}
-	
-	/** Constructor used when Loading from NBT */
-	public SGWorldManager(String uid) {
-		super(uid);
-	}
 	
 	public SGWorldData getWorldData(Address address) {
 		for (SGWorldData data : worlds) {
@@ -74,6 +66,11 @@ public class SGWorldManager extends WorldSavedData implements IDynamicWorldLoade
 			new PacketWorldData(dimId).dispatchToServer();
 		}
 		return worldData;
+	}
+	
+	public void addClientData(SGWorldData worldData) {
+		if (worlds.contains(worldData)) return;
+		worlds.add(worldData);
 	}
 	
 	public Collection<SGWorldData> getSGWorlds() {
@@ -133,31 +130,30 @@ public class SGWorldManager extends WorldSavedData implements IDynamicWorldLoade
 			// TODO Place Stargate
 		}
 	}
-
-	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		// TODO Auto-generated method stub
+	
+	public void saveData() {
+		File wmFile = SGWorlds.getSaveFile("SGWorlds");
+		for (SGWorldData worldData : worlds) {
+			worldData.saveData();
+		}
 		
-	}
-
-	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		// TODO Auto-generated method stub
+		try {
+			FileOutputStream fileoutputstream = new FileOutputStream(wmFile);
+			fileoutputstream.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 	}
 	
 	public static void loadData() {
-		World overWorld = DimensionManager.getWorld(0);
-		instance = (SGWorldManager)overWorld.loadItemData(SGWorldManager.class, FILE_NAME);
-		if (instance != null) {
-			// File dataDir = overWorld.getSaveHandler().getMapFileFromName("fake").getParentFile();
-			// TODO Load WorldDatas
-			// SGWorldManager.instance.registerSGWorld();
-		} else {
-			instance = new SGWorldManager();
-			overWorld.setItemData(FILE_NAME, instance);
-			instance.markDirty();
-			
+		File wmFile = SGWorlds.getSaveFile("SGWorlds");
+		File wdDir = SGWorlds.getSaveFile("SGWorlds/fake").getParentFile();
+		wdDir.mkdirs();
+		
+		instance = new SGWorldManager();
+		
+		if (!wmFile.exists()) {
 			int genCount = Registry.config.numberWorldsToGenerate + RandomUtils.randomInt(Registry.config.numberWorldsToGenerateRandom+1);
 			List<SGWorldData> worlds = WorldDataGenerator.generateRandomWorlds(genCount);
 			
@@ -167,8 +163,24 @@ public class SGWorldManager extends WorldSavedData implements IDynamicWorldLoade
 			
 			for (SGWorldData sgwd : worlds) {
 				instance.registerSGWorld(sgwd);
-				sgwd.registerForSave();
+			}
+			
+		} else {
+			File dataDir = SGWorlds.getSaveFile("fake").getParentFile();
+			for (String name : dataDir.list()) {
+				if (name.startsWith("sgworlddata_") && name.endsWith(".dat")) {
+					String designation = name.substring(12, name.length()-4);
+					
+					try {
+						SGWorldData worldData = SGWorldData.loadData(designation);
+						instance.registerSGWorld(worldData);
+					} catch (Exception e) {
+						FMLLog.severe("The world \"%s\" could not be loaded because %s!", designation, e.getMessage());
+						e.printStackTrace();
+					}
+				}
 			}
 		}
+		
 	}
 }

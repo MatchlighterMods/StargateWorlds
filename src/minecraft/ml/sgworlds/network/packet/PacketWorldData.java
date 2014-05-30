@@ -41,9 +41,10 @@ public class PacketWorldData extends MLPacket {
 	public void handleClientSide(EntityPlayer epl) throws IOException {
 		SGWorldData worldData = SGWorldManager.instance.getWorldData(dimId);
 		if (worldData == null) {
-			worldData = new SGWorldData("client_sgworlddata");
-		}
-		worldData.readFromNBT(worldDataNBT);
+			worldData = new SGWorldData(worldDataNBT);
+			SGWorldManager.instance.addClientData(worldData);
+		} else
+			worldData.readFromNBT(worldDataNBT);
 	}
 	
 	@Override

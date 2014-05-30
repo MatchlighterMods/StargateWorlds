@@ -42,6 +42,13 @@ public class FeatureManager implements IFeatureManager {
 	}
 	
 	@Override
+	public FeatureProvider registerFeature(String identifier, FeatureType type, Class<? extends WorldFeature> featureClass, int weight, boolean independent) {
+		FeatureProvider nprovider = new FeatureProvider(identifier, type, featureClass, weight, independent);
+		if (registerFeatureProvider(nprovider)) return nprovider;
+		return null;
+	}
+	
+	@Override
 	public FeatureProvider getFeatureProvider(String identifier) {
 		for (FeatureProvider p : featureProviders.values()) {
 			if (p.willLoadFeatureId(identifier)) return p;

@@ -19,8 +19,8 @@ import cpw.mods.fml.relauncher.SideOnly;
  * A simple, default implementation of {@link WorldFeature}.<br/>
  * Read through the JavaDoc of this class to see all requirements for subclasses!
  * <br/><br/>
- * Instead of overriding {@link FeatureProvider#generateRandom(IWorldData, java.util.Random)}, you can add a constructor with the signature ({@link FeatureProvider}, {@link IWorldData}, {@link Random}).<br/>
- * Instead of overriding {@link FeatureProvider#loadFromNBT(IWorldData, NBTTagCompound)}, you can add a constructor with the signature ({@link FeatureProvider}, {@link IWorldData}, {@link NBTTagCompound}).<br/>
+ * Instead of overriding {@link FeatureProvider#generateRandom(IWorldData, java.util.Random)}, you can add a constructor with the signature ({@link FeatureProvider}, {@link IWorldData}, {@link Random}).<br/><br/>
+ * Instead of overriding {@link FeatureProvider#loadFromNBT(IWorldData, NBTTagCompound)}, you can add a constructor with the signature ({@link FeatureProvider}, {@link IWorldData}, {@link NBTTagCompound}).<br/><br/>
  * 
  * @author Matchlighter
  */

@@ -14,6 +14,8 @@ import org.apache.commons.lang3.reflect.ConstructorUtils;
 
 
 /**
+ * Provides a {@link WorldFeature} on demand.<br/>
+ * The default implementation uses several reflection tricks, so in 99% of cases, you shouldn't need to override this.
  * @author Matchlighter
  */
 public class FeatureProvider {
@@ -24,6 +26,13 @@ public class FeatureProvider {
 	protected int weight = 100;
 	public final boolean independent;
 	
+	/**
+	 * @param identifier The provider-unique identifier used for saving and loading.
+	 * @param type The {@link FeatureType} of the feature.
+	 * @param cls The Class of the Feature. Used for reflective construction.
+	 * @param weight The amount of weight the feature will have when being chosen randomly.
+	 * @param independent Marks if a feature should ignore maximums and use a one-in-weight chance instead of a weighted random.
+	 */
 	public FeatureProvider(String identifier, FeatureType type, Class<? extends WorldFeature> cls, int weight, boolean independent) {
 		this.identifier = identifier;
 		this.type = type;
@@ -51,7 +60,7 @@ public class FeatureProvider {
 	}
 	
 	/**
-	 * Determine if this feature is compatible with all already generated. Only features of the {@link FeatureType} are passed.
+	 * Determine if this feature is compatible with all already generated. Only features of the same {@link FeatureType} are passed.
 	 */
 	public boolean compatibleWith(FeatureProvider provider) {
 		return true;
