@@ -6,6 +6,7 @@ import java.util.List;
 
 import ml.core.util.RandomUtils;
 import ml.sgworlds.Registry;
+import ml.sgworlds.api.world.IStaticWorld;
 import ml.sgworlds.api.world.IWorldData;
 import ml.sgworlds.network.packet.PacketRegisterDimensions;
 import ml.sgworlds.network.packet.PacketWorldData;
@@ -25,9 +26,9 @@ public class SGWorldManager extends WorldSavedData implements IDynamicWorldLoade
 	public static final String FILE_NAME = "SGWorldsData";
 
 	public static SGWorldManager instance;
+	public static final List<IStaticWorld> staticWorlds = new ArrayList<IStaticWorld>();
 	public final List<SGWorldData> worlds = new ArrayList<SGWorldData>();
 	public final List<Integer> registeredDims = new ArrayList<Integer>();
-	// public MapStorage worldDataStorage;
 	
 	private SGWorldManager() {
 		super(FILE_NAME);
@@ -159,11 +160,15 @@ public class SGWorldManager extends WorldSavedData implements IDynamicWorldLoade
 			
 			int genCount = Registry.config.numberWorldsToGenerate + RandomUtils.randomInt(Registry.config.numberWorldsToGenerateRandom+1);
 			List<SGWorldData> worlds = WorldDataGenerator.generateRandomWorlds(genCount);
+			
+			for (IStaticWorld staticWorld : instance.staticWorlds) {
+				worlds.add(SGWorldData.fromStaticWorld(staticWorld));
+			}
+			
 			for (SGWorldData sgwd : worlds) {
 				instance.registerSGWorld(sgwd);
 				sgwd.registerForSave();
 			}
-			// TODO Load static worlds
 		}
 	}
 }

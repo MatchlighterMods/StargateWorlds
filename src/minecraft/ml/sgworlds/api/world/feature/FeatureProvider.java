@@ -115,7 +115,8 @@ public class FeatureProvider {
 	}
 	
 	/**
-	 * Gets the amount of weight this feature will carry in the {@link WeightedRandom} during random generation of worlds. Average is 100.
+	 * Gets the amount of weight this feature will carry in the {@link WeightedRandom} during random generation of worlds. Average is 100.<br/>
+	 * Or if the feature is independent the one-in chance of it occurring.
 	 */
 	public int getWeight() {
 		return weight;

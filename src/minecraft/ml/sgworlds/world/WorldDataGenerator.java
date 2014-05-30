@@ -46,29 +46,39 @@ public class WorldDataGenerator {
 		return true;
 	}
 	
+	
 	public static List<WorldFeature> generateRandomFeatureType(IWorldData worldData, FeatureType type, int count, Random rand) {
 		
 		List<WorldFeature> features = new ArrayList<WorldFeature>();
-		BiMap<FeatureProvider, WeightedRandomFeature> featureProviders = mapFeatureWeights(FeatureManager.instance.getFeatureProviders(type));
 		
-		while (count > 0 && featureProviders.size() > 0) {
-			FeatureProvider provider = ((WeightedRandomFeature)WeightedRandom.getRandomItem(rand, featureProviders.values())).provider;
+		if (type != FeatureType.INDEPENDENT) {
+			BiMap<FeatureProvider, WeightedRandomFeature> featureProviders = mapFeatureWeights(FeatureManager.instance.getFeatureProviders(type));
 			
-			if (!checkCompatible(worldData, provider)) {
-				featureProviders.remove(provider);
-				continue;
+			while (count > 0 && featureProviders.size() > 0) {
+				FeatureProvider provider = ((WeightedRandomFeature)WeightedRandom.getRandomItem(rand, featureProviders.values())).provider;
+				
+				if (!checkCompatible(worldData, provider)) {
+					featureProviders.remove(provider);
+					continue;
+				}
+				
+				WorldFeature feature = provider.generateRandom(worldData, new Random());
+				
+				if (type.clazz == null || type.clazz.isAssignableFrom(feature.getClass())) {
+					features.add(feature);
+				} else {
+					throw new IllegalArgumentException(String.format("The class \"%s\" tried to provide \"%s\" as the wrong feature type (%s)",
+						provider.getClass().getName(), feature.getClass().getName(), type.name()));
+				}
+				
+				count--;
 			}
-			
-			WorldFeature feature = provider.generateRandom(worldData, new Random());
-			
-			if (type.clazz == null || type.clazz.isAssignableFrom(feature.getClass())) {
-				features.add(feature);
-			} else {
-				throw new IllegalArgumentException(String.format("The class \"%s\" tried to provide \"%s\" as the wrong feature type (%s)",
-					provider.getClass().getName(), feature.getClass().getName(), type.name()));
+		} else {
+			for (FeatureProvider provider : FeatureManager.instance.getFeatureProviders(type)) {
+				if (rand.nextInt(provider.getWeight()) == 0 && checkCompatible(worldData, provider)) {
+					features.add(provider.generateRandom(worldData, rand));
+				}
 			}
-			
-			count--;
 		}
 		
 		return features;

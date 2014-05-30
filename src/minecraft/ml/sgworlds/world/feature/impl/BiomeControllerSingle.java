@@ -6,9 +6,6 @@ import java.util.Random;
 
 import ml.sgworlds.api.world.IWorldData;
 import ml.sgworlds.api.world.feature.FeatureProvider;
-import ml.sgworlds.api.world.feature.FeatureType;
-import ml.sgworlds.api.world.feature.SGWFeatures;
-import ml.sgworlds.api.world.feature.WorldFeature;
 import ml.sgworlds.api.world.feature.prefab.BaseBiomeController;
 import ml.sgworlds.api.world.feature.types.IBiomeController;
 import net.minecraft.nbt.NBTTagCompound;
@@ -18,17 +15,25 @@ import net.minecraft.world.gen.layer.IntCache;
 
 public class BiomeControllerSingle extends BaseBiomeController implements IBiomeController {
 
-	public List<BiomeGenBase> biomeList;
+	public List<BiomeGenBase> biomeList = new ArrayList<BiomeGenBase>();
 
 	public BiomeControllerSingle(FeatureProvider provider, IWorldData worldData, BiomeGenBase biome) {
 		super(provider, worldData);
 
-		this.biomeList = new ArrayList<BiomeGenBase>();
 		this.biomeList.add(biome);
 	}
 
-	public BiomeControllerSingle(FeatureProvider provider, IWorldData worldData) {
+	public BiomeControllerSingle(FeatureProvider provider, IWorldData worldData, Random rnd) {
 		super(provider, worldData);
+		
+		BiomeGenBase[] vbiomes = WorldType.DEFAULT.getBiomesForWorldType();
+		this.biomeList.add(vbiomes[rnd.nextInt(vbiomes.length)]);
+	}
+	
+	public BiomeControllerSingle(FeatureProvider provider, IWorldData worldData, NBTTagCompound nbtData) {
+		super(provider, worldData);
+		
+		this.biomeList.add(BiomeGenBase.biomeList[nbtData.getInteger("biomeId")]);
 	}
 	
 	@Override
@@ -62,16 +67,4 @@ public class BiomeControllerSingle extends BaseBiomeController implements IBiome
 
 		return reuseArray;
 	}
-	
-	public static final FeatureProvider provider = new FeatureProvider(SGWFeatures.BIOME_SINGLE.name(), FeatureType.BIOME_CONTROLLER, BiomeControllerSingle.class) {
-		@Override
-		public WorldFeature generateRandom(IWorldData worldData, Random rnd) {
-			BiomeGenBase[] vbiomes = WorldType.DEFAULT.getBiomesForWorldType();
-			return new BiomeControllerSingle(this, worldData, vbiomes[rnd.nextInt(vbiomes.length)]);
-		}
-		@Override
-		public WorldFeature loadFromNBT(IWorldData worldData, NBTTagCompound nbtData) {
-			return new BiomeControllerSingle(this, worldData, BiomeGenBase.biomeList[nbtData.getInteger("biomeId")]);
-		}
-	};
 }

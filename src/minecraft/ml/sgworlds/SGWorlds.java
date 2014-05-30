@@ -108,8 +108,8 @@ public class SGWorlds {
 			
 			//Biome Controllers
 			registerFeature(SGWFeatures.BIOME_NATIVE, FeatureType.BIOME_CONTROLLER, BiomeControllerNative.class);
-			fm.registerFeatureProvider(BiomeControllerSingle.provider);
-			fm.registerFeatureProvider(BiomeControllerSized.provider);
+			registerFeature(SGWFeatures.BIOME_SINGLE, FeatureType.BIOME_CONTROLLER, BiomeControllerSingle.class);
+			registerFeature(SGWFeatures.BIOME_SIZED, FeatureType.BIOME_CONTROLLER, BiomeControllerSized.class);
 			
 		}
 }

@@ -2,7 +2,7 @@ package ml.sgworlds.api.world;
 
 import java.util.List;
 
-import ml.sgworlds.api.world.feature.IFeatureAPI;
+import ml.sgworlds.api.world.feature.IFeatureManager;
 import ml.sgworlds.api.world.feature.IFeatureBuilder;
 import ml.sgworlds.api.world.feature.WorldFeature;
 
@@ -31,7 +31,7 @@ public interface IStaticWorld {
 	/**
 	 * Gets a list of features for this static world.<br/>
 	 * For basic use, you can use {@link IFeatureBuilder#getFeatureList()} to get the return list.
-	 * See {@link IFeatureAPI#getFeatureBuilder(IWorldData)}.
+	 * See {@link IFeatureManager#getFeatureBuilder(IWorldData)}.
 	 * @param worldData
 	 * @return
 	 */

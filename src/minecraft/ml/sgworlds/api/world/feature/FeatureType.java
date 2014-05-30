@@ -15,7 +15,7 @@ import ml.sgworlds.api.world.feature.types.ITerrainModifier;
 import ml.sgworlds.api.world.feature.types.IWeatherController;
 
 /**
- * 
+ * Feature types may be singletons, meaning only one instance of that type can exist per world (e.g. {@link FeatureType#TERRAIN_GENERATOR}).
  * @author Matchlighter
  */
 public enum FeatureType {
@@ -48,6 +48,13 @@ public enum FeatureType {
 	FOG_COLOR(1, IColorProvider.class),
 	SKY_COLOR(1, IColorProvider.class),
 	SUNSET_COLOR(1, IColorProvider.class),
+	
+	/**
+	 * Independent features will have a 1-in-weight chance of being added, regardless of previously generated features.<br/>
+	 * Use {@link WorldFeature#getSecondaryTypes(java.util.List)} to get the actual type.<br/>
+	 * You can only use non-singleton feature types with independent features.
+	 */
+	INDEPENDENT(-1, null),
 	
 	/**
 	 * Registering a {@link WorldFeatureProvider} as {@link WorldFeatureType#ALL} will throw an IllegalArgumentException.

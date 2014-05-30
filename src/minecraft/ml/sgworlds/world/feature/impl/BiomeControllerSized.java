@@ -16,12 +16,10 @@ import java.util.Random;
 
 import ml.sgworlds.api.world.IWorldData;
 import ml.sgworlds.api.world.feature.FeatureProvider;
-import ml.sgworlds.api.world.feature.FeatureType;
-import ml.sgworlds.api.world.feature.SGWFeatures;
-import ml.sgworlds.api.world.feature.WorldFeature;
 import ml.sgworlds.api.world.feature.prefab.BaseBiomeController;
 import ml.sgworlds.api.world.feature.types.IBiomeController;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.WorldProvider;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.gen.layer.GenLayer;
@@ -44,9 +42,32 @@ public class BiomeControllerSized extends BaseBiomeController implements IBiomeC
 	public BiomeControllerSized(FeatureProvider provider, IWorldData worldData, int zoom, List<BiomeGenBase> biomes) {
 		super(provider, worldData);
 		this.zoomFactor = zoom;
-
 		this.allowedBiomes = biomes;
 
+	}
+	
+	public BiomeControllerSized(FeatureProvider provider, IWorldData worldData, Random rnd) {
+		super(provider, worldData);
+		
+		this.zoomFactor = rnd.nextInt(7);
+		
+		List<BiomeGenBase> vbiomes = new ArrayList<BiomeGenBase>(Arrays.asList(WorldType.DEFAULT.getBiomesForWorldType()));
+		Collections.shuffle(vbiomes);
+		this.allowedBiomes = vbiomes.subList(0, rnd.nextInt(vbiomes.size()-3)+3);
+	}
+	
+	public BiomeControllerSized(FeatureProvider provider, IWorldData worldData, NBTTagCompound nbtData) {
+		super(provider, worldData);
+		
+		this.zoomFactor = nbtData.getInteger("zoomFactor");
+		this.allowedBiomes = new ArrayList<BiomeGenBase>();
+		for (int bioId : nbtData.getIntArray("biomes")) {
+			allowedBiomes.add(BiomeGenBase.biomeList[bioId]);
+		}
+	}
+	
+	@Override
+	public void onProviderCreated(WorldProvider wprovider) {
 		GenLayer[] agenlayer = initializeAllBiomeGenerators(worldData.getWorldSeed(), WorldType.DEFAULT);
 		this.genBiomes = agenlayer[0];
 		this.biomeIndexLayer = agenlayer[1];
@@ -135,23 +156,4 @@ public class BiomeControllerSized extends BaseBiomeController implements IBiomeC
 
 	}
 	
-	public static final FeatureProvider provider = new FeatureProvider(SGWFeatures.BIOME_SIZED.name(), FeatureType.BIOME_CONTROLLER, BiomeControllerSized.class) {
-		@Override
-		public WorldFeature generateRandom(IWorldData worldData, Random rnd) {
-			List<BiomeGenBase> vbiomes = Arrays.asList(WorldType.DEFAULT.getBiomesForWorldType());
-			Collections.shuffle(vbiomes);
-			List<BiomeGenBase> biomes = vbiomes.subList(0, rnd.nextInt(vbiomes.size()-3)+3);
-			
-			return new BiomeControllerSized(provider, worldData, rnd.nextInt(7), biomes);
-		}
-		@Override
-		public WorldFeature loadFromNBT(IWorldData worldData, NBTTagCompound nbtData) {
-			List<BiomeGenBase> biomes = new ArrayList<BiomeGenBase>();
-			for (int bioId : nbtData.getIntArray("biomes")) {
-				biomes.add(BiomeGenBase.biomeList[bioId]);
-			}
-			return new BiomeControllerSized(this, worldData, nbtData.getInteger("zoomFactor"), biomes);
-		}
-	};
-
 }

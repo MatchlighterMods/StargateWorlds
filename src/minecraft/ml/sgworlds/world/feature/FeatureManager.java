@@ -6,14 +6,14 @@ import java.util.List;
 import ml.sgworlds.api.world.IWorldData;
 import ml.sgworlds.api.world.feature.FeatureProvider;
 import ml.sgworlds.api.world.feature.FeatureType;
-import ml.sgworlds.api.world.feature.IFeatureAPI;
+import ml.sgworlds.api.world.feature.IFeatureManager;
 import ml.sgworlds.api.world.feature.IFeatureBuilder;
 import ml.sgworlds.api.world.feature.WorldFeature;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
-public class FeatureManager implements IFeatureAPI {
+public class FeatureManager implements IFeatureManager {
 	
 	public static FeatureManager instance = new FeatureManager();
 	

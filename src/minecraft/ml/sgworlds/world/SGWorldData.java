@@ -267,7 +267,7 @@ public class SGWorldData extends WorldSavedData implements IWorldData {
 		return sgd;
 	}
 	
-	public static IWorldData fromStaticWorld(IStaticWorld sworld) {
+	public static SGWorldData fromStaticWorld(IStaticWorld sworld) {
 		SGWorldData sgd = new SGWorldData(sworld.getDesignation(), sworld.getAddress());
 		sgd.seed = sworld.getSeed();
 		sgd.name = sworld.getName();

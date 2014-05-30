@@ -3,7 +3,7 @@ package ml.sgworlds.api.world.feature;
 import ml.sgworlds.api.world.IWorldData;
 
 
-public interface IFeatureAPI {
+public interface IFeatureManager {
 
 	public boolean registerFeatureProvider(FeatureProvider feature);
 

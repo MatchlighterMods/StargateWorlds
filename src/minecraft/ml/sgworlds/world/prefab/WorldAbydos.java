@@ -43,12 +43,12 @@ public class WorldAbydos implements IStaticWorld {
 		Random rand = new Random();
 		
 		// Suns
-		
+		fbuilder.createFeatureConstructor(SGWFeatures.SUN_NORMAL.name());
 		
 		// Moons
-		fbuilder.createFeatureReflection(SGWFeatures.MOON_NORMAL.name(), "size", 20, "angle", 70, "orbitPeriod", 10000L);
+		fbuilder.createFeatureReflection(SGWFeatures.MOON_NORMAL.name(), "size", 40, "angle", 70, "orbitPeriod", 10000L);
 		fbuilder.createFeatureReflection(SGWFeatures.MOON_NORMAL.name(), "size", 30, "angle", 10, "orbitPeriod", 32000L, "offset", -0.35F);
-		fbuilder.createFeatureReflection(SGWFeatures.MOON_NORMAL.name(), "size", 40);
+		fbuilder.createFeatureReflection(SGWFeatures.MOON_NORMAL.name(), "size", 20);
 		
 		// Biome
 		fbuilder.createFeatureConstructor(SGWFeatures.BIOME_SINGLE.name(), BiomeGenBase.desert);
