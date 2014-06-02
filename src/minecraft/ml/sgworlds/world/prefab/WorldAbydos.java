@@ -53,11 +53,14 @@ public class WorldAbydos implements IStaticWorld {
 		// Biome
 		fbuilder.createFeatureConstructor(SGWFeatures.BIOME_SINGLE.name(), BiomeGenBase.desert);
 		
-		// Terrain
-		fbuilder.createFeatureConstructor(SGWFeatures.TERRAIN_NORMAL.name());
-		
 		// Populators
 		fbuilder.createFeatureConstructor(SGWFeatures.POPULATE_ORE_NAQUADAH.name());
+		
+		// Clouds
+		fbuilder.createFeatureConstructor(SGWFeatures.CLOUD_COLOR_NORMAL.name(), 0xEFEDCB);
+		
+		// Fog
+		fbuilder.createFeatureConstructor(SGWFeatures.FOG_COLOR_NORMAL.name(), 0xCCBF8C);
 		
 		return fbuilder.getFeatureList();
 	}

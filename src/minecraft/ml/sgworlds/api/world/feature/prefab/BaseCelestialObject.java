@@ -72,6 +72,7 @@ public abstract class BaseCelestialObject extends WorldFeature implements ICeles
 		tess.draw();
 	}
 
+	// TODO Make Feature?
 	private float[] colorsSunriseSunset = new float[4];
 	protected float[] calcSunriseSunsetColors(float celestialAngle, float partialTicks) {
 		float f2 = 0.4F;
@@ -156,6 +157,16 @@ public abstract class BaseCelestialObject extends WorldFeature implements ICeles
 		f1 = 1.0F - (float)((Math.cos((double)f1 * Math.PI) + 1.0D) / 2.0D);
 		f1 = f2 + (f1 - f2) / 3.0F;
 		return f1;
+	}
+	
+	@Override
+	public long getTimeToRise(long curtime) {
+		if (orbitPeriod == 0) return 0;
+		
+		long riseTime = (long)((float)orbitPeriod * Math.abs(0.75F - offset));
+		long timeOfDay = curtime % orbitPeriod;
+		if (timeOfDay > riseTime) riseTime += orbitPeriod;
+		return riseTime - timeOfDay;
 	}
 
 	@Override

@@ -10,9 +10,9 @@ import cpw.mods.fml.common.FMLLog;
 
 public class APIImplementation extends SGWorldsAPI {
 
-	public void expose() {
+	public static void expose() {
 		FMLLog.info("Exposing SGWorlds API Instance");
-		sgworldsAPI = this;
+		sgworldsAPI = new APIImplementation();
 	}
 	
 	@Override

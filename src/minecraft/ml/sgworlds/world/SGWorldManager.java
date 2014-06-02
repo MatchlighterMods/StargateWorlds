@@ -16,6 +16,7 @@ import ml.sgworlds.network.packet.PacketWorldData;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.common.ForgeChunkManager;
 import stargatetech2.api.StargateTechAPI;
 import stargatetech2.api.stargate.Address;
 import stargatetech2.api.stargate.IDynamicWorldLoader;
@@ -99,6 +100,11 @@ public class SGWorldManager implements IDynamicWorldLoader {
 		for (SGWorldData data : worlds) {
 			if (data.getDimensionId() != 0) {
 				registerDimension(data.getDimensionId());
+				
+				File saveDir = DimensionManager.getCurrentSaveRootDirectory();
+				saveDir = new File(saveDir, data.getSaveFolderName());
+				ForgeChunkManager.savedWorldHasForcedChunkTickets(saveDir);
+				// TODO
 			}
 		}
 	}
@@ -155,14 +161,13 @@ public class SGWorldManager implements IDynamicWorldLoader {
 		
 		if (!wmFile.exists()) {
 			int genCount = Registry.config.numberWorldsToGenerate + RandomUtils.randomInt(Registry.config.numberWorldsToGenerateRandom+1);
-			List<SGWorldData> worlds = WorldDataGenerator.generateRandomWorlds(genCount);
 			
-			for (IStaticWorld staticWorld : instance.staticWorlds) {
-				worlds.add(SGWorldData.fromStaticWorld(staticWorld));
+			for (int i=0; i < genCount; i++) {
+				instance.registerSGWorld(SGWorldData.generateRandom());
 			}
 			
-			for (SGWorldData sgwd : worlds) {
-				instance.registerSGWorld(sgwd);
+			for (IStaticWorld staticWorld : instance.staticWorlds) {
+				instance.registerSGWorld(SGWorldData.fromStaticWorld(staticWorld));
 			}
 			
 		} else {

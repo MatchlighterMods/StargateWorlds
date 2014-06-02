@@ -43,6 +43,8 @@ public class SGWorldData implements IWorldData {
 	private SGWorldProvider worldProvider;
 	private boolean dirty;
 	
+	private long worldTime;
+	
 	public SGWorldData(String designation, Address address) {
 		this.designation = designation;
 		this.primaryAddress = address;
@@ -64,6 +66,7 @@ public class SGWorldData implements IWorldData {
 		this.primaryAddress = StargateTechAPI.api().getStargateNetwork().parseAddress(nbt.getString("address"));
 		this.dimensionId = nbt.getInteger("dim");
 		this.seed = nbt.getLong("seed");
+		this.worldTime = nbt.getLong("worldTime");
 		
 		features = HashMultimap.create();
 		NBTTagList list = nbt.getTagList("features");
@@ -96,6 +99,7 @@ public class SGWorldData implements IWorldData {
 		nbt.setString("address", primaryAddress.toString());
 		nbt.setInteger("dim", dimensionId);
 		nbt.setLong("seed", seed);
+		nbt.setLong("worldTime", worldTime);
 		
 		NBTTagList list = new NBTTagList();
 		Set<WorldFeature> featureSet = new HashSet<WorldFeature>(features.values());
@@ -116,7 +120,7 @@ public class SGWorldData implements IWorldData {
 		for (FeatureType ftype : FeatureType.values()) {
 			if (ftype == FeatureType.ALL) continue;
 			
-			fillFeatures();
+			fillFeatures(false);
 			
 			// Check that we meet the minimums.
 			int count = getFeatures(ftype).size();
@@ -138,9 +142,10 @@ public class SGWorldData implements IWorldData {
 	
 	/**
 	 * Checks if we meet the minimum count for each feature. If not, generate features to minimum.
-	 * @return If any feature were generated and added.
+	 * @param useDefaults If true, default features are preferred. It will only generate a random feature if there isn't a default.
+	 * @return If any features were generated and added.
 	 */
-	public boolean fillFeatures() {
+	public boolean fillFeatures(boolean useDefaults) {
 		Random rand = new Random();
 		
 		boolean flag = false;
@@ -149,8 +154,14 @@ public class SGWorldData implements IWorldData {
 
 			int fcount = type.getMinimumCount() - this.getFeatures(type).size();
 			if (fcount > 0) {
-				List<WorldFeature> features = WorldDataGenerator.generateRandomFeatureType(this, type, fcount, rand);
-				this.features.putAll(type, features);
+				flag = true;
+				FeatureProvider provider = FeatureManager.instance.getDefaultFeatureProvider(type);
+				if (provider != null) {
+					this.features.put(type, provider.constructFeature(this));
+				} else {
+					List<WorldFeature> features = WorldDataGenerator.generateRandomTypeFeatures(this, type, fcount, rand);
+					this.features.putAll(type, features);
+				}
 				markDirty();
 			}
 		}
@@ -180,6 +191,15 @@ public class SGWorldData implements IWorldData {
 		return seed;
 	}
 	
+	public long getWorldTime() {
+		return worldTime;
+	}
+	
+	public void setWorldTime(long worldTime) {
+		this.worldTime = worldTime;
+		markDirty();
+	}
+	
 	@Override
 	public WorldProvider getWorldProvider() {
 		return worldProvider;
@@ -190,6 +210,10 @@ public class SGWorldData implements IWorldData {
 		for (WorldFeature feature : features.values()) {
 			feature.onProviderCreated(pvdr);
 		}
+	}
+	
+	public String getSaveFolderName() {
+		return "SG_WORLD" + this.dimensionId;
 	}
 	
 	@Override
@@ -269,7 +293,7 @@ public class SGWorldData implements IWorldData {
 	}
 	
 	public static SGWorldData generateRandom() {
-		SGWorldData sgd = new SGWorldData(WorldDataGenerator.getRandomDesignation(), WorldDataGenerator.generateAddress(true));
+		SGWorldData sgd = new SGWorldData(WorldDataGenerator.getRandomDesignation(), WorldDataGenerator.generateAddress());
 		sgd.seed = (new Random()).nextLong();
 		
 		for (WorldFeature feat : WorldDataGenerator.generateRandomFeatures(sgd).values()) {
@@ -287,7 +311,7 @@ public class SGWorldData implements IWorldData {
 			sgd.addFeature(feat);
 		}
 		
-		sgd.fillFeatures();
+		sgd.fillFeatures(true);
 		
 		return sgd;
 	}

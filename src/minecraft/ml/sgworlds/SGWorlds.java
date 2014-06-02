@@ -2,8 +2,10 @@ package ml.sgworlds;
 
 import java.io.File;
 
+import ml.sgworlds.api.RegisterEvent;
 import ml.sgworlds.api.world.feature.FeatureType;
 import ml.sgworlds.api.world.feature.SGWFeatures;
+import ml.sgworlds.api.world.feature.prefab.BaseWeatherController;
 import ml.sgworlds.network.ServerConnectionHandler;
 import ml.sgworlds.world.GenEventHandler;
 import ml.sgworlds.world.SGWorldManager;
@@ -12,13 +14,21 @@ import ml.sgworlds.world.feature.FeatureManager;
 import ml.sgworlds.world.feature.impl.BiomeControllerNative;
 import ml.sgworlds.world.feature.impl.BiomeControllerSingle;
 import ml.sgworlds.world.feature.impl.BiomeControllerSized;
+import ml.sgworlds.world.feature.impl.CloudColorNormal;
+import ml.sgworlds.world.feature.impl.FogColorNormal;
 import ml.sgworlds.world.feature.impl.MoonDefault;
 import ml.sgworlds.world.feature.impl.PopulateNaquadah;
+import ml.sgworlds.world.feature.impl.SkyColorNormal;
 import ml.sgworlds.world.feature.impl.StarsDefault;
 import ml.sgworlds.world.feature.impl.StarsEnd;
 import ml.sgworlds.world.feature.impl.StarsTwinkle;
 import ml.sgworlds.world.feature.impl.SunDefault;
 import ml.sgworlds.world.feature.impl.TerrainDefault;
+import ml.sgworlds.world.feature.impl.WeatherClear;
+import ml.sgworlds.world.feature.impl.WeatherRainySnowy;
+import ml.sgworlds.world.feature.impl.WeatherStormy;
+import ml.sgworlds.world.feature.impl.WeatherThunder;
+import ml.sgworlds.world.prefab.WorldAbydos;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.DimensionManager;
@@ -33,6 +43,7 @@ import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLInterModComms.IMCEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerAboutToStartEvent;
@@ -58,32 +69,37 @@ public class SGWorlds {
 		public void PreInit(FMLPreInitializationEvent evt){
 			Configuration cfg = new Configuration(evt.getSuggestedConfigurationFile());
 			Registry.config = (SGWorldsConfig)new SGWorldsConfig(cfg).load();
-		}
-		
-		@EventHandler
-		public void Init(FMLInitializationEvent evt){
 			
 			Registry.registerTileEntities();
 			Registry.registerBlocks();
 			Registry.registerItems();
 			Registry.registerRecipes();
 			
-			NetworkRegistry.instance().registerGuiHandler(instance, proxy);
-			Registry.registerPackets();
-			
-			proxy.load();
-			
 			DimensionManager.registerProviderType(Registry.config.worldProviderId, SGWorldProvider.class, false);
 			
 			NetworkRegistry.instance().registerConnectionHandler(new ServerConnectionHandler());
-			
-			registerFeatures();
+			NetworkRegistry.instance().registerGuiHandler(instance, proxy);
+			Registry.registerPackets();
 			
 			GenEventHandler geh = new GenEventHandler();
 			MinecraftForge.ORE_GEN_BUS.register(geh);
 			MinecraftForge.TERRAIN_GEN_BUS.register(geh);
 			
 			MinecraftForge.EVENT_BUS.register(this);
+		}
+		
+		@EventHandler
+		public void Init(FMLInitializationEvent evt){
+			
+			proxy.load();
+			
+			APIImplementation.expose();
+			
+			registerFeatures();
+			MinecraftForge.EVENT_BUS.post(new RegisterEvent.RegisterFeatures(FeatureManager.instance));
+
+			APIImplementation.getSGWorldsAPI().registerStaticWorld(new WorldAbydos());
+			MinecraftForge.EVENT_BUS.post(new RegisterEvent.RegisterStaticWorlds());
 		}
 		
 		@EventHandler
@@ -105,6 +121,11 @@ public class SGWorlds {
 			SGWorldManager.instance = null;
 		}
 		
+		@EventHandler
+		public void handleIMC(IMCEvent evt) {
+			
+		}
+		
 		@ForgeSubscribe
 		public void worldSaved(WorldEvent.Save evt) {
 			SGWorldManager.instance.saveData();
@@ -112,27 +133,49 @@ public class SGWorlds {
 		
 		public void registerFeatures() {
 			FeatureManager fm = FeatureManager.instance;
-			//Suns
+			// Suns
 			fm.registerFeature(SGWFeatures.SUN_NORMAL.name(), FeatureType.SUN, SunDefault.class);
 			
-			//Moons
+			// Moons
 			fm.registerFeature(SGWFeatures.MOON_NORMAL.name(), FeatureType.MOON, MoonDefault.class);
 			
-			//Stars
+			// Stars
 			fm.registerFeature(SGWFeatures.STARS_NORMAL.name(), FeatureType.STARS, StarsDefault.class);
 			fm.registerFeature(SGWFeatures.STARS_END.name(), FeatureType.STARS, StarsEnd.class, 4, false);
 			fm.registerFeature(SGWFeatures.STARS_TWINKLE.name(), FeatureType.STARS, StarsTwinkle.class);
 			
-			//Biome Controllers
+			// Biome Controllers
 			fm.registerFeature(SGWFeatures.BIOME_NATIVE.name(), FeatureType.BIOME_CONTROLLER, BiomeControllerNative.class);
 			fm.registerFeature(SGWFeatures.BIOME_SINGLE.name(), FeatureType.BIOME_CONTROLLER, BiomeControllerSingle.class);
 			fm.registerFeature(SGWFeatures.BIOME_SIZED.name(), FeatureType.BIOME_CONTROLLER, BiomeControllerSized.class);
 			
-			//Terrain Gens
-			fm.registerFeature(SGWFeatures.TERRAIN_NORMAL.name(), FeatureType.TERRAIN_GENERATOR, TerrainDefault.class);
+			// Terrain Gens
+				fm.setDefaultFeatureProvider(
+			fm.registerFeature(SGWFeatures.TERRAIN_NORMAL.name(), FeatureType.TERRAIN_GENERATOR, TerrainDefault.class));
 			
-			//Populators
+			// Populators
 			fm.registerFeature(SGWFeatures.POPULATE_ORE_NAQUADAH.name(), FeatureType.CHUNK_POPULATOR, PopulateNaquadah.class, 6, true);
+			
+			// Weather Controllers
+				fm.setDefaultFeatureProvider(
+			fm.registerFeature(SGWFeatures.WEATHER_NORMAL.name(), FeatureType.WEATHER_CONTROLLER, BaseWeatherController.class));
+			fm.registerFeature(SGWFeatures.WEATHER_CLEAR.name(), FeatureType.WEATHER_CONTROLLER, WeatherClear.class);
+			fm.registerFeature(SGWFeatures.WEATHER_RAINY.name(), FeatureType.WEATHER_CONTROLLER, WeatherRainySnowy.class);
+			fm.registerFeature(SGWFeatures.WEATHER_STORMY.name(), FeatureType.WEATHER_CONTROLLER, WeatherStormy.class);
+			fm.registerFeature(SGWFeatures.WEATHER_THUNDER.name(), FeatureType.WEATHER_CONTROLLER, WeatherThunder.class);
+			
+			// Fog Color
+				fm.setDefaultFeatureProvider(
+			fm.registerFeature(SGWFeatures.FOG_COLOR_NORMAL.name(), FeatureType.FOG_COLOR, FogColorNormal.class));
+			
+			// Cloud Color
+				fm.setDefaultFeatureProvider(
+			fm.registerFeature(SGWFeatures.CLOUD_COLOR_NORMAL.name(), FeatureType.CLOUD_COLOR, CloudColorNormal.class));
+			
+			// SkyColor
+				fm.setDefaultFeatureProvider(
+			fm.registerFeature(SGWFeatures.SKY_COLOR_NORMAL.name(), FeatureType.SKY_COLOR, SkyColorNormal.class));
+			
 		}
 		
 		public static File getSaveFile(String flName) {

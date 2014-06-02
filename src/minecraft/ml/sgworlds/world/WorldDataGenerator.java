@@ -58,7 +58,7 @@ public class WorldDataGenerator {
 		return true;
 	}
 
-	private static WorldFeature getRandomFeature(FeatureProvider provider, IWorldData worldData, FeatureType type) {
+	private static WorldFeature generateRandomTypeFeature(FeatureProvider provider, IWorldData worldData, FeatureType type) {
 		WorldFeature feature = provider.generateRandom(worldData, new Random());
 
 		if (type.clazz == null || type.clazz.isAssignableFrom(feature.getClass())) {
@@ -69,7 +69,15 @@ public class WorldDataGenerator {
 		}
 	}
 
-	public static List<WorldFeature> generateRandomFeatureType(IWorldData worldData, FeatureType type, int count, Random rand) {
+	/**
+	 * Generates features for the type and count specified.
+	 * @param worldData The {@link SGWorldData} to associate the features with.
+	 * @param type The type of the features to generate.
+	 * @param count The number of features to generate.
+	 * @param rand The {@link Random} to use for generation.
+	 * @return A list of the generated {@link WorldFeature}s
+	 */
+	public static List<WorldFeature> generateRandomTypeFeatures(IWorldData worldData, FeatureType type, int count, Random rand) {
 
 		List<WorldFeature> genFeatures = new ArrayList<WorldFeature>();
 		List<FeatureProvider> typeProviders = FeatureManager.instance.getFeatureProviders(type);
@@ -85,7 +93,7 @@ public class WorldDataGenerator {
 				continue;
 			}
 
-			genFeatures.add(getRandomFeature(provider, worldData, type));
+			genFeatures.add(generateRandomTypeFeature(provider, worldData, type));
 
 			count--;
 		}
@@ -93,13 +101,17 @@ public class WorldDataGenerator {
 		// Independent Features
 		for (FeatureProvider provider : getIndependentProviders(typeProviders)) {
 			if (rand.nextInt(provider.getWeight()) == 0 && checkCompatible(worldData, provider)) {
-				genFeatures.add(getRandomFeature(provider, worldData, type));
+				genFeatures.add(generateRandomTypeFeature(provider, worldData, type));
 			}
 		}
 
 		return genFeatures;
 	}
 
+	/**
+	 * Generates a map of Features for the {@link SGWorldData}, but does NOT add them to the {@link SGWorldData}.
+	 * @return The map of {@link WorldFeature}s
+	 */
 	public static Multimap<FeatureType, WorldFeature> generateRandomFeatures(IWorldData worldData) {
 		Random rand = new Random();
 
@@ -109,22 +121,17 @@ public class WorldDataGenerator {
 
 			int randCount = type.getRandomCount(rand, FeatureManager.instance.getFeatureProviders(type).size()) - worldData.getFeatures(type).size();
 
-			List<WorldFeature> features = generateRandomFeatureType(worldData, type, randCount, rand);
+			List<WorldFeature> features = generateRandomTypeFeatures(worldData, type, randCount, rand);
 			featureMap.putAll(type, features);
 		}
 
 		return featureMap;
 	}
 
-	public static List<SGWorldData> generateRandomWorlds(int count) {
-		List<SGWorldData> worlds = new ArrayList<SGWorldData>();
-		for (int i=0; i < count; i++) {
-			worlds.add(SGWorldData.generateRandom());
-		}
-		return worlds;
-	}
-
-	public static Address generateAddress(boolean reserveIt) {
+	/**
+	 * Generates an options Stargate address and optionally reserves it.
+	 */
+	public static Address generateAddress() {
 		Random random = new Random();
 		Symbol[] symbols;
 		Address address;
@@ -145,7 +152,7 @@ public class WorldDataGenerator {
 			address = Address.create(symbols);
 		} while(address == null
 				|| sgn.addressExists(address)
-				|| (reserveIt && !sgn.reserveDimensionPrefix(SGWorldManager.instance, (Symbol[])Arrays.copyOfRange(symbols, 0, 3))));
+				|| (sgn.prefixExists((Symbol[])Arrays.copyOfRange(symbols, 0, 3))));
 		return address;
 	}
 

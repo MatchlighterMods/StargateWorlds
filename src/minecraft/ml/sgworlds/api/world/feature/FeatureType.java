@@ -9,6 +9,7 @@ import ml.sgworlds.api.world.feature.types.IColorProvider;
 import ml.sgworlds.api.world.feature.types.IFeatureLocator;
 import ml.sgworlds.api.world.feature.types.ILightingController;
 import ml.sgworlds.api.world.feature.types.IPopulate;
+import ml.sgworlds.api.world.feature.types.ISkyColor;
 import ml.sgworlds.api.world.feature.types.ISkyFeature;
 import ml.sgworlds.api.world.feature.types.ITerrainGenerator;
 import ml.sgworlds.api.world.feature.types.ITerrainModifier;
@@ -50,8 +51,9 @@ public enum FeatureType {
 	FEATURE_LOCATOR(0, IFeatureLocator.class),
 	
 	FOG_COLOR(1, IColorProvider.class),
-	SKY_COLOR(1, IColorProvider.class),
-	SUNSET_COLOR(1, IColorProvider.class),
+	SKY_COLOR(1, ISkyColor.class),
+	//SUNSET_COLOR(1, IColorProvider.class),
+	CLOUD_COLOR(1, IColorProvider.class),
 	
 	/**
 	 * Registering a {@link WorldFeatureProvider} as {@link WorldFeatureType#ALL} will throw an IllegalArgumentException.
