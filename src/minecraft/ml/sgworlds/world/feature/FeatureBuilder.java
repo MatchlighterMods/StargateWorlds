@@ -44,7 +44,7 @@ public class FeatureBuilder implements IFeatureBuilder {
 		
 		for (int i=0; i<properties.length; i+=2) {
 			try {
-				FieldUtils.writeDeclaredField(feature, (String)properties[i], properties[i+1]);
+				FieldUtils.writeField(feature, (String)properties[i], properties[i+1]);
 			} catch (Exception e) {
 				FMLLog.severe("Could not set field \"%s\"!", (String)properties[i]);
 			}

@@ -1,11 +1,14 @@
 package ml.sgworlds.world.feature.impl;
 
+import java.util.Random;
+
 import ml.sgworlds.api.world.IWorldData;
 import ml.sgworlds.api.world.feature.FeatureProvider;
 import ml.sgworlds.api.world.feature.prefab.BaseTerrainGenerator;
 import ml.sgworlds.api.world.feature.types.ITerrainGenerator;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
+import net.minecraft.world.WorldProvider;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.gen.NoiseGeneratorOctaves;
 
@@ -26,6 +29,7 @@ public class TerrainDefault extends BaseTerrainGenerator implements ITerrainGene
 
 	float[] parabolicField;
 	private BiomeGenBase[] biomesForGeneration;
+	private Random rand;
 
 	public TerrainDefault(FeatureProvider provider, IWorldData worldData) {
 		super(provider, worldData);
@@ -36,6 +40,27 @@ public class TerrainDefault extends BaseTerrainGenerator implements ITerrainGene
 		// TODO
 	}
 
+	@Override
+	public void onProviderCreated(WorldProvider wprovider) {
+		
+		this.rand = new Random(2);
+		this.noiseGen1 = new NoiseGeneratorOctaves(this.rand, 16);
+        this.noiseGen2 = new NoiseGeneratorOctaves(this.rand, 16);
+        this.noiseGen3 = new NoiseGeneratorOctaves(this.rand, 8);
+        this.noiseGen4 = new NoiseGeneratorOctaves(this.rand, 4);
+        this.noiseGen5 = new NoiseGeneratorOctaves(this.rand, 10);
+        this.noiseGen6 = new NoiseGeneratorOctaves(this.rand, 16);
+
+//        NoiseGeneratorOctaves[] noiseGens = {noiseGen1, noiseGen2, noiseGen3, noiseGen4, noiseGen5, noiseGen6};
+//        noiseGens = TerrainGen.getModdedNoiseGenerators(wprovider.g, this.rand, noiseGens);
+//        this.noiseGen1 = noiseGens[0];
+//        this.noiseGen2 = noiseGens[1];
+//        this.noiseGen3 = noiseGens[2];
+//        this.noiseGen4 = noiseGens[3];
+//        this.noiseGen5 = noiseGens[4];
+//        this.noiseGen6 = noiseGens[5];
+	}
+	
 	@Override
 	public double[] initializeNoiseField(double[] par1ArrayOfDouble, int subX, int subY, int subZ, int sizeX, int sizeY, int sizeZ) {
 		//ChunkProviderEvent.InitNoiseField event = new ChunkProviderEvent.InitNoiseField(this, par1ArrayOfDouble, par2, par3, par4, par5, par6, par7);

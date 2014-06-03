@@ -22,10 +22,12 @@ public class MoonDefault extends BaseCelestialObject {
 	
 	public MoonDefault(FeatureProvider provider, IWorldData worldData, NBTTagCompound tag) {
 		super(provider, worldData, tag);
+		this.textureLocation = locationMoonPhasesPng;
 	}
 	
 	public MoonDefault(FeatureProvider provider, IWorldData worldData, Random rand) {
 		super(provider, worldData, rand);
+		this.textureLocation = locationMoonPhasesPng;
 	}
 
 	@Override
@@ -40,10 +42,10 @@ public class MoonDefault extends BaseCelestialObject {
 		float f17 = (float)(i1 + 1) / 2.0F;
 
 		tess.startDrawingQuads();
-		tess.addVertexWithUV((double)(-size), -100.0D, (double)size, (double)f16, (double)f17);
-		tess.addVertexWithUV((double)size, -100.0D, (double)size, (double)f14, (double)f17);
-		tess.addVertexWithUV((double)size, -100.0D, (double)(-size), (double)f14, (double)f15);
-		tess.addVertexWithUV((double)(-size), -100.0D, (double)(-size), (double)f16, (double)f15);
+		tess.addVertexWithUV((double)(-size), 100.0D, (double)-size, (double)f16, (double)f17);
+		tess.addVertexWithUV((double)size, 100.0D, (double)-size, (double)f14, (double)f17);
+		tess.addVertexWithUV((double)size, 100.0D, (double)(size), (double)f14, (double)f15);
+		tess.addVertexWithUV((double)(-size), 100.0D, (double)(size), (double)f16, (double)f15);
 		tess.draw();
 	}
 

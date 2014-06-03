@@ -19,9 +19,11 @@ public class SunDefault extends BaseCelestialObject {
 	
 	public SunDefault(FeatureProvider provider, IWorldData worldData, NBTTagCompound tag) {
 		super(provider, worldData, tag);
+		this.textureLocation = locationSunPng;
 	}
 	
 	public SunDefault(FeatureProvider provider, IWorldData worldData, Random rand) {
 		super(provider, worldData, rand);
+		this.textureLocation = locationSunPng;
 	}
 }

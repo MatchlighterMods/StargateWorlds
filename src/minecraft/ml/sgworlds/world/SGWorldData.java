@@ -266,10 +266,8 @@ public class SGWorldData implements IWorldData {
 			if (wdloc != null) {
 				NBTTagCompound nbttagcompound = new NBTTagCompound();
 				this.writeToNBT(nbttagcompound);
-				NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-				nbttagcompound1.setCompoundTag("data", nbttagcompound);
 				FileOutputStream fileoutputstream = new FileOutputStream(wdloc);
-				CompressedStreamTools.writeCompressed(nbttagcompound1, fileoutputstream);
+				CompressedStreamTools.writeCompressed(nbttagcompound, fileoutputstream);
 				fileoutputstream.close();
 			}
 			

@@ -16,6 +16,7 @@ import ml.sgworlds.world.feature.impl.BiomeControllerSingle;
 import ml.sgworlds.world.feature.impl.BiomeControllerSized;
 import ml.sgworlds.world.feature.impl.CloudColorNormal;
 import ml.sgworlds.world.feature.impl.FogColorNormal;
+import ml.sgworlds.world.feature.impl.LightingNormal;
 import ml.sgworlds.world.feature.impl.MoonDefault;
 import ml.sgworlds.world.feature.impl.PopulateNaquadah;
 import ml.sgworlds.world.feature.impl.SkyColorNormal;
@@ -163,6 +164,10 @@ public class SGWorlds {
 			fm.registerFeature(SGWFeatures.WEATHER_RAINY.name(), FeatureType.WEATHER_CONTROLLER, WeatherRainySnowy.class);
 			fm.registerFeature(SGWFeatures.WEATHER_STORMY.name(), FeatureType.WEATHER_CONTROLLER, WeatherStormy.class);
 			fm.registerFeature(SGWFeatures.WEATHER_THUNDER.name(), FeatureType.WEATHER_CONTROLLER, WeatherThunder.class);
+			
+			// Lighting Controllers
+				fm.setDefaultFeatureProvider(
+			fm.registerFeature(SGWFeatures.LIGHTING_NORMAL.name(), FeatureType.LIGHTING_CONTROLLER, LightingNormal.class));
 			
 			// Fog Color
 				fm.setDefaultFeatureProvider(

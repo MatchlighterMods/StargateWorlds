@@ -7,6 +7,7 @@ import ml.sgworlds.api.world.feature.FeatureProvider;
 import ml.sgworlds.api.world.feature.FeatureType;
 import ml.sgworlds.api.world.feature.WorldFeature;
 import ml.sgworlds.api.world.feature.types.ITerrainGenerator;
+import net.minecraft.block.Block;
 
 public abstract class BaseTerrainGenerator extends WorldFeature implements ITerrainGenerator {
 
@@ -16,10 +17,10 @@ public abstract class BaseTerrainGenerator extends WorldFeature implements ITerr
 
 	private double[] noiseArray;
 	
-	public short fillBlockId;
-	public byte fillBlockMeta;
-	public short oceanBlockId;
-	public byte oceanBlockMeta;
+	public short fillBlockId = (short)Block.stone.blockID;
+	public byte fillBlockMeta = 0;
+	public short oceanBlockId = (short)Block.waterStill.blockID;
+	public byte oceanBlockMeta = 0;
 	
 	@Override
 	public void getSecondaryTypes(List<FeatureType> types) {}

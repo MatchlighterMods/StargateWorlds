@@ -48,17 +48,23 @@ public abstract class BaseCelestialObject extends WorldFeature implements ICeles
 
 	@Override
 	public void render(float partialTicks, World world, Minecraft mc) {
+		
 		float celestialAngle = calculateCelestialAngle(world.getWorldTime(), partialTicks);
+
+		GL11.glRotatef(angle, 0.0F, 1.0F, 0.0F);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        RenderHelper.disableStandardItemLighting();
 		
 		renderHorizon(partialTicks, world, mc, celestialAngle, 1.0F);
 		
 		float invRainStrength = 1.0F - world.getRainStrength(partialTicks);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, invRainStrength);
-		GL11.glRotatef(angle, 0.0F, 1.0F, 0.0F);
 		GL11.glRotatef(celestialAngle * 360.0F, 1.0F, 0.0F, 0.0F);
 
-		mc.getTextureManager().bindTexture(textureLocation);
-
+		if (textureLocation != null) mc.getTextureManager().bindTexture(textureLocation);
+		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
+		
 		doRender(partialTicks, world, mc);
 	}
 
@@ -94,7 +100,6 @@ public abstract class BaseCelestialObject extends WorldFeature implements ICeles
 	}
 
 	protected void renderHorizon(float partialTicks, World world, Minecraft mc, float celestialAngle, float opacity) {
-		RenderHelper.disableStandardItemLighting();
 		float[] horizonColors = calcSunriseSunsetColors(celestialAngle, partialTicks);
 		float f9;
 		float f10;
@@ -106,6 +111,7 @@ public abstract class BaseCelestialObject extends WorldFeature implements ICeles
 			GL11.glDisable(GL11.GL_TEXTURE_2D);
 			GL11.glShadeModel(GL11.GL_SMOOTH);
 			GL11.glPushMatrix();
+			GL11.glRotatef(90.0F, 0.0F, 1.0F, 0.0F);
 			GL11.glRotatef(90.0F, 1.0F, 0.0F, 0.0F);
 			GL11.glRotatef(MathHelper.sin(celestialAngleRads) < 0.0F ? 180.0F : 0.0F, 0.0F, 0.0F, 1.0F);
 			GL11.glRotatef(90.0F, 0.0F, 0.0F, 1.0F);

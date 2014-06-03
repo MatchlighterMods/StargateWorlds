@@ -19,6 +19,8 @@ public class StarsTwinkle extends BaseCelestialObject {
 	protected int[] starGLCallLists;
 	protected long[] timeOffsets;
 	private boolean setup;
+	
+	private Random random = new Random();
 
 	public StarsTwinkle(FeatureProvider provider, IWorldData worldData) {
 		super(provider, worldData);
@@ -35,14 +37,12 @@ public class StarsTwinkle extends BaseCelestialObject {
 	private void setup() {
 		setup=true;
 		
-		Random rnd = new Random();
-		
 		this.starGLCallLists = new int[10];
 		timeOffsets = new long[starGLCallLists.length];
 		int clists = GLAllocation.generateDisplayLists(starGLCallLists.length);
 		for (int i=0; i<starGLCallLists.length; i++) {
 			starGLCallLists[i] = clists+i;
-			timeOffsets[i] = rnd.nextLong();
+			timeOffsets[i] = random.nextLong();
 			
 			GL11.glNewList(clists+i, GL11.GL_COMPILE);
 			this.renderStars(150);
@@ -51,7 +51,6 @@ public class StarsTwinkle extends BaseCelestialObject {
 	}
 
 	protected void renderStars(int count) {
-		Random random = new Random(10842L);
 		Tessellator tessellator = Tessellator.instance;
 		tessellator.startDrawingQuads();
 
@@ -118,7 +117,7 @@ public class StarsTwinkle extends BaseCelestialObject {
 
 	private float getBrightness(int set, World world, float partialTicks) {
 		float f1 = (float)((world.getWorldTime() + timeOffsets[set]) % 200L) + partialTicks;
-		float f2 = 1.0F - (MathHelper.cos(f1 * (float)Math.PI * 2.0F) * 2.0F + Math.abs(0.5F-partialTicks)/2.0F);
+		float f2 = 1.0F - (MathHelper.cos(f1 * (float)Math.PI * 2.0F) * 2.0F); // + Math.abs(0.5F-partialTicks)/2.0F); // TODO
 
 		if (f2 < 0.0F) f2 = 0.0F;
 		if (f2 > 1.0F) f2 = 1.0F;

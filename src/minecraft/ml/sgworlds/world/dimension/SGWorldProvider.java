@@ -4,6 +4,7 @@ import ml.sgworlds.api.world.feature.FeatureType;
 import ml.sgworlds.api.world.feature.WorldFeature;
 import ml.sgworlds.api.world.feature.types.ICelestialObject;
 import ml.sgworlds.api.world.feature.types.IColorProvider;
+import ml.sgworlds.api.world.feature.types.ILightingController;
 import ml.sgworlds.api.world.feature.types.ISkyColor;
 import ml.sgworlds.api.world.feature.types.IWeatherController;
 import ml.sgworlds.world.SGWorldData;
@@ -26,8 +27,8 @@ public class SGWorldProvider extends WorldProvider {
 	@Override
 	protected void registerWorldChunkManager() {
 		worldData = SGWorldManager.instance.getClientWorldData(dimensionId);
-		worldData.setWorldProvider(this);
 		this.worldChunkMgr = new SGChunkManager(worldData);
+		worldData.setWorldProvider(this);
 	}
 	
 	@Override
@@ -43,12 +44,6 @@ public class SGWorldProvider extends WorldProvider {
 	@Override
 	public String getSaveFolder() {
 		return worldData.getSaveFolderName();
-	}
-	
-	@Override
-	public boolean canBlockFreeze(int x, int y, int z, boolean byWater) {
-		// TODO Auto-generated method stub
-		return super.canBlockFreeze(x, y, z, byWater);
 	}
 	
 	@Override
@@ -78,13 +73,6 @@ public class SGWorldProvider extends WorldProvider {
 	public int getRespawnDimension(EntityPlayerMP player) {
 		// TODO Auto-generated method stub
 		return super.getRespawnDimension(player);
-	}
-	
-	// Occurs as part of tickBlocksAndAmbience
-	@Override
-	public boolean canDoLightning(Chunk chunk) {
-		((IWeatherController)worldData.getFeature(FeatureType.WEATHER_CONTROLLER)).tickLightning(chunk);
-		return false;
 	}
 	
 	// Celestial angle of 0 or 1 = Noon
@@ -145,6 +133,13 @@ public class SGWorldProvider extends WorldProvider {
 	@Override
 	public void resetRainAndThunder() {
 		((IWeatherController)worldData.getFeature(FeatureType.WEATHER_CONTROLLER)).clearWeather();
+	}
+	
+	// Occurs as part of tickBlocksAndAmbience
+	@Override
+	public boolean canDoLightning(Chunk chunk) {
+		((IWeatherController)worldData.getFeature(FeatureType.WEATHER_CONTROLLER)).tickLightning(chunk);
+		return false;
 	}
 	
 	@Override
@@ -252,6 +247,11 @@ public class SGWorldProvider extends WorldProvider {
 		}
 
 		return worldObj.getWorldVec3Pool().getVecFromPool(colorRed, colorGreen, colorBlue);
+	}
+	
+	@Override
+	protected void generateLightBrightnessTable() {
+		((ILightingController)worldData.getFeature(FeatureType.LIGHTING_CONTROLLER)).populateBrightnessTable(lightBrightnessTable);
 	}
 	
 	public void onTick() {

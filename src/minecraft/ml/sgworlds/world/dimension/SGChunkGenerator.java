@@ -97,8 +97,8 @@ public class SGChunkGenerator implements IChunkProvider {
 				short topBlock = biomegenbase.topBlock;
 				short fillBlock = biomegenbase.fillerBlock;
 
-				for (int y = 127; y >= 0; --y) {
-					int blIndex = (x * 16 + z) * 128 + y;
+				for (int y = worldObj.getActualHeight()-1; y >= 0; --y) {
+					int blIndex = y<<8 | z<<4 | x;
 
 					if (y <= 0 + this.rand.nextInt(5)) {
 						blockIds[blIndex] = (short)Block.bedrock.blockID;

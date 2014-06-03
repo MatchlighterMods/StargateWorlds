@@ -124,16 +124,22 @@ public class SGWorldManager implements IDynamicWorldLoader {
 	@Override
 	public void loadWorldFor(Address address, IStargatePlacer seedingShip) {
 		SGWorldData data = getWorldData(address);
-		if (data != null) {
-			data.setDimensionId(DimensionManager.getNextFreeDimId());
-			data.markDirty();
-			
-			DimensionManager.registerDimension(data.getDimensionId(), Registry.config.worldProviderId);
-			registeredDims.add(data.getDimensionId());
-			new PacketRegisterDimensions(data.getDimensionId()).dispatchToAll();
-			
-			WorldServer world = MinecraftServer.getServer().worldServerForDimension(data.getDimensionId());
-			// TODO Place Stargate
+		try {
+			if (data != null) {
+				data.setDimensionId(DimensionManager.getNextFreeDimId());
+				data.markDirty();
+				
+				DimensionManager.registerDimension(data.getDimensionId(), Registry.config.worldProviderId);
+				registeredDims.add(data.getDimensionId());
+				new PacketRegisterDimensions(data.getDimensionId()).dispatchToAll();
+				
+				WorldServer world = MinecraftServer.getServer().worldServerForDimension(data.getDimensionId());
+				
+				seedingShip.placeStargate(world, 0, 80, 0, 0);
+				// TODO Place Stargate
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 	
