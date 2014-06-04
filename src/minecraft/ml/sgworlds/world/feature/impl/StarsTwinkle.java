@@ -4,7 +4,7 @@ import java.util.Random;
 
 import ml.sgworlds.api.world.IWorldData;
 import ml.sgworlds.api.world.feature.FeatureProvider;
-import ml.sgworlds.api.world.feature.prefab.BaseCelestialObject;
+import ml.sgworlds.api.world.feature.prefab.BaseOrbitalObject;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.Tessellator;
@@ -14,7 +14,7 @@ import net.minecraft.world.World;
 
 import org.lwjgl.opengl.GL11;
 
-public class StarsTwinkle extends BaseCelestialObject {
+public class StarsTwinkle extends BaseOrbitalObject {
 
 	protected int[] starGLCallLists;
 	protected long[] timeOffsets;
@@ -116,8 +116,8 @@ public class StarsTwinkle extends BaseCelestialObject {
 	}
 
 	private float getBrightness(int set, World world, float partialTicks) {
-		float f1 = (float)((world.getWorldTime() + timeOffsets[set]) % 200L) + partialTicks;
-		float f2 = 1.0F - (MathHelper.cos(f1 * (float)Math.PI * 2.0F) * 2.0F); // + Math.abs(0.5F-partialTicks)/2.0F); // TODO
+		float f1 = ((float)((world.getWorldTime() + timeOffsets[set]) % 200L) + partialTicks) / 200F;
+		float f2 = 1.0F - (MathHelper.cos(f1 * (float)Math.PI * 2.0F) * 2.0F);
 
 		if (f2 < 0.0F) f2 = 0.0F;
 		if (f2 > 1.0F) f2 = 1.0F;

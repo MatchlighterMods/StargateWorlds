@@ -1,35 +1,42 @@
 package ml.sgworlds.world.gen;
 
-import java.util.Random;
-
+import ml.core.world.feature.StructureGeneratorBase;
 import net.minecraft.world.World;
-import ml.core.world.feature.IFeatureGenerator;
+import net.minecraft.world.gen.structure.StructureStart;
 
-public class CartoucheGenerator implements IFeatureGenerator {
-
-	@Override
-	public boolean doGeneration(Random rand, int chunkX, int chunkZ,
-			World world, boolean isRetroGen, int oldVersion) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public String getSubIdentifier() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+public class CartoucheGenerator extends StructureGeneratorBase {
 
 	@Override
 	public int getFeatureVersion() {
-		// TODO Auto-generated method stub
-		return 0;
+		return 1;
 	}
 
 	@Override
 	public boolean allowRetroGen() {
+		return true;
+	}
+
+	@Override
+	public String func_143025_a() {
+		return "SGWCartouche";
+	}
+
+	@Override
+	public boolean canGenerateInWorld(World world) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	
+	@Override
+	protected boolean canSpawnStructureAtCoords(int i, int j) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	protected StructureStart getStructureStart(int i, int j) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

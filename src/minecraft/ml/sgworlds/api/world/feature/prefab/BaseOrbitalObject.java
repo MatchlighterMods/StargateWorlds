@@ -5,7 +5,7 @@ import java.util.Random;
 import ml.sgworlds.api.world.IWorldData;
 import ml.sgworlds.api.world.feature.FeatureProvider;
 import ml.sgworlds.api.world.feature.WorldFeature;
-import ml.sgworlds.api.world.feature.types.ICelestialObject;
+import ml.sgworlds.api.world.feature.types.IOrbitalObject;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
@@ -16,19 +16,20 @@ import net.minecraft.world.World;
 
 import org.lwjgl.opengl.GL11;
 
-public abstract class BaseCelestialObject extends WorldFeature implements ICelestialObject {
+public abstract class BaseOrbitalObject extends WorldFeature implements IOrbitalObject {
 
 	public long orbitPeriod = 24000L;
 	public int angle = 0;
 	public float offset = -0.25F;
 	public int size = 30;
+	public boolean hasHorizon = false;
 	public ResourceLocation textureLocation;
 	
-	public BaseCelestialObject(FeatureProvider provider, IWorldData worldData) {
+	public BaseOrbitalObject(FeatureProvider provider, IWorldData worldData) {
 		super(provider, worldData);
 	}
 	
-	public BaseCelestialObject(FeatureProvider provider, IWorldData worldData, NBTTagCompound tag) {
+	public BaseOrbitalObject(FeatureProvider provider, IWorldData worldData, NBTTagCompound tag) {
 		super(provider, worldData);
 		
 		this.orbitPeriod = tag.getLong("period");
@@ -37,7 +38,7 @@ public abstract class BaseCelestialObject extends WorldFeature implements ICeles
 		this.size = tag.getInteger("size");
 	}
 	
-	public BaseCelestialObject(FeatureProvider provider, IWorldData worldData, Random rnd) {
+	public BaseOrbitalObject(FeatureProvider provider, IWorldData worldData, Random rnd) {
 		super(provider, worldData);
 		
 		this.orbitPeriod = (rnd.nextInt(32-6)+6) * 1000;
@@ -55,7 +56,7 @@ public abstract class BaseCelestialObject extends WorldFeature implements ICeles
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         RenderHelper.disableStandardItemLighting();
 		
-		renderHorizon(partialTicks, world, mc, celestialAngle, 1.0F);
+		if (hasHorizon) renderHorizon(partialTicks, world, mc, celestialAngle, 1.0F);
 		
 		float invRainStrength = 1.0F - world.getRainStrength(partialTicks);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, invRainStrength);
@@ -148,7 +149,7 @@ public abstract class BaseCelestialObject extends WorldFeature implements ICeles
 			GL11.glShadeModel(GL11.GL_FLAT);
 		}
 	}
-
+	
 	@Override
 	public float calculateCelestialAngle(long worldTime, float partialTickTime) {
 		if (this.orbitPeriod == 0L) return offset;
@@ -170,6 +171,16 @@ public abstract class BaseCelestialObject extends WorldFeature implements ICeles
 		if (orbitPeriod == 0) return 0;
 		
 		long riseTime = (long)((float)orbitPeriod * Math.abs(0.75F - offset));
+		long timeOfDay = curtime % orbitPeriod;
+		if (timeOfDay > riseTime) riseTime += orbitPeriod;
+		return riseTime - timeOfDay;
+	}
+	
+	@Override
+	public long getTimeToSet(long curtime) {
+		if (orbitPeriod == 0) return 0;
+		
+		long riseTime = (long)((float)orbitPeriod * Math.abs(0.25F - offset));
 		long timeOfDay = curtime % orbitPeriod;
 		if (timeOfDay > riseTime) riseTime += orbitPeriod;
 		return riseTime - timeOfDay;

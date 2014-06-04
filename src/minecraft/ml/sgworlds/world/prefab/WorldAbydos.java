@@ -3,6 +3,7 @@ package ml.sgworlds.world.prefab;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.world.WorldServer;
 import net.minecraft.world.biome.BiomeGenBase;
 
 import ml.sgworlds.api.world.IStaticWorld;
@@ -13,12 +14,12 @@ import ml.sgworlds.api.world.feature.WorldFeature;
 import ml.sgworlds.world.feature.FeatureBuilder;
 import stargatetech2.api.StargateTechAPI;
 import stargatetech2.api.stargate.Address;
+import stargatetech2.api.stargate.IStargatePlacer;
 
 public class WorldAbydos implements IStaticWorld {
 
 	@Override
 	public long getSeed() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
@@ -46,8 +47,8 @@ public class WorldAbydos implements IStaticWorld {
 		fbuilder.createFeatureReflection(SGWFeatures.SUN_NORMAL.name());
 		
 		// Moons
-		fbuilder.createFeatureReflection(SGWFeatures.MOON_NORMAL.name(), "size", 40, "angle", 70, "orbitPeriod", 10000L);
-		fbuilder.createFeatureReflection(SGWFeatures.MOON_NORMAL.name(), "size", 30, "angle", 10, "orbitPeriod", 32000L, "offset", -0.35F);
+		fbuilder.createFeatureReflection(SGWFeatures.MOON_NORMAL.name(), "size", 15, "angle", 70, "orbitPeriod", 10000L);
+		fbuilder.createFeatureReflection(SGWFeatures.MOON_NORMAL.name(), "size", 25, "angle", 10, "orbitPeriod", 32000L, "offset", -0.35F);
 		fbuilder.createFeatureReflection(SGWFeatures.MOON_NORMAL.name(), "size", 20);
 		
 		// Biome
@@ -63,6 +64,12 @@ public class WorldAbydos implements IStaticWorld {
 		fbuilder.createFeatureConstructor(SGWFeatures.FOG_COLOR_NORMAL.name(), 0xCCBF8C);
 		
 		return fbuilder.getFeatureList();
+	}
+
+	@Override
+	public boolean generateStargate(WorldServer world, IStargatePlacer seedingShip) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

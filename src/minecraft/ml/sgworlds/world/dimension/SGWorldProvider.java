@@ -2,14 +2,16 @@ package ml.sgworlds.world.dimension;
 
 import ml.sgworlds.api.world.feature.FeatureType;
 import ml.sgworlds.api.world.feature.WorldFeature;
-import ml.sgworlds.api.world.feature.types.ICelestialObject;
 import ml.sgworlds.api.world.feature.types.IColorProvider;
 import ml.sgworlds.api.world.feature.types.ILightingController;
+import ml.sgworlds.api.world.feature.types.IOrbitalObject;
 import ml.sgworlds.api.world.feature.types.ISkyColor;
 import ml.sgworlds.api.world.feature.types.IWeatherController;
+import ml.sgworlds.network.packet.PacketWorldData;
 import ml.sgworlds.world.SGWorldData;
 import ml.sgworlds.world.SGWorldManager;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
@@ -18,10 +20,15 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraftforge.client.IRenderHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class SGWorldProvider extends WorldProvider {
 
 	private SGWorldData worldData;
+	private boolean clientDataDirty;
+	
+	@SideOnly(Side.CLIENT)
 	private SGWorldSkyRenderer skyRenderer;
 	
 	@Override
@@ -54,6 +61,7 @@ public class SGWorldProvider extends WorldProvider {
 	@Override
 	public void setWorldTime(long time) {
 		worldData.setWorldTime(time);
+		clientDataDirty = true;
 	}
 	
 	@Override
@@ -70,8 +78,12 @@ public class SGWorldProvider extends WorldProvider {
 	}
 	
 	@Override
+	public boolean canRespawnHere() {
+		return false;
+	}
+	
+	@Override
 	public int getRespawnDimension(EntityPlayerMP player) {
-		// TODO Auto-generated method stub
 		return super.getRespawnDimension(player);
 	}
 	
@@ -84,7 +96,7 @@ public class SGWorldProvider extends WorldProvider {
 	public float getCelestialAngle(float partialTicks) {
 		float min=0.5F, max=0.5F;
 		for (WorldFeature feat : worldData.getFeatures(FeatureType.SUN)) {
-			ICelestialObject sun = (ICelestialObject)feat;
+			IOrbitalObject sun = (IOrbitalObject)feat;
 			float s = sun.calculateCelestialAngle(getWorldTime(), partialTicks);
 			if (s<0.0F) s++;
 			if (s>1.0F) s--;
@@ -99,7 +111,7 @@ public class SGWorldProvider extends WorldProvider {
 	public long getTimeToSunrise(long worldTime) {
 		long dtime = -1;
 		for (WorldFeature feature : worldData.getFeatures(FeatureType.SUN)) {
-			ICelestialObject sun = (ICelestialObject)feature;
+			IOrbitalObject sun = (IOrbitalObject)feature;
 			long tmToRise = sun.getTimeToRise(worldTime);
 			if (dtime < 0 || tmToRise < dtime) dtime = tmToRise;
 		}
@@ -254,6 +266,13 @@ public class SGWorldProvider extends WorldProvider {
 		((ILightingController)worldData.getFeature(FeatureType.LIGHTING_CONTROLLER)).populateBrightnessTable(lightBrightnessTable);
 	}
 	
+	/**
+	 * Marks the worldData as having been updated and needing to be pushed to the client.
+	 */
+	public void markDirtyClient() {
+		this.clientDataDirty = true;
+	}
+	
 	public void onTick() {
 		if (worldObj.isRemote) {
 			
@@ -262,7 +281,17 @@ public class SGWorldProvider extends WorldProvider {
 				setWorldTime(getWorldTime() + getTimeToSunrise(getWorldTime()));
 			}
 			
-			setWorldTime(getWorldTime() + 1L);
+			worldData.setWorldTime(getWorldTime() + 1L);
+			
+			if (clientDataDirty && getWorldTime() % 40 == 0) {
+				clientDataDirty = false;
+				PacketWorldData pwd = new PacketWorldData(worldData);
+				for (Object pl : worldObj.playerEntities) {
+					if (pl instanceof EntityPlayerMP) {
+						pwd.dispatchToPlayer((EntityPlayer)pl);
+					}
+				}
+			}
 		}
 	}
 	

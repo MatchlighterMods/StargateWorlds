@@ -41,7 +41,7 @@ public class SGChunkGenerator implements IChunkProvider {
 	private NoiseGeneratorOctaves noiseGen4;
 	private double[] stoneNoise = new double[256];
 	private BiomeGenBase[] biomesForGeneration;
-	
+
 	public SGChunkGenerator(World world, IWorldData worldData) {
 		this.worldObj = world;
 		this.worldData = worldData;
@@ -59,13 +59,15 @@ public class SGChunkGenerator implements IChunkProvider {
 		this.rand.setSeed((long)chunkX * 341873128712L + (long)chunkZ * 132897987541L);
 		short[] blockIds = new short[16*16*256];
 		byte[] blockMetas = new byte[blockIds.length];
-		
-		((ITerrainGenerator)worldData.getFeature(FeatureType.TERRAIN_GENERATOR)).generateTerrain(chunkX, chunkZ, blockIds, blockMetas);
+
+		ITerrainGenerator terrainGenerator = ((ITerrainGenerator)worldData.getFeature(FeatureType.TERRAIN_GENERATOR));
+
+		terrainGenerator.generateTerrain(chunkX, chunkZ, blockIds, blockMetas);
 		this.biomesForGeneration = this.worldObj.getWorldChunkManager().loadBlockGeneratorData(this.biomesForGeneration, chunkX * 16, chunkZ * 16, 16, 16);
 		this.replaceBlocksForBiome(chunkX, chunkZ, blockIds, blockMetas, this.biomesForGeneration);
-		
+
 		for (WorldFeature ft : worldData.getFeatures(FeatureType.TERRAIN_MODIFIFIER)) {
-			((ITerrainModifier)ft).generate(worldObj, chunkX, chunkZ, blockIds, blockMetas);
+			((ITerrainModifier)ft).generate(worldObj, chunkX, chunkZ, terrainGenerator, blockIds, blockMetas);
 		}
 
 		Chunk chunk = new Chunk(this.worldObj, blockIds, blockMetas, chunkX, chunkZ);
@@ -91,9 +93,12 @@ public class SGChunkGenerator implements IChunkProvider {
 		for (int z = 0; z < 16; ++z) {
 			for (int x = 0; x < 16; ++x) {
 				BiomeGenBase biomegenbase = biomes[x + z * 16];
-				float temp = biomegenbase.getFloatTemperature();
-				int i1 = (int)(this.stoneNoise[z + x * 16] / 3.0D + 3.0D + this.rand.nextDouble() * 0.25D);
-				int j1 = -1;
+				float temperature = biomegenbase.getFloatTemperature();
+
+				boolean isDesert = biomegenbase == BiomeGenBase.desert;
+				double depthBase = isDesert ? 10.0D : 3.0D;
+				int surfaceDepth = (int)(this.stoneNoise[z + x * 16] / 3.0D + depthBase + this.rand.nextDouble() * 0.25D);
+				int fillCounter = -1;
 				short topBlock = biomegenbase.topBlock;
 				short fillBlock = biomegenbase.fillerBlock;
 
@@ -105,56 +110,39 @@ public class SGChunkGenerator implements IChunkProvider {
 					} else {
 						short curBlock = blockIds[blIndex];
 
-						if (curBlock == 0)
-						{
-							j1 = -1;
-						}
-						else if (curBlock == Block.stone.blockID)
-						{
-							if (j1 == -1)
-							{
-								if (i1 <= 0)
-								{
+						if (curBlock == 0) {
+							fillCounter = -1;
+						} else if (curBlock == Block.stone.blockID) {
+							if (fillCounter == -1) {
+								if (surfaceDepth <= 0) {
 									topBlock = 0;
 									fillBlock = (short)Block.stone.blockID;
-								}
-								else if (y >= b0 - 4 && y <= b0 + 1)
-								{
+								} else if (y >= b0 - 4 && y <= b0 + 1) {
 									topBlock = biomegenbase.topBlock;
 									fillBlock = biomegenbase.fillerBlock;
 								}
 
-								if (y < b0 && topBlock == 0)
-								{
-									if (temp < 0.15F)
-									{
+								if (y < b0 && topBlock == 0) {
+									if (temperature < 0.15F) {
 										topBlock = (short)Block.ice.blockID;
-									}
-									else
-									{
+									} else {
 										topBlock = (short)Block.waterStill.blockID;
 									}
 								}
 
-								j1 = i1;
+								fillCounter = surfaceDepth;
 
-								if (y >= b0 - 1)
-								{
+								if (y >= b0 - 1) {
 									blockIds[blIndex] = topBlock;
-								}
-								else
-								{
+								} else {
 									blockIds[blIndex] = fillBlock;
 								}
-							}
-							else if (j1 > 0)
-							{
-								--j1;
+							} else if (fillCounter > 0) {
+								--fillCounter;
 								blockIds[blIndex] = fillBlock;
 
-								if (j1 == 0 && fillBlock == Block.sand.blockID)
-								{
-									j1 = this.rand.nextInt(4);
+								if (fillCounter == 0 && fillBlock == Block.sand.blockID) {
+									fillCounter = (isDesert ? 12 : 0) + this.rand.nextInt(4);
 									fillBlock = (short)Block.sandStone.blockID;
 								}
 							}
@@ -265,10 +253,9 @@ public class SGChunkGenerator implements IChunkProvider {
 	}
 
 	@Override
-	public List getPossibleCreatures(EnumCreatureType enumcreaturetype, int i,
-			int j, int k) {
-		// TODO Auto-generated method stub
-		return null;
+	public List getPossibleCreatures(EnumCreatureType enumcreaturetype, int i, int j, int k) {
+		BiomeGenBase biomegenbase = this.worldObj.getBiomeGenForCoords(i, j);
+		return biomegenbase == null ? null : biomegenbase.getSpawnableList(enumcreaturetype);
 	}
 
 	@Override
@@ -296,7 +283,6 @@ public class SGChunkGenerator implements IChunkProvider {
 
 	@Override
 	public void recreateStructures(int chunkX, int chunkZ) {
-		// TODO Auto-generated method stub
 
 	}
 

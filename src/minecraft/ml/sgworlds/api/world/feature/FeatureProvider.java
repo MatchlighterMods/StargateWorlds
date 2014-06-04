@@ -31,7 +31,7 @@ public class FeatureProvider {
 	 * @param type The {@link FeatureType} of the feature.
 	 * @param cls The Class of the Feature. Used for reflective construction.
 	 * @param weight The amount of weight the feature will have when being chosen randomly.
-	 * @param independent Marks if a feature should ignore maximums and use a one-in-weight chance instead of a weighted random.
+	 * @param independent Marks if a feature should ignore maximums and use a percent chance instead of a weighted random.
 	 */
 	public FeatureProvider(String identifier, FeatureType type, Class<? extends WorldFeature> cls, int weight, boolean independent) {
 		this.identifier = identifier;
@@ -128,7 +128,7 @@ public class FeatureProvider {
 	
 	/**
 	 * Gets the amount of weight this feature will carry in the {@link WeightedRandom} during random generation of worlds. Average is 100.<br/>
-	 * Or if the feature is independent the one-in chance of it occurring.
+	 * Or if the feature is independent the percent chance of it occurring.
 	 */
 	public int getWeight() {
 		return weight;

@@ -4,7 +4,7 @@ import java.util.Random;
 
 import ml.sgworlds.api.world.feature.WorldFeature.WorldFeatureRender;
 import ml.sgworlds.api.world.feature.types.IBiomeController;
-import ml.sgworlds.api.world.feature.types.ICelestialObject;
+import ml.sgworlds.api.world.feature.types.IOrbitalObject;
 import ml.sgworlds.api.world.feature.types.IColorProvider;
 import ml.sgworlds.api.world.feature.types.IFeatureLocator;
 import ml.sgworlds.api.world.feature.types.ILightingController;
@@ -20,13 +20,13 @@ import ml.sgworlds.api.world.feature.types.IWeatherController;
  * @author Matchlighter
  */
 public enum FeatureType {
-	SUN(1, 2, ICelestialObject.class) {
+	SUN(1, 2, IOrbitalObject.class) {
 		@Override
 		public int getRandomCount(Random rand, int registeredTypes) {
 			return getLowEndRandom(minimum, maximum, rand);
 		}
 	},
-	MOON(0, 4, ICelestialObject.class) {
+	MOON(0, 4, IOrbitalObject.class) {
 		@Override
 		public int getRandomCount(Random rand, int registeredTypes) { // Shift the result by +1, maximum becomes 0. Makes 0 possible, but less likely
 			return (getLowEndRandom(minimum, maximum, rand)+1) % (maximum+1);

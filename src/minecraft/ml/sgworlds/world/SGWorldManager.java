@@ -135,8 +135,16 @@ public class SGWorldManager implements IDynamicWorldLoader {
 				
 				WorldServer world = MinecraftServer.getServer().worldServerForDimension(data.getDimensionId());
 				
-				seedingShip.placeStargate(world, 0, 80, 0, 0);
-				// TODO Place Stargate
+				boolean gatePlaced = false;
+				for (IStaticWorld sWorld : staticWorlds) {
+					if (address.equals(sWorld.getAddress())) {
+						gatePlaced = sWorld.generateStargate(world, seedingShip);
+						break;
+					}
+				}
+				if (!gatePlaced) {
+					seedingShip.placeStargate(world, 0, 80, 0, 0); //TODO
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

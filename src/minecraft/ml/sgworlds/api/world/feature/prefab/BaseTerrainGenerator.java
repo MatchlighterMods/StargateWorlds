@@ -102,4 +102,9 @@ public abstract class BaseTerrainGenerator extends WorldFeature implements ITerr
 
 	public abstract double[] initializeNoiseField(double[] par1ArrayOfDouble, int subX, int subY, int subZ, int sizeX, int sizeY, int sizeZ);
 
+	@Override
+	public void setFillerBlock(int x, int y, int z, int blockIndex, short[] blockIds, byte[] blockMetas) {
+		blockIds[blockIndex] = fillBlockId;
+		blockMetas[blockIndex] = fillBlockMeta;
+	}
 }

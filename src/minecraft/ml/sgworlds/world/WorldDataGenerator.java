@@ -100,7 +100,7 @@ public class WorldDataGenerator {
 		
 		// Independent Features
 		for (FeatureProvider provider : getIndependentProviders(typeProviders)) {
-			if (rand.nextInt(provider.getWeight()) == 0 && checkCompatible(worldData, provider)) {
+			if (rand.nextInt(100) < provider.getWeight() && checkCompatible(worldData, provider)) {
 				genFeatures.add(generateRandomTypeFeature(provider, worldData, type));
 			}
 		}

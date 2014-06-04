@@ -14,12 +14,12 @@ public class APIImplementation extends SGWorldsAPI {
 		FMLLog.info("Exposing SGWorlds API Instance");
 		sgworldsAPI = new APIImplementation();
 	}
-	
+
 	@Override
 	public CreativeTabs getSGWorldsCreativeTab() {
 		return SGWorlds.sgwTab;
 	}
-	
+
 	@Override
 	public IFeatureManager getFeatureManager() {
 		return FeatureManager.instance;
@@ -27,7 +27,8 @@ public class APIImplementation extends SGWorldsAPI {
 
 	@Override
 	public boolean registerStaticWorld(IStaticWorld staticWorld) {
-		if (SGWorldManager.staticWorlds.contains(staticWorld)) return false;
+		if (SGWorldManager.staticWorlds.contains(staticWorld))
+			return false;
 		return SGWorldManager.staticWorlds.add(staticWorld);
 	}
 

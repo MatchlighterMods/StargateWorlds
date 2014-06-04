@@ -2,7 +2,7 @@ package ml.sgworlds.api.world.feature.types;
 
 import ml.sgworlds.api.world.feature.WorldFeature.WorldFeatureRender;
 
-public interface ICelestialObject extends WorldFeatureRender {
+public interface IOrbitalObject extends WorldFeatureRender {
 
 	/**
 	 * @param worldTime
@@ -11,6 +11,8 @@ public interface ICelestialObject extends WorldFeatureRender {
 	 */
 	public float calculateCelestialAngle(long worldTime, float partialTickTime);
 
-	public abstract long getTimeToRise(long curtime);
+	public long getTimeToRise(long curtime);
+	
+	public long getTimeToSet(long curtime);
 	
 }

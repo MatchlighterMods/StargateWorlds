@@ -4,30 +4,29 @@ import java.util.Random;
 
 import ml.sgworlds.api.world.IWorldData;
 import ml.sgworlds.api.world.feature.FeatureProvider;
-import ml.sgworlds.api.world.feature.prefab.BaseCelestialObject;
+import ml.sgworlds.api.world.feature.prefab.BaseOrbitalObject;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
-public class MoonDefault extends BaseCelestialObject {
+public class MoonDefault extends BaseOrbitalObject {
 
-	private static final ResourceLocation locationMoonPhasesPng = new ResourceLocation("textures/environment/moon_phases.png");
+	{
+		this.textureLocation = new ResourceLocation("textures/environment/moon_phases.png");
+	}
 
 	public MoonDefault(FeatureProvider provider, IWorldData worldData) {
 		super(provider, worldData);
-		this.textureLocation = locationMoonPhasesPng;
 	}
 	
 	public MoonDefault(FeatureProvider provider, IWorldData worldData, NBTTagCompound tag) {
 		super(provider, worldData, tag);
-		this.textureLocation = locationMoonPhasesPng;
 	}
 	
 	public MoonDefault(FeatureProvider provider, IWorldData worldData, Random rand) {
 		super(provider, worldData, rand);
-		this.textureLocation = locationMoonPhasesPng;
 	}
 
 	@Override
@@ -50,6 +49,6 @@ public class MoonDefault extends BaseCelestialObject {
 	}
 
 	public int getPhase(long worldTime) {
-		return (int)(worldTime / orbitPeriod) % 8;
+		return (int)((worldTime-(orbitPeriod*offset)) / orbitPeriod) % 8;
 	}
 }

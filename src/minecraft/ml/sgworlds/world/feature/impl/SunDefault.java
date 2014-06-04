@@ -4,26 +4,26 @@ import java.util.Random;
 
 import ml.sgworlds.api.world.IWorldData;
 import ml.sgworlds.api.world.feature.FeatureProvider;
-import ml.sgworlds.api.world.feature.prefab.BaseCelestialObject;
+import ml.sgworlds.api.world.feature.prefab.BaseOrbitalObject;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 
-public class SunDefault extends BaseCelestialObject {
+public class SunDefault extends BaseOrbitalObject {
 
-	private static final ResourceLocation locationSunPng = new ResourceLocation("textures/environment/sun.png");
+	{
+		this.textureLocation = new ResourceLocation("textures/environment/sun.png");
+		hasHorizon = true;
+	}
 
 	public SunDefault(FeatureProvider provider, IWorldData worldData) {
 		super(provider, worldData);
-		this.textureLocation = locationSunPng;
 	}
 	
 	public SunDefault(FeatureProvider provider, IWorldData worldData, NBTTagCompound tag) {
 		super(provider, worldData, tag);
-		this.textureLocation = locationSunPng;
 	}
 	
 	public SunDefault(FeatureProvider provider, IWorldData worldData, Random rand) {
 		super(provider, worldData, rand);
-		this.textureLocation = locationSunPng;
 	}
 }

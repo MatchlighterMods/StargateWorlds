@@ -8,10 +8,10 @@ public class SGWorldsCreativeTab extends CreativeTabs {
 	public SGWorldsCreativeTab() {
 		super("Stargate Worlds");
 	}
-	
+
 	@Override
 	public ItemStack getIconItemStack() {
-		return super.getIconItemStack(); //TODO
+		return super.getIconItemStack(); // TODO
 	}
 
 }

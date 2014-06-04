@@ -4,7 +4,7 @@ import java.util.Random;
 
 import ml.sgworlds.api.world.IWorldData;
 import ml.sgworlds.api.world.feature.FeatureProvider;
-import ml.sgworlds.api.world.feature.prefab.BaseCelestialObject;
+import ml.sgworlds.api.world.feature.prefab.BaseOrbitalObject;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.Tessellator;
@@ -13,7 +13,7 @@ import net.minecraft.world.World;
 
 import org.lwjgl.opengl.GL11;
 
-public class StarsDefault extends BaseCelestialObject {
+public class StarsDefault extends BaseOrbitalObject {
 
 	protected int starGLCallList;
 	private boolean setup;
