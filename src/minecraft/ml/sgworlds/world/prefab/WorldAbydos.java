@@ -9,7 +9,7 @@ import net.minecraft.world.biome.BiomeGenBase;
 import ml.sgworlds.api.world.IStaticWorld;
 import ml.sgworlds.api.world.IWorldData;
 import ml.sgworlds.api.world.feature.IFeatureBuilder;
-import ml.sgworlds.api.world.feature.SGWFeatures;
+import ml.sgworlds.api.world.feature.SGWFeature;
 import ml.sgworlds.api.world.feature.WorldFeature;
 import ml.sgworlds.world.feature.FeatureBuilder;
 import stargatetech2.api.StargateTechAPI;
@@ -44,24 +44,24 @@ public class WorldAbydos implements IStaticWorld {
 		Random rand = new Random();
 		
 		// Suns
-		fbuilder.createFeatureReflection(SGWFeatures.SUN_NORMAL.name());
+		fbuilder.createFeatureReflection(SGWFeature.SUN_NORMAL.name());
 		
 		// Moons
-		fbuilder.createFeatureReflection(SGWFeatures.MOON_NORMAL.name(), "size", 15, "angle", 70, "orbitPeriod", 10000L);
-		fbuilder.createFeatureReflection(SGWFeatures.MOON_NORMAL.name(), "size", 25, "angle", 10, "orbitPeriod", 32000L, "offset", -0.35F);
-		fbuilder.createFeatureReflection(SGWFeatures.MOON_NORMAL.name(), "size", 20);
+		fbuilder.createFeatureReflection(SGWFeature.MOON_NORMAL.name(), "size", 15, "angle", 70, "orbitPeriod", 10000L);
+		fbuilder.createFeatureReflection(SGWFeature.MOON_NORMAL.name(), "size", 25, "angle", 10, "orbitPeriod", 32000L, "offset", -0.35F);
+		fbuilder.createFeatureReflection(SGWFeature.MOON_NORMAL.name(), "size", 20);
 		
 		// Biome
-		fbuilder.createFeatureConstructor(SGWFeatures.BIOME_SINGLE.name(), BiomeGenBase.desert);
+		fbuilder.createFeatureConstructor(SGWFeature.BIOME_SINGLE.name(), BiomeGenBase.desert);
 		
 		// Populators
-		fbuilder.createFeatureConstructor(SGWFeatures.POPULATE_ORE_NAQUADAH.name());
+		fbuilder.createFeatureConstructor(SGWFeature.POPULATE_ORE_NAQUADAH.name());
 		
 		// Clouds
-		fbuilder.createFeatureConstructor(SGWFeatures.CLOUD_COLOR_NORMAL.name(), 0xEFEDCB);
+		fbuilder.createFeatureConstructor(SGWFeature.CLOUD_COLOR_NORMAL.name(), 0xEFEDCB);
 		
 		// Fog
-		fbuilder.createFeatureConstructor(SGWFeatures.FOG_COLOR_NORMAL.name(), 0xCCBF8C);
+		fbuilder.createFeatureConstructor(SGWFeature.FOG_COLOR_NORMAL.name(), 0xCCBF8C);
 		
 		return fbuilder.getFeatureList();
 	}

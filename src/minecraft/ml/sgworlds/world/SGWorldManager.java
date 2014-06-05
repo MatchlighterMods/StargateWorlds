@@ -143,6 +143,7 @@ public class SGWorldManager implements IDynamicWorldLoader {
 					}
 				}
 				if (!gatePlaced) {
+					System.out.println(world.getHeightValue(0, 0));
 					seedingShip.placeStargate(world, 0, 80, 0, 0); //TODO
 				}
 			}

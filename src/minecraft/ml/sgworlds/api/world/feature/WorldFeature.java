@@ -37,7 +37,7 @@ public abstract class WorldFeature {
 	/**
 	 * @return The {@link FeatureProvider} associated with this feature.
 	 */
-	public FeatureProvider getProvider() {
+	public final FeatureProvider getProvider() {
 		return provider;
 	}
 	
@@ -58,10 +58,11 @@ public abstract class WorldFeature {
 	/**
 	 * Sometimes features need to implement multiple types.<br/>
 	 * For instance, {@link ITerrainModifier}, {@link IPopulate}, and {@link IFeatureLocator} commonly work together.
-	 * You could implement all three, register your feature as the 'primary' type, and then provide alternate types here.<br/><br/>
+	 * You could implement all three, register your feature as the 'primary' type, and then provide alternate types here.<br/>
+	 * A secondary type that matches the primary type will be ignored.<br/><br/>
 	 * 
 	 * This should only be used for passive feature types (e.g. {@link IFeatureLocator}) and features that are tightly linked.<br/>
-	 * DO NOT use this with singleton feature types (e.g. {@link ITerrainGenerator})!
+	 * Using this with singleton feature types (e.g. {@link ITerrainGenerator}) will throw an Exception!
 	 */
 	public void getSecondaryTypes(List<FeatureType> types) {}
 	

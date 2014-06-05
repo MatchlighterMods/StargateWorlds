@@ -68,6 +68,7 @@ public class BiomeControllerSized extends BaseBiomeController implements IBiomeC
 	
 	@Override
 	public void onProviderCreated(WorldProvider wprovider) {
+		super.onProviderCreated(wprovider);
 		GenLayer[] agenlayer = initializeAllBiomeGenerators(worldData.getWorldSeed(), WorldType.DEFAULT);
 		this.genBiomes = agenlayer[0];
 		this.biomeIndexLayer = agenlayer[1];
@@ -87,6 +88,11 @@ public class BiomeControllerSized extends BaseBiomeController implements IBiomeC
 	public List<BiomeGenBase> getBiomesForSpawn() {
 		return biomesToSpawnIn;
 	}
+	
+	@Override
+	public BiomeGenBase calcBiomeAt(int x, int z) {
+		return BiomeGenBase.biomeList[biomeIndexLayer.getInts(x, z, 1, 1)[0]];
+	}
 
 	@Override
 	public BiomeGenBase[] getBiomesForGeneration(BiomeGenBase[] reuseArray, int x, int z, int width, int length) {
@@ -100,6 +106,48 @@ public class BiomeControllerSized extends BaseBiomeController implements IBiomeC
 
 		for (int i1 = 0; i1 < width * length; ++i1) {
 			reuseArray[i1] = BiomeGenBase.biomeList[aint[i1]];
+		}
+
+		return reuseArray;
+	}
+	
+	@Override
+	public float[] getRainfall(float[] reuseArray, int x, int z, int width, int length) {
+		IntCache.resetIntCache();
+
+		if (reuseArray == null || reuseArray.length < width * length) {
+			reuseArray = new float[width * length];
+		}
+		
+		int[] aint = this.biomeIndexLayer.getInts(x, z, width, length);
+
+		for (int lx=0; lx<width; lx++) {
+			for (int lz=0; lz<length; lz++) {
+				float f = BiomeGenBase.biomeList[aint[lx + lz*width]].rainfall;
+				if (f>1.0F) f=1.0F;
+				reuseArray[lx + lz*width] = f;
+			}
+		}
+
+		return reuseArray;
+	}
+
+	@Override
+	public float[] getTemperatures(float[] reuseArray, int x, int z, int width, int length) {
+		IntCache.resetIntCache();
+
+		if (reuseArray == null || reuseArray.length < width * length) {
+			reuseArray = new float[width * length];
+		}
+
+		int[] aint = this.biomeIndexLayer.getInts(x, z, width, length);
+		
+		for (int lx=0; lx<width; lx++) {
+			for (int lz=0; lz<length; lz++) {
+				float f = BiomeGenBase.biomeList[aint[lx + lz*width]].temperature;
+				if (f>1.0F) f=1.0F;
+				reuseArray[lx + lz*width] = f;
+			}
 		}
 
 		return reuseArray;

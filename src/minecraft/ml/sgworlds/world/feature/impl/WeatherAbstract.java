@@ -14,11 +14,13 @@ import ml.sgworlds.api.world.feature.types.IWeatherController;
 
 public abstract class WeatherAbstract extends WorldFeature implements IWeatherController {
 
+	protected Random rand = new Random();
 	protected int updateLCG = (new Random()).nextInt();
 	
 	protected int resetTime = 12000;
 	protected int resetTicker = 0;
 	
+	protected int lightningRarity = 100000;
 	protected float rainStrength = 0.0F;
 	protected float thunderStrength = 0.0F;
 	protected boolean enableLightning = false;
@@ -31,6 +33,7 @@ public abstract class WeatherAbstract extends WorldFeature implements IWeatherCo
 	public WeatherAbstract(FeatureProvider provider, IWorldData worldData, NBTTagCompound tag) {
 		super(provider, worldData);
 		resetTicker = tag.getInteger("resetTicker");
+		if (resetTicker==0) startWeather();
 	}
 
 	@Override
@@ -76,7 +79,7 @@ public abstract class WeatherAbstract extends WorldFeature implements IWeatherCo
 		int k1 = (chnk.zPosition * 16) + (i1 >> 8 & 15);
 		int l1 = world.getPrecipitationHeight(j1, k1);
 
-		if (enableLightning && canLightningStrikeAt(j1, l1, k1)) {
+		if (enableLightning && canLightningStrikeAt(j1, l1, k1) && this.rand.nextInt(lightningRarity) == 0) {
 			world.addWeatherEffect(new EntityLightningBolt(world, (double)j1, (double)l1, (double)k1));
 		}
 	}

@@ -77,14 +77,7 @@ public class SGWorldData implements IWorldData {
 			FeatureProvider prov = FeatureManager.instance.getFeatureProvider(id);
 			if (prov != null) {
 				WorldFeature feature = prov.loadFromNBT(this, ftag.getCompoundTag("data"));
-				features.put(prov.type, feature);
-				
-				List<FeatureType> secondaryTypes = new ArrayList<FeatureType>();
-				feature.getSecondaryTypes(secondaryTypes);
-				for (FeatureType stype : secondaryTypes) {
-					if (stype == prov.type) continue;
-					features.put(stype, feature);
-				}
+				addFeature(feature);
 			} else {
 				throw new RuntimeException(String.format("Missing feature for identifier \"%s\"", id, getDisplayName()));
 			}

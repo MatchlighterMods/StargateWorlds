@@ -1,4 +1,4 @@
-package ml.sgworlds.world.feature.impl;
+package ml.sgworlds.world.feature.impl.populate;
 
 import java.util.List;
 import java.util.Random;
@@ -16,11 +16,11 @@ import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.MapGenStronghold;
 
-public class PopulateStronghold extends WorldFeature implements IPopulate, IFeatureLocator, ITerrainModifier {
+public class PopulateStrongholds extends WorldFeature implements IPopulate, IFeatureLocator, ITerrainModifier {
 
 	private MapGenStronghold vgen = new MapGenStronghold();
 	
-	public PopulateStronghold(FeatureProvider provider, IWorldData worldData) {
+	public PopulateStrongholds(FeatureProvider provider, IWorldData worldData) {
 		super(provider, worldData);
 	}
 
@@ -38,8 +38,8 @@ public class PopulateStronghold extends WorldFeature implements IPopulate, IFeat
 	}
 
 	@Override
-	public void populate(World world, Random rand, int chunkX, int chunkY) {
-		vgen.generateStructuresInChunk(world, rand, chunkX, chunkY);
+	public void populate(World world, Random rand, int chunkX, int chunkZ) {
+		vgen.generateStructuresInChunk(world, rand, chunkX, chunkZ);
 	}
 
 	@Override

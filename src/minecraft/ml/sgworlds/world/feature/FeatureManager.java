@@ -10,6 +10,7 @@ import ml.sgworlds.api.world.feature.FeatureProvider;
 import ml.sgworlds.api.world.feature.FeatureType;
 import ml.sgworlds.api.world.feature.IFeatureBuilder;
 import ml.sgworlds.api.world.feature.IFeatureManager;
+import ml.sgworlds.api.world.feature.SimpleProvider;
 import ml.sgworlds.api.world.feature.WorldFeature;
 
 import com.google.common.collect.HashMultimap;
@@ -52,6 +53,15 @@ public class FeatureManager implements IFeatureManager {
 	}
 	
 	@Override
+	public FeatureProvider registerFeature(Class<? extends WorldFeature> featureClass) {
+		if (featureClass.isAnnotationPresent(SimpleProvider.class)) {
+			SimpleProvider annot = featureClass.getAnnotation(SimpleProvider.class);
+			return registerFeature(annot.identifier(), annot.type(), featureClass, annot.weight(), annot.independent());
+		}
+		return null;
+	}
+	
+	@Override
 	public FeatureProvider getFeatureProvider(String identifier) {
 		for (FeatureProvider p : featureProviders.values()) {
 			if (p.willLoadFeatureId(identifier)) return p;
@@ -69,6 +79,7 @@ public class FeatureManager implements IFeatureManager {
 	 * @param provider
 	 */
 	public void setDefaultFeatureProvider(FeatureProvider provider) {
+		if (provider == null) return;
 		defaultFeatures.put(provider.type, provider);
 	}
 	

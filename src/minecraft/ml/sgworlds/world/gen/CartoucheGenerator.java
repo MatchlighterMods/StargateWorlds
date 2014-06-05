@@ -12,7 +12,7 @@ public class CartoucheGenerator extends StructureGeneratorBase {
 	}
 
 	@Override
-	public boolean allowRetroGen() {
+	public boolean allowRetroGen(World world, int chunkX, int chunkZ) {
 		return true;
 	}
 

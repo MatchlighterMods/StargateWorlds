@@ -7,7 +7,7 @@ import ml.sgworlds.api.world.IStaticWorld;
  * For use with {@link IStaticWorld} and {@link IFeatureBuilder}.
  * @author Matchlighter
  */
-public enum SGWFeatures {
+public enum SGWFeature {
 	
 	// SUNS
 	SUN_NORMAL,
@@ -28,35 +28,43 @@ public enum SGWFeatures {
 	BIOME_SIZED,
 	
 	// TERRAIN GENERATORS
-	TERRAIN_NORMAL,
+	@Default TERRAIN_NORMAL,
 	
 	// TERRAIN MODIFIERS
+	MOD_RAVINES,
+	MOD_CAVES,
 	
 	// CHUNK POPULATORS
 	POPULATE_ORE_NAQUADAH,
+	POPULATE_DUNGEONS,
+	POPULATE_STRONGHOLDS,
+	POPULATE_LAKES_WATER,
+	POPULATE_LAKES_LAVA,
 	
 	// WEATHER CONTROLLERS
-	WEATHER_NORMAL,
+	@Default WEATHER_NORMAL,
 	WEATHER_THUNDER,
 	WEATHER_STORMY,
 	WEATHER_RAINY,
 	WEATHER_CLEAR,
 	
 	// LIGHTING CONTROLLERS
-	LIGHTING_NORMAL,
+	@Default LIGHTING_NORMAL,
 	
 	// FOG COLORS
-	FOG_COLOR_NORMAL,
+	@Default FOG_COLOR_NORMAL,
 	
 	// CLOUD COLORS
-	CLOUD_COLOR_NORMAL,
+	@Default CLOUD_COLOR_NORMAL,
 	
 	// SKY COLORS
-	SKY_COLOR_NORMAL
+	@Default SKY_COLOR_NORMAL
 	
 	;
 	
 	public String toString() {
 		return this.name();
 	};
+	
+	public @interface Default {}
 }

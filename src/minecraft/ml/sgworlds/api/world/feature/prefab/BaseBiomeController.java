@@ -29,6 +29,8 @@ public abstract class BaseBiomeController extends WorldFeature implements IBiome
 		return this.biomeCache.getBiomeGenAt(x, z);
 	}
 	
+	public abstract BiomeGenBase calcBiomeAt(int x, int z);
+	
 	@Override
 	public BiomeGenBase[] getBiomesAt(BiomeGenBase[] reuseArray, int x, int z, int width, int length, boolean cacheFlag) {
 		IntCache.resetIntCache();
@@ -44,7 +46,7 @@ public abstract class BaseBiomeController extends WorldFeature implements IBiome
 		} else {
 			for (int lx=0; lx<width; lx++) {
 				for (int lz=0; lz<length; lz++) {
-					reuseArray[lx + lz*width] = getBiomeAt(x+lx, z+lz);
+					reuseArray[lx + lz*width] = calcBiomeAt(x+lx, z+lz);
 				}
 			}
 		}
@@ -62,7 +64,7 @@ public abstract class BaseBiomeController extends WorldFeature implements IBiome
 
 		for (int lx=0; lx<width; lx++) {
 			for (int lz=0; lz<length; lz++) {
-				float f = getBiomeAt(x+lx, z+lz).rainfall;
+				float f = calcBiomeAt(x+lx, z+lz).rainfall;
 				if (f>1.0F) f=1.0F;
 				reuseArray[lx + lz*width] = f;
 			}
@@ -81,7 +83,7 @@ public abstract class BaseBiomeController extends WorldFeature implements IBiome
 
 		for (int lx=0; lx<width; lx++) {
 			for (int lz=0; lz<length; lz++) {
-				float f = getBiomeAt(x+lx, z+lz).temperature;
+				float f = calcBiomeAt(x+lx, z+lz).temperature;
 				if (f>1.0F) f=1.0F;
 				reuseArray[lx + lz*width] = f;
 			}

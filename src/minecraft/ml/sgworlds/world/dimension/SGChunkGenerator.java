@@ -181,38 +181,13 @@ public class SGChunkGenerator implements IChunkProvider {
 		int i2;
 
 		// TODO Move
-		if (biomegenbase != BiomeGenBase.desert && biomegenbase != BiomeGenBase.desertHills && !flag && this.rand.nextInt(4) == 0
-				&& TerrainGen.populate(ichunkprovider, worldObj, rand, chunkX, chunkZ, flag, LAKE)) {
-			k1 = k + this.rand.nextInt(16) + 8;
-			l1 = this.rand.nextInt(128);
-			i2 = l + this.rand.nextInt(16) + 8;
-			(new WorldGenLakes(Block.waterStill.blockID)).generate(this.worldObj, this.rand, k1, l1, i2);
-		}
-
-		if (TerrainGen.populate(ichunkprovider, worldObj, rand, chunkX, chunkZ, flag, LAVA) && !flag && this.rand.nextInt(8) == 0) {
-			k1 = k + this.rand.nextInt(16) + 8;
-			l1 = this.rand.nextInt(this.rand.nextInt(120) + 8);
-			i2 = l + this.rand.nextInt(16) + 8;
-
-			if (l1 < 63 || this.rand.nextInt(10) == 0) {
-				(new WorldGenLakes(Block.lavaStill.blockID)).generate(this.worldObj, this.rand, k1, l1, i2);
-			}
-		}
-
-		boolean doGen = TerrainGen.populate(ichunkprovider, worldObj, rand, chunkX, chunkZ, flag, DUNGEON);
-		for (k1 = 0; doGen && k1 < 8; ++k1) {
-			l1 = k + this.rand.nextInt(16) + 8;
-			i2 = this.rand.nextInt(128);
-			int j2 = l + this.rand.nextInt(16) + 8;
-			(new WorldGenDungeons()).generate(this.worldObj, this.rand, l1, i2, j2);
-		}
 
 		biomegenbase.decorate(this.worldObj, this.rand, k, l);
 		SpawnerAnimals.performWorldGenSpawning(this.worldObj, biomegenbase, k + 8, l + 8, 16, 16, this.rand);
 		k += 8;
 		l += 8;
 
-		doGen = TerrainGen.populate(ichunkprovider, worldObj, rand, chunkX, chunkZ, flag, ICE);
+		boolean doGen = TerrainGen.populate(ichunkprovider, worldObj, rand, chunkX, chunkZ, flag, ICE);
 		for (k1 = 0; doGen && k1 < 16; ++k1) {
 			for (l1 = 0; l1 < 16; ++l1) {
 				i2 = this.worldObj.getPrecipitationHeight(k + k1, l + l1);

@@ -48,6 +48,11 @@ public class BiomeControllerSingle extends BaseBiomeController implements IBiome
 
 	@Override
 	public BiomeGenBase getBiomeAt(int x, int z) {
+		return calcBiomeAt(x, z);
+	}
+	
+	@Override
+	public BiomeGenBase calcBiomeAt(int x, int z) {
 		return biomeList.get(0);
 	}
 
@@ -61,7 +66,7 @@ public class BiomeControllerSingle extends BaseBiomeController implements IBiome
 
 		for (int lx=0; lx<width; lx++) {
 			for (int lz=0; lz<length; lz++) {
-				reuseArray[lx + lz*width] = getBiomeAt(x+lx, z+lz);
+				reuseArray[lx + lz*width] = calcBiomeAt(x+lx, z+lz);
 			}
 		}
 
