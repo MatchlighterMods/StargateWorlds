@@ -6,8 +6,10 @@ import ml.core.network.MLPacket;
 import ml.sgworlds.SGWorlds;
 import ml.sgworlds.world.SGWorldData;
 import ml.sgworlds.world.SGWorldManager;
+import ml.sgworlds.world.dimension.SGWorldProvider;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.DimensionManager;
 
 import com.google.common.io.ByteArrayDataInput;
 
@@ -43,8 +45,12 @@ public class PacketWorldData extends MLPacket {
 		if (worldData == null) {
 			worldData = new SGWorldData(worldDataNBT);
 			SGWorldManager.instance.addClientData(worldData);
-		} else
-			worldData.readFromNBT(worldDataNBT);
+		} else {
+			worldData.readFromNBT(worldDataNBT); // TODO Some kind of "refreshData" method would be much better than reconstructing *everything*.
+			if (dimId != 0 && DimensionManager.getWorld(dimId) != null) {
+				worldData.setWorldProvider((SGWorldProvider)DimensionManager.getProvider(dimId));
+			}
+		}
 	}
 	
 	@Override
