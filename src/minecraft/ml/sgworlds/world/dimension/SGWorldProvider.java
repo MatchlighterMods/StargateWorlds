@@ -92,6 +92,7 @@ public class SGWorldProvider extends WorldProvider {
 	@Override
 	public ChunkCoordinates getSpawnPoint() {
 		ChunkPosition gatePos = worldData.getGateLocation();
+		if (gatePos == null) return new ChunkCoordinates();
 		return new ChunkCoordinates(gatePos.x, gatePos.y, gatePos.z);
 	}
 	

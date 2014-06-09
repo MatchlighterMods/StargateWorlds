@@ -16,9 +16,9 @@ public class TempleUnderground implements IGateTempleGenerator {
 	@Override
 	public ChunkPosition getGateCoords(World world, int gateRotation) {
 		Random rnd = new Random(world.getSeed());
-		int x = rnd.nextInt(500), z = rnd.nextInt(500);
+		int x = rnd.nextInt(500), z = rnd.nextInt(500), y = Math.max(1, world.getHeightValue(x, z) - 20);
 		
-		return new ChunkPosition(x, rnd.nextInt(world.getHeightValue(x, z) - 20) + 10, z);
+		return new ChunkPosition(x, rnd.nextInt(y) + 10, z);
 	}
 
 }

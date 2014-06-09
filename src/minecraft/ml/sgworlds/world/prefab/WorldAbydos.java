@@ -13,6 +13,7 @@ import ml.sgworlds.api.world.feature.IFeatureBuilder;
 import ml.sgworlds.api.world.feature.SGWFeature;
 import ml.sgworlds.api.world.feature.WorldFeature;
 import ml.sgworlds.world.feature.FeatureBuilder;
+import ml.sgworlds.world.gen.temples.TemplePyramid;
 import stargatetech2.api.StargateTechAPI;
 import stargatetech2.api.stargate.Address;
 
@@ -68,8 +69,7 @@ public class WorldAbydos implements IStaticWorld {
 
 	@Override
 	public IGateTempleGenerator getTempleGenerator(WorldServer world) {
-		// TODO Auto-generated method stub
-		return null;
+		return new TemplePyramid();
 	}
 
 }
