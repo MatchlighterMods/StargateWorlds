@@ -6,6 +6,7 @@ import java.util.Random;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.biome.BiomeGenBase;
 
+import ml.sgworlds.api.world.IGateTempleGenerator;
 import ml.sgworlds.api.world.IStaticWorld;
 import ml.sgworlds.api.world.IWorldData;
 import ml.sgworlds.api.world.feature.IFeatureBuilder;
@@ -14,7 +15,6 @@ import ml.sgworlds.api.world.feature.WorldFeature;
 import ml.sgworlds.world.feature.FeatureBuilder;
 import stargatetech2.api.StargateTechAPI;
 import stargatetech2.api.stargate.Address;
-import stargatetech2.api.stargate.IStargatePlacer;
 
 public class WorldAbydos implements IStaticWorld {
 
@@ -67,9 +67,9 @@ public class WorldAbydos implements IStaticWorld {
 	}
 
 	@Override
-	public boolean generateStargate(WorldServer world, IStargatePlacer seedingShip) {
+	public IGateTempleGenerator getTempleGenerator(WorldServer world) {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
 
 }

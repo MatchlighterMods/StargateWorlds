@@ -9,7 +9,6 @@ import ml.sgworlds.api.world.feature.IFeatureBuilder;
 import ml.sgworlds.api.world.feature.WorldFeature;
 
 import stargatetech2.api.stargate.Address;
-import stargatetech2.api.stargate.IStargatePlacer;
 
 public interface IStaticWorld {
 
@@ -44,6 +43,6 @@ public interface IStaticWorld {
 	/**
 	 * Optionally perform special steps for adding a Stargate to the world. Return false for default placement and generation.
 	 */
-	public boolean generateStargate(WorldServer world, IStargatePlacer seedingShip);
+	public IGateTempleGenerator getTempleGenerator(WorldServer world);
 	
 }

@@ -1,6 +1,7 @@
 package ml.sgworlds;
 
 import ml.sgworlds.api.SGWorldsAPI;
+import ml.sgworlds.api.world.IGateTempleGenerator;
 import ml.sgworlds.api.world.IStaticWorld;
 import ml.sgworlds.api.world.feature.IFeatureManager;
 import ml.sgworlds.world.SGWorldManager;
@@ -27,9 +28,13 @@ public class APIImplementation extends SGWorldsAPI {
 
 	@Override
 	public boolean registerStaticWorld(IStaticWorld staticWorld) {
-		if (SGWorldManager.staticWorlds.contains(staticWorld))
-			return false;
 		return SGWorldManager.staticWorlds.add(staticWorld);
+	}
+	
+	@Override
+	public boolean registerGateTemple(IGateTempleGenerator templeGen) {
+		if (SGWorldManager.templeGens.contains(templeGen)) return false;
+		return SGWorldManager.templeGens.add(templeGen);
 	}
 
 }

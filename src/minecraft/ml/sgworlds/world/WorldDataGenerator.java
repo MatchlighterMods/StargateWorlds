@@ -1,6 +1,7 @@
 package ml.sgworlds.world;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -11,7 +12,6 @@ import ml.sgworlds.api.world.feature.WorldFeature;
 import ml.sgworlds.world.feature.FeatureManager;
 import net.minecraft.util.WeightedRandom;
 import net.minecraft.util.WeightedRandomItem;
-import scala.actors.threadpool.Arrays;
 import stargatetech2.api.StargateTechAPI;
 import stargatetech2.api.stargate.Address;
 import stargatetech2.api.stargate.IStargateNetwork;

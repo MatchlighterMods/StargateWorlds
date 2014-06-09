@@ -20,6 +20,7 @@ import ml.sgworlds.world.feature.FeatureManager;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.WorldProvider;
 import stargatetech2.api.StargateTechAPI;
 import stargatetech2.api.stargate.Address;
@@ -37,6 +38,7 @@ public class SGWorldData implements IWorldData {
 	private String name = "";
 	private String designation;
 	private Address primaryAddress;
+	private ChunkPosition gateLocation;
 	private int dimensionId = 0;
 	private long seed;
 	private Multimap<FeatureType, WorldFeature> features = HashMultimap.create();
@@ -64,6 +66,7 @@ public class SGWorldData implements IWorldData {
 		this.designation = nbt.getString("designation");
 		this.name = nbt.getString("name");
 		this.primaryAddress = StargateTechAPI.api().getStargateNetwork().parseAddress(nbt.getString("address"));
+		this.gateLocation = new ChunkPosition(nbt.getInteger("gateX"), nbt.getInteger("gateY"), nbt.getInteger("gateZ"));
 		this.dimensionId = nbt.getInteger("dim");
 		this.seed = nbt.getLong("seed");
 		this.worldTime = nbt.getLong("worldTime");
@@ -90,6 +93,11 @@ public class SGWorldData implements IWorldData {
 		nbt.setString("designation", designation);
 		nbt.setString("name", name);
 		nbt.setString("address", primaryAddress.toString());
+		if (gateLocation != null) {
+			nbt.setInteger("gateX", gateLocation.x);
+			nbt.setInteger("gateY", gateLocation.y);
+			nbt.setInteger("gateZ", gateLocation.z);
+		}
 		nbt.setInteger("dim", dimensionId);
 		nbt.setLong("seed", seed);
 		nbt.setLong("worldTime", worldTime);
@@ -203,6 +211,15 @@ public class SGWorldData implements IWorldData {
 		for (WorldFeature feature : features.values()) {
 			feature.onProviderCreated(pvdr);
 		}
+	}
+	
+	public ChunkPosition getGateLocation() {
+		return gateLocation;
+	}
+	
+	public void setGateLocation(ChunkPosition gateLocation) {
+		this.gateLocation = gateLocation;
+		markDirty();
 	}
 	
 	public String getSaveFolderName() {

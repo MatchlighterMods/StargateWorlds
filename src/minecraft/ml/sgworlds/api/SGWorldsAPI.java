@@ -1,5 +1,6 @@
 package ml.sgworlds.api;
 
+import ml.sgworlds.api.world.IGateTempleGenerator;
 import ml.sgworlds.api.world.IStaticWorld;
 import ml.sgworlds.api.world.feature.IFeatureManager;
 import net.minecraft.creativetab.CreativeTabs;
@@ -19,5 +20,7 @@ public abstract class SGWorldsAPI {
 	 * Registers a static world that will be added to the list of worlds at generation.
 	 */
 	public abstract boolean registerStaticWorld(IStaticWorld staticWorld);
+	
+	public abstract boolean registerGateTemple(IGateTempleGenerator templeGen);
 
 }

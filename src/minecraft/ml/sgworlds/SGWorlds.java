@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ml.sgworlds.api.RegisterEvent;
+import ml.sgworlds.api.SGWorldsAPI;
 import ml.sgworlds.api.world.feature.FeatureType;
 import ml.sgworlds.api.world.feature.SGWFeature;
 import ml.sgworlds.api.world.feature.WorldFeature;
@@ -36,7 +37,13 @@ import ml.sgworlds.world.feature.impl.populate.PopulateLavaLakes;
 import ml.sgworlds.world.feature.impl.populate.PopulateNaquadah;
 import ml.sgworlds.world.feature.impl.populate.PopulateStrongholds;
 import ml.sgworlds.world.feature.impl.populate.PopulateWaterLakes;
+import ml.sgworlds.world.gen.temples.TempleLibrary;
+import ml.sgworlds.world.gen.temples.TemplePillars;
+import ml.sgworlds.world.gen.temples.TemplePyramid;
+import ml.sgworlds.world.gen.temples.TempleUnderwater;
+import ml.sgworlds.world.gen.temples.TempleUnderground;
 import ml.sgworlds.world.prefab.WorldAbydos;
+import ml.sgworlds.world.prefab.WorldTest;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.DimensionManager;
@@ -80,8 +87,7 @@ public class SGWorlds {
 
 	@EventHandler
 	public void PreInit(FMLPreInitializationEvent evt) {
-		Configuration cfg = new Configuration(
-				evt.getSuggestedConfigurationFile());
+		Configuration cfg = new Configuration(evt.getSuggestedConfigurationFile());
 		Registry.config = (SGWorldsConfig) new SGWorldsConfig(cfg).load();
 
 		Registry.registerTileEntities();
@@ -89,11 +95,9 @@ public class SGWorlds {
 		Registry.registerItems();
 		Registry.registerRecipes();
 
-		DimensionManager.registerProviderType(Registry.config.worldProviderId,
-				SGWorldProvider.class, false);
+		DimensionManager.registerProviderType(Registry.config.worldProviderId, SGWorldProvider.class, false);
 
-		NetworkRegistry.instance().registerConnectionHandler(
-				new ServerConnectionHandler());
+		NetworkRegistry.instance().registerConnectionHandler( new ServerConnectionHandler());
 		NetworkRegistry.instance().registerGuiHandler(instance, proxy);
 		Registry.registerPackets();
 
@@ -102,21 +106,32 @@ public class SGWorlds {
 		MinecraftForge.TERRAIN_GEN_BUS.register(geh);
 
 		MinecraftForge.EVENT_BUS.register(this);
+		MinecraftForge.EVENT_BUS.register(new EventListener());
 	}
 
 	@EventHandler
 	public void Init(FMLInitializationEvent evt) {
-
+		
 		proxy.load();
 
 		APIImplementation.expose();
+		SGWorldsAPI api = SGWorldsAPI.getSGWorldsAPI();
 
+		// Features
 		registerFeatures();
-		MinecraftForge.EVENT_BUS.post(new RegisterEvent.RegisterFeatures(
-				FeatureManager.instance));
-
-		APIImplementation.getSGWorldsAPI().registerStaticWorld(
-				new WorldAbydos());
+		MinecraftForge.EVENT_BUS.post(new RegisterEvent.RegisterFeatures(FeatureManager.instance));
+		
+		// Gate Temples
+		api.registerGateTemple(new TempleLibrary());
+		api.registerGateTemple(new TemplePillars());
+		api.registerGateTemple(new TemplePyramid());
+		api.registerGateTemple(new TempleUnderground());
+		api.registerGateTemple(new TempleUnderwater());
+		MinecraftForge.EVENT_BUS.post(new RegisterEvent.RegisterGateTemples());
+		
+		// Static Worlds
+		api.registerStaticWorld(new WorldTest());
+		api.registerStaticWorld(new WorldAbydos());
 		MinecraftForge.EVENT_BUS.post(new RegisterEvent.RegisterStaticWorlds());
 	}
 
@@ -209,7 +224,6 @@ public class SGWorlds {
 	public static File getSaveFile(String flName) {
 		flName = StringUtils.strip(flName, "/");
 		flName = flName.replace("/", File.separator);
-		return new File(DimensionManager.getCurrentSaveRootDirectory()
-				.getAbsolutePath() + File.separator + flName + ".dat");
+		return new File(DimensionManager.getCurrentSaveRootDirectory().getAbsolutePath() + File.separator + flName + ".dat");
 	}
 }

@@ -13,8 +13,10 @@ import ml.sgworlds.world.SGWorldManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
+import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
@@ -85,6 +87,12 @@ public class SGWorldProvider extends WorldProvider {
 	@Override
 	public int getRespawnDimension(EntityPlayerMP player) {
 		return super.getRespawnDimension(player);
+	}
+	
+	@Override
+	public ChunkCoordinates getSpawnPoint() {
+		ChunkPosition gatePos = worldData.getGateLocation();
+		return new ChunkCoordinates(gatePos.x, gatePos.y, gatePos.z);
 	}
 	
 	// Celestial angle of 0 or 1 = Noon
