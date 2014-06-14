@@ -2,10 +2,6 @@ package ml.sgworlds.world.prefab;
 
 import java.util.List;
 
-import net.minecraft.world.WorldServer;
-import net.minecraft.world.biome.BiomeGenBase;
-import stargatetech2.api.StargateTechAPI;
-import stargatetech2.api.stargate.Address;
 import ml.sgworlds.api.world.IGateTempleGenerator;
 import ml.sgworlds.api.world.IStaticWorld;
 import ml.sgworlds.api.world.IWorldData;
@@ -13,7 +9,11 @@ import ml.sgworlds.api.world.feature.IFeatureBuilder;
 import ml.sgworlds.api.world.feature.SGWFeature;
 import ml.sgworlds.api.world.feature.WorldFeature;
 import ml.sgworlds.world.feature.FeatureBuilder;
-import ml.sgworlds.world.gen.temples.TempleUnderwater;
+import ml.sgworlds.world.gen.temples.TemplePillars;
+import net.minecraft.world.WorldServer;
+import net.minecraft.world.biome.BiomeGenBase;
+import stargatetech2.api.StargateTechAPI;
+import stargatetech2.api.stargate.Address;
 
 public class WorldTest implements IStaticWorld {
 
@@ -41,14 +41,14 @@ public class WorldTest implements IStaticWorld {
 	public List<WorldFeature> getWorldFeatureList(IWorldData worldData) {
 		IFeatureBuilder fbuilder = new FeatureBuilder(worldData);
 		
-		fbuilder.createFeatureConstructor(SGWFeature.BIOME_SINGLE.name(), BiomeGenBase.ocean);
+		fbuilder.createFeatureConstructor(SGWFeature.BIOME_SINGLE.name(), BiomeGenBase.plains);
 		
 		return fbuilder.getFeatureList();
 	}
 
 	@Override
 	public IGateTempleGenerator getTempleGenerator(WorldServer world) {
-		return new TempleUnderwater();
+		return new TemplePillars();
 	}
 
 }

@@ -38,6 +38,7 @@ import ml.sgworlds.world.feature.impl.populate.PopulateNaquadah;
 import ml.sgworlds.world.feature.impl.populate.PopulateStrongholds;
 import ml.sgworlds.world.feature.impl.populate.PopulateWaterLakes;
 import ml.sgworlds.world.gen.temples.TempleLibrary;
+import ml.sgworlds.world.gen.temples.TemplePillars;
 import ml.sgworlds.world.gen.temples.TemplePyramid;
 import ml.sgworlds.world.gen.temples.TempleUnderwater;
 import ml.sgworlds.world.prefab.WorldAbydos;
@@ -121,7 +122,7 @@ public class SGWorlds {
 		
 		// Gate Temples
 		api.registerGateTemple(new TempleLibrary());
-		//api.registerGateTemple(new TemplePillars());
+		api.registerGateTemple(new TemplePillars());
 		api.registerGateTemple(new TemplePyramid());
 		//api.registerGateTemple(new TempleUnderground());
 		api.registerGateTemple(new TempleUnderwater());
