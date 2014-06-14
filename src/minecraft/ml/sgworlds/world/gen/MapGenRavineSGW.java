@@ -128,7 +128,7 @@ public class MapGenRavineSGW extends MapGenExtended {
 
 										int blockIndex = ly<<8 | lz<<4 | lx;
 										if ((d12 * d12 + d13 * d13) * (double)this.field_75046_d[ly] + d14 * d14 / 6.0D < 1.0D) {
-											placeFillBlock(chunkX, chunkZ, blockIds, blockMetas, blockIndex);
+											clearBlock(blockIds, blockMetas, blockIndex);
 										}
 									}
 								}

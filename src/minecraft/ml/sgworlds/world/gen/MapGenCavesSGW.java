@@ -138,7 +138,7 @@ public class MapGenCavesSGW extends MapGenExtended {
 										double d14 = ((double)ly + 0.5D - altY) / d7;
 
 										if (d14 > -0.7D && d12 * d12 + d14 * d14 + d13 * d13 < 1.0D) {
-											placeFillBlock(chunkX, chunkZ, blockIds, blockMetas, (ly<<8 | lz<<4 | lx));
+											clearBlock(blockIds, blockMetas, (ly<<8 | lz<<4 | lx));
 										}
 									}
 								}

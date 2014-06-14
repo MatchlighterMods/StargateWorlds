@@ -93,6 +93,7 @@ public class TempleUnderwater implements IGateTempleGenerator {
 	@Override
 	public ChunkPosition getGateCoords(World world, int gateRotation) {
 		ChunkPosition biomePos = world.provider.worldChunkMgr.findBiomePosition(0, 0, 500, validBiomes, new Random(world.getSeed()));
+		if (biomePos == null) return null;
 		return new ChunkPosition(biomePos.x, getOceanFloorHeight(world, biomePos.x, biomePos.z), biomePos.z);
 	}
 

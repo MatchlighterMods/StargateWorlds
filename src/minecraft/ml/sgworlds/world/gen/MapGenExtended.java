@@ -38,8 +38,7 @@ public class MapGenExtended {
 	 */
 	protected void recursiveGenerate(World par1World, int altChunkX, int altChunkZ, int chunkX, int chunkZ, short[] blockIds, byte[] blockMetas) {}
 
-	protected void placeFillBlock(int chunkX, int chunkZ, short[] blocksIds, byte[] blockMetas, int index) {
-
+	protected void placeFillBlock(short[] blocksIds, byte[] blockMetas, int index) {
 		short blkId = blocksIds[index];
 		Block blk = Block.blocksList[blkId];
 
@@ -55,5 +54,15 @@ public class MapGenExtended {
 			blocksIds[index] = 1;
 			blockMetas[index] = 0;
 		}
+	}
+	
+	protected void clearBlock(short[] blocksIds, byte[] blockMetas, int index) {
+		short blkId = blocksIds[index];
+		Block blk = Block.blocksList[blkId];
+
+		if (blk == Block.bedrock) return;
+		
+		blocksIds[index] = 0;
+		blockMetas[index] = 0;
 	}
 }

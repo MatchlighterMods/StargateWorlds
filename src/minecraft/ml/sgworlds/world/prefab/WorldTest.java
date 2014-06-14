@@ -42,6 +42,8 @@ public class WorldTest implements IStaticWorld {
 		IFeatureBuilder fbuilder = new FeatureBuilder(worldData);
 		
 		fbuilder.createFeatureConstructor(SGWFeature.BIOME_SINGLE.name(), BiomeGenBase.plains);
+		fbuilder.createFeatureConstructor(SGWFeature.MOD_CAVES.name());
+		fbuilder.createFeatureConstructor(SGWFeature.MOD_RAVINES.name());
 		
 		return fbuilder.getFeatureList();
 	}

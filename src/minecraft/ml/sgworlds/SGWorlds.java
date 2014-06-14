@@ -19,6 +19,8 @@ import ml.sgworlds.world.feature.impl.BiomeControllerNative;
 import ml.sgworlds.world.feature.impl.BiomeControllerSingle;
 import ml.sgworlds.world.feature.impl.BiomeControllerSized;
 import ml.sgworlds.world.feature.impl.CloudColorNormal;
+import ml.sgworlds.world.feature.impl.FeatureCaves;
+import ml.sgworlds.world.feature.impl.FeatureRavines;
 import ml.sgworlds.world.feature.impl.FogColorNormal;
 import ml.sgworlds.world.feature.impl.LightingNormal;
 import ml.sgworlds.world.feature.impl.MoonDefault;
@@ -185,6 +187,8 @@ public class SGWorlds {
 		fm.registerFeature(SGWFeature.TERRAIN_NORMAL.name(), FeatureType.TERRAIN_GENERATOR, TerrainDefault.class);
 		
 		// Terrain Mods
+		fm.registerFeature(SGWFeature.MOD_CAVES.name(), FeatureType.TERRAIN_MODIFIFIER, FeatureCaves.class, 80, true);
+		fm.registerFeature(SGWFeature.MOD_RAVINES.name(), FeatureType.TERRAIN_MODIFIFIER, FeatureRavines.class, 50, true);
 
 		// Populators
 		fm.registerFeature(SGWFeature.POPULATE_ORE_NAQUADAH.name(), FeatureType.CHUNK_POPULATOR, PopulateNaquadah.class, 16, true);
