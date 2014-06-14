@@ -24,6 +24,10 @@ public class StructureBuilder {
 	public int rotation;
 	public ChunkPosition center;
 	
+	public boolean flipXZ = false;
+	public boolean xSymmetry = false;
+	public boolean zSymmetry = false;
+	
 	/**
 	 * 
 	 * @param world
@@ -69,7 +73,19 @@ public class StructureBuilder {
 	}
 	
 	public void setBlockAt(int rx, int ry, int rz, Block block, int blockMeta) {
-		world.setBlock(getAbsX(rx, rz), center.y + ry, getAbsZ(rx, rz), block != null ? block.blockID : 0, blockMeta, 3);
+		int bx = flipXZ ? rz : rx;
+		int bz = flipXZ ? rx : rz;
+		world.setBlock(getAbsX(bx, bz), center.y + ry, getAbsZ(bx, bz), block != null ? block.blockID : 0, blockMeta, 2);
+		
+		if (xSymmetry && zSymmetry) {
+			world.setBlock(getAbsX(-bx, -bz), center.y + ry, getAbsZ(-bx, -bz), block != null ? block.blockID : 0, blockMeta, 2);
+		}
+		if (xSymmetry) {
+			world.setBlock(getAbsX(-bx, bz), center.y + ry, getAbsZ(-bx, bz), block != null ? block.blockID : 0, blockMeta, 2);
+		}
+		if (zSymmetry) {
+			world.setBlock(getAbsX(bx, -bz), center.y + ry, getAbsZ(bx, -bz), block != null ? block.blockID : 0, blockMeta, 2);
+		}
 	}
 	
 	public void fillArea(int startX, int startY, int startZ, int endX, int endY, int endZ, Block block, int blockMeta) {
