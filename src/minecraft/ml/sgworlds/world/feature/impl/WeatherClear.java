@@ -15,8 +15,6 @@ public class WeatherClear extends WeatherAbstract {
 	}
 
 	@Override
-	public void startWeather() {
-		this.rainStrength = 1.0F;
-	}
+	public void startWeather() {}
 
 }

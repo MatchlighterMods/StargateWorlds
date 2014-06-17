@@ -11,7 +11,6 @@ import ml.sgworlds.api.world.feature.WorldFeature;
 import ml.sgworlds.world.feature.FeatureBuilder;
 import ml.sgworlds.world.gen.temples.TemplePillars;
 import net.minecraft.world.WorldServer;
-import net.minecraft.world.biome.BiomeGenBase;
 import stargatetech2.api.StargateTechAPI;
 import stargatetech2.api.stargate.Address;
 
@@ -41,7 +40,7 @@ public class WorldTest implements IStaticWorld {
 	public List<WorldFeature> getWorldFeatureList(IWorldData worldData) {
 		IFeatureBuilder fbuilder = new FeatureBuilder(worldData);
 		
-		fbuilder.createFeatureConstructor(SGWFeature.BIOME_SINGLE.name(), BiomeGenBase.plains);
+		fbuilder.createFeatureConstructor(SGWFeature.BIOME_SIZED.name(), 0);
 		fbuilder.createFeatureConstructor(SGWFeature.MOD_CAVES.name());
 		fbuilder.createFeatureConstructor(SGWFeature.MOD_RAVINES.name());
 		

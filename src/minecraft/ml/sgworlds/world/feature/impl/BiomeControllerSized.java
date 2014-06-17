@@ -43,7 +43,12 @@ public class BiomeControllerSized extends BaseBiomeController implements IBiomeC
 		super(provider, worldData);
 		this.zoomFactor = zoom;
 		this.allowedBiomes = biomes;
-
+	}
+	
+	public BiomeControllerSized(FeatureProvider provider, IWorldData worldData, int zoom) {
+		super(provider, worldData);
+		this.zoomFactor = zoom;
+		this.allowedBiomes = new ArrayList<BiomeGenBase>(Arrays.asList(WorldType.DEFAULT.getBiomesForWorldType()));;
 	}
 	
 	public BiomeControllerSized(FeatureProvider provider, IWorldData worldData, Random rnd) {

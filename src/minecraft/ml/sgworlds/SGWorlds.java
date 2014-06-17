@@ -38,6 +38,7 @@ import ml.sgworlds.world.feature.impl.populate.PopulateDungeons;
 import ml.sgworlds.world.feature.impl.populate.PopulateLavaLakes;
 import ml.sgworlds.world.feature.impl.populate.PopulateNaquadah;
 import ml.sgworlds.world.feature.impl.populate.PopulateStrongholds;
+import ml.sgworlds.world.feature.impl.populate.PopulateVillages;
 import ml.sgworlds.world.feature.impl.populate.PopulateWaterLakes;
 import ml.sgworlds.world.gen.temples.TempleLibrary;
 import ml.sgworlds.world.gen.temples.TemplePillars;
@@ -194,6 +195,7 @@ public class SGWorlds {
 		fm.registerFeature(SGWFeature.POPULATE_ORE_NAQUADAH.name(), FeatureType.CHUNK_POPULATOR, PopulateNaquadah.class, 16, true);
 		fm.registerFeature(SGWFeature.POPULATE_DUNGEONS.name(), FeatureType.CHUNK_POPULATOR, PopulateDungeons.class, 25, true);
 		fm.registerFeature(SGWFeature.POPULATE_STRONGHOLDS.name(), FeatureType.CHUNK_POPULATOR, PopulateStrongholds.class, 5, true);
+		fm.registerFeature(SGWFeature.POPULATE_VILLAGES.name(), FeatureType.CHUNK_POPULATOR, PopulateVillages.class, 75, true);
 		fm.registerFeature(SGWFeature.POPULATE_LAKES_WATER.name(), FeatureType.CHUNK_POPULATOR, PopulateWaterLakes.class, 50, true);
 		fm.registerFeature(SGWFeature.POPULATE_LAKES_LAVA.name(), FeatureType.CHUNK_POPULATOR, PopulateLavaLakes.class, 40, true);
 

@@ -1,6 +1,7 @@
 package ml.sgworlds.world.gen.temples;
 
 import ml.sgworlds.api.world.IGateTempleGenerator;
+import ml.sgworlds.world.gen.StructureBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;

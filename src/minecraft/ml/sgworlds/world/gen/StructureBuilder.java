@@ -1,4 +1,4 @@
-package ml.sgworlds.world.gen.temples;
+package ml.sgworlds.world.gen;
 
 import net.minecraft.block.Block;
 import net.minecraft.world.ChunkPosition;

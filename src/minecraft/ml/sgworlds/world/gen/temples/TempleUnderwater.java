@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 import ml.sgworlds.api.world.IGateTempleGenerator;
+import ml.sgworlds.world.gen.StructureBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFluid;
 import net.minecraft.world.ChunkPosition;
