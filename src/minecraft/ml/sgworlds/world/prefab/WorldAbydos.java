@@ -69,7 +69,7 @@ public class WorldAbydos implements IStaticWorld {
 
 	@Override
 	public IGateTempleGenerator getTempleGenerator(WorldServer world) {
-		return new TemplePyramid();
+		return new TemplePyramid(48);
 	}
 
 }

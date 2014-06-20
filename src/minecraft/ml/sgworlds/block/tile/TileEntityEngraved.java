@@ -11,7 +11,7 @@ public class TileEntityEngraved extends TileEntityFacade {
 	public String[] sideStrings = new String[6];
 	public float scale = 1.0F;
 	public int rotation = 0;
-	public int fontColor = 0x888462;
+	public int fontColor = 0x686442;
 	
 	public void setString(int side, String str) {
 		sideStrings[side] = str;

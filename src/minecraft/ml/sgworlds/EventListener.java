@@ -20,10 +20,10 @@ public class EventListener {
 				SGWorldManager.instance.getWorldData(evt.address) != null) evt.setCanceled(true);
 	}
 	
-//	private IGateTempleGenerator tgen = new TempleLibrary();
+//	private IGateTempleGenerator tgen = new TemplePyramid(30);
 //	@ForgeSubscribe
 //	public void onPopulate(PopulateChunkEvent.Pre evt) {
-//		if (evt.chunkX % 4 == 0 && evt.chunkZ % 4 == 0 && tgen != null) {
+//		if (evt.chunkX == 0 && evt.chunkZ == 0 && tgen != null) {
 //			tgen.generateGateTemple(evt.world, new ChunkPosition(evt.chunkX << 4, 150, evt.chunkZ << 4), 0);
 //		}
 //	}

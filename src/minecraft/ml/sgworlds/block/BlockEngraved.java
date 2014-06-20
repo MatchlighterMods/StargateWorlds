@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import ml.sgworlds.Registry;
 import ml.sgworlds.block.tile.TileEntityEngraved;
 import ml.sgworlds.block.tile.TileEntityFacade;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemStack;
@@ -38,12 +37,4 @@ public class BlockEngraved extends BlockContainer {
 		return alit;
 	}
 	
-	@Override
-	public void onBlockAdded(World par1World, int par2, int par3, int par4) {
-		TileEntityEngraved tee = (TileEntityEngraved)par1World.getBlockTileEntity(par2, par3, par4);
-		tee.setBlockSide(-1, Block.sandStone, 1);
-		tee.setString(2, "Hello\nWorld");
-		tee.updateClients();
-		super.onBlockAdded(par1World, par2, par3, par4);
-	}
 }

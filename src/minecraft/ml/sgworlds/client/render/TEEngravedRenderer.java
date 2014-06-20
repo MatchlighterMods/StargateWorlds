@@ -16,7 +16,6 @@ public class TEEngravedRenderer extends TileEntitySpecialRenderer {
 	@Override
 	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float partialTick) {
 		TileEntityEngraved tee = (TileEntityEngraved)tileentity;
-		FontRenderer fr = tee.getFontRenderer();
 		Tessellator tess = Tessellator.instance;
 		
 		GL11.glPushMatrix();
@@ -24,6 +23,14 @@ public class TEEngravedRenderer extends TileEntitySpecialRenderer {
 		GL11.glRotatef(tee.rotation*90F, 0, 1.0F, 0);
 		GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
 		GL11.glNormal3i(0, 0, 1);
+		
+		renderEngraving(tee);
+		
+		GL11.glPopMatrix();
+	}
+	
+	protected void renderEngraving(TileEntityEngraved tee) {
+		FontRenderer fr = tee.getFontRenderer();
 		GL11.glDisable(GL11.GL_LIGHTING);
 		
 		for (int i=0; i<6; i++) {
@@ -57,7 +64,6 @@ public class TEEngravedRenderer extends TileEntitySpecialRenderer {
 		}
 		
 		GL11.glEnable(GL11.GL_LIGHTING);
-		GL11.glPopMatrix();
 	}
 
 }

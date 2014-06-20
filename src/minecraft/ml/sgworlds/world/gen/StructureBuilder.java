@@ -1,6 +1,7 @@
 package ml.sgworlds.world.gen;
 
 import net.minecraft.block.Block;
+import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
 
@@ -23,6 +24,7 @@ public class StructureBuilder {
 	public World world;
 	public int rotation;
 	public ChunkPosition center;
+	public ChunkCoordinates ioffset = new ChunkCoordinates();
 	
 	public boolean flipXZ = false;
 	public boolean xSymmetry = false;
@@ -75,6 +77,7 @@ public class StructureBuilder {
 	public void setBlockAt(int rx, int ry, int rz, Block block, int blockMeta) {
 		int bx = flipXZ ? rz : rx;
 		int bz = flipXZ ? rx : rz;
+		bx += ioffset.posX; ry += ioffset.posY; bz += ioffset.posZ;
 		world.setBlock(getAbsX(bx, bz), center.y + ry, getAbsZ(bx, bz), block != null ? block.blockID : 0, blockMeta, 2);
 		
 		if (xSymmetry && zSymmetry) {
