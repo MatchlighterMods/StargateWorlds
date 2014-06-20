@@ -11,9 +11,7 @@ public class TileEntityFacade extends BaseTileEntity {
 	protected Block[] sideBlocks = new Block[6];
 	protected int[] sideBlockMetas = new int[6];
 	
-	public TileEntityFacade(Block blk, int meta) {
-		setBlockSide(-1, blk, meta);
-	}
+	public TileEntityFacade() {}
 	
 	@Override
 	public void readFromNBT(NBTTagCompound tag) {
@@ -28,6 +26,7 @@ public class TileEntityFacade extends BaseTileEntity {
 	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
 		for (int i=0; i<sideBlocks.length; i++) {
+			if (sideBlocks[i] == null) continue;
 			tag.setInteger("blockId_" + i, sideBlocks[i].blockID);
 			tag.setInteger("blockMeta_" + i, sideBlockMetas[i]);
 		}

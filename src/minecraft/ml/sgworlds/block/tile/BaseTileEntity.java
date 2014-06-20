@@ -7,7 +7,7 @@ import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 
-public class BaseTileEntity extends TileEntity {
+public abstract class BaseTileEntity extends TileEntity {
 
 	@Override
 	public Packet getDescriptionPacket() {
@@ -19,6 +19,7 @@ public class BaseTileEntity extends TileEntity {
 	@Override
 	public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt) {
 		if (pkt.data != null) readFromNBT(pkt.data);
+		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 	
 	public void updateClients() {
