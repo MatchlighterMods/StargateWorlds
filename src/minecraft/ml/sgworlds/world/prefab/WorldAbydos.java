@@ -3,6 +3,9 @@ package ml.sgworlds.world.prefab;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.block.Block;
+import net.minecraft.world.ChunkPosition;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.biome.BiomeGenBase;
 
@@ -13,9 +16,11 @@ import ml.sgworlds.api.world.feature.IFeatureBuilder;
 import ml.sgworlds.api.world.feature.SGWFeature;
 import ml.sgworlds.api.world.feature.WorldFeature;
 import ml.sgworlds.world.feature.FeatureBuilder;
+import ml.sgworlds.world.gen.StructureBuilder;
 import ml.sgworlds.world.gen.temples.TemplePyramid;
 import stargatetech2.api.StargateTechAPI;
 import stargatetech2.api.stargate.Address;
+import stargatetech2.transport.ModuleTransport;
 
 public class WorldAbydos implements IStaticWorld {
 
@@ -69,7 +74,32 @@ public class WorldAbydos implements IStaticWorld {
 
 	@Override
 	public IGateTempleGenerator getTempleGenerator(WorldServer world) {
-		return new TemplePyramid(48);
+		return new TempleAbydos();
 	}
 
+	private class TempleAbydos extends TemplePyramid {
+		public TempleAbydos() {
+			super(48);
+		}
+		
+		@Override
+		public void generateGateTemple(World world, ChunkPosition gateCoords, int gateRotation) {
+			super.generateGateTemple(world, gateCoords, gateRotation);
+			StructureBuilder th = new StructureBuilder(world, gateCoords, gateRotation);
+			th.ioffset.posZ = -gateOffset;
+			
+			// Transport Rings
+			th.setBlockAt(0, -1, 0, ModuleTransport.transportRing, 0);
+			th.setBlockAt(0, gateRoomHeight + 1, 0, ModuleTransport.transportRing, 0);
+			
+			
+			// Upper Floor
+			th.ioffset.posZ = -gateOffset - sanctumOffset;
+			int out = plevels - (gateRoomHeight + 2);
+			th.fillArea(-out, gateRoomHeight+2, -out, out, gateRoomHeight+2, out, Block.sandStone, 2);
+			
+			// TODO Add treasure and monsters
+			
+		}
+	}
 }

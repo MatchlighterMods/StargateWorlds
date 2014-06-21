@@ -95,15 +95,13 @@ public class TemplePyramid implements IGateTempleGenerator {
 			th.fillArea(-out, y, -out, out, y, out, null, 0);
 		}
 		
-		if (plevels > gateRoomHeight) {
-			int out = plevels - gateRoomHeight;
-			th.fillArea(-out, gateRoomHeight, -out, out, gateRoomHeight, out, Block.sandStone, 2);
-		}
-		
 		// Inner Sanctum
 		th.ioffset.posZ = -gateOffset;
 		
 		th.wallArea(-9, 1, -10, 9, Math.min(plevels - 9, gateRoomHeight), 10, true, false, true, Block.sandStone, 2);
+		if (plevels > gateRoomHeight) {
+			th.fillArea(-9, gateRoomHeight, -10, 9, gateRoomHeight, 10, Block.sandStone, 2);
+		}
 		
 		for (int x=-9; x<=9; x++) {
 			for (int z=-9; z<=9; z++) {
@@ -164,6 +162,7 @@ public class TemplePyramid implements IGateTempleGenerator {
 		th.setBlockAt( 0, 6, front, Block.sandStone, 2);
 		th.setBlockAt(-1, 6, front, Block.sandStone, 2);
 		th.setBlockAt( 1, 6, front, Block.sandStone, 2);
+		
 	}
 	
 	private void ankh(int x, int ybot, int z, StructureBuilder th) {
