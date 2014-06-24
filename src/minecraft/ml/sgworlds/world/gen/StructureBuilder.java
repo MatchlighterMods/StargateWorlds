@@ -12,22 +12,30 @@ import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
 
+/**
+ * Helper class for making the creation of rotatable structures easier.<br/>
+ * Imposes a custom coordinate system:
+ * 
+ * <pre>
+ *              Z+
+ *              ^
+ *              |
+ *              N
+ *  X- <------W + E------> X+
+ *              S
+ *              |
+ *              v
+ *              Z-
+ * </pre>
+ * 
+ * N,E,S,W are default minecraft directions, in global space. Z+, X+, Z-, X- are in local space and are rotated depending on the passed rotation.
+ * Rotation works in 90-degree increments, rotating the axes in the above illustration clockwise. e.g. Z+ becomes East, X+ becomes South, etc.<br/>
+ * Note: In vanilla MC coordinates, North is Z- and South is Z+.
+ * 
+ * @author Matchlighter
+ */
 public class StructureBuilder {
 
-	/*
-	 * Gate Facing:
-	 * 0: North -Z
-	 * 1: East +X
-	 * 2: South +Z
-	 * 3: West -X
-	 * 
-	 * Coords:
-	 * +X : Right
-	 * -X : Left
-	 * +Z : Forward
-	 * -Z : Backward
-	 */
-	
 	public final World world;
 	public final int rotation;
 	public final ChunkPosition center;
@@ -38,7 +46,7 @@ public class StructureBuilder {
 	public boolean zSymmetry = false;
 	
 	/**
-	 * 
+	 * See {@link StructureBuilder} for details.
 	 * @param world
 	 * @param pos The point to rotate the structure around.
 	 * @param rot The number of clockwise, 90-degree increments to rotate the structure.
@@ -49,6 +57,9 @@ public class StructureBuilder {
 		this.rotation = rot;
 	}
 	
+	/**
+	 * Converts the local z passed to a global z-value.
+	 */
 	public int getAbsZ(int x, int z) {
 		switch (rotation) {
 		case 0:
@@ -63,6 +74,9 @@ public class StructureBuilder {
 		return center.z;
 	}
 	
+	/**
+	 * Converts the local x passed to a global x-value.
+	 */
 	public int getAbsX(int x, int z) {
 		switch (rotation) {
 		case 0:
@@ -77,6 +91,9 @@ public class StructureBuilder {
 		return center.x;
 	}
 	
+	/**
+	 * Converts the relative x,y,z into a global point.
+	 */
 	public ChunkPosition getAbsCoords(int rx, int ry, int rz) {
 		int bx = flipXZ ? rz : rx;
 		int bz = flipXZ ? rx : rz;
@@ -97,6 +114,10 @@ public class StructureBuilder {
 		}
 	}
 	
+	/**
+	 * Set the block at the local coordinates (rx, ry, rz) to the specified block and meta.
+	 * Takes symmetry booleans into account, so up to 4 blocks may be placed.
+	 */
 	public void setBlockAt(int rx, int ry, int rz, Block block, int blockMeta) {
 		
 		int bx = flipXZ ? rz : rx;
@@ -116,6 +137,9 @@ public class StructureBuilder {
 		}
 	}
 	
+	/**
+	 * Fills the specified area with blocks. start_ and end_ are both inclusive.
+	 */
 	public void fillArea(int startX, int startY, int startZ, int endX, int endY, int endZ, Block block, int blockMeta) {
 		for (int x=startX; x<=endX; x++) {
 			for (int z=startZ; z<=endZ; z++) {
@@ -126,6 +150,9 @@ public class StructureBuilder {
 		}
 	}
 	
+	/**
+	 * Fills the edges of the specified area with blocks. start_ and end_ are both inclusive.
+	 */
 	public void borderArea(int startX, int startY, int startZ, int endX, int endY, int endZ, Block block, int blockMeta) {
 		for (int x=startX; x<=endX; x++) {
 			boolean xc = x==startX || x==endX;
@@ -142,22 +169,16 @@ public class StructureBuilder {
 		}
 	}
 	
+	/**
+	 * Fills the faces of the specified area with blocks. start_ and end_ are both inclusive.
+	 */
 	public void wallArea(int startX, int startY, int startZ, int endX, int endY, int endZ, Block block, int blockMeta) {
-		for (int x=startX; x<=endX; x++) {
-			boolean xc = x==startX || x==endX;
-			
-			for (int z=startZ; z<=endZ; z++) {
-				boolean zc = z==startZ || z==endZ;
-				
-				for (int y=startY; y<=endY; y++) {
-					boolean yc = y==startY || y==endY;
-					
-					if (xc || yc || zc) setBlockAt(x, y, z, block, blockMeta);
-				}
-			}
-		}
+		wallArea(startX, startY, startZ, endX, endY, endZ, true, true, true, block, blockMeta);
 	}
 	
+	/**
+	 * Fills the faces of the specified area with blocks, if the w_ is true for the axis. start_ and end_ are both inclusive.
+	 */
 	public void wallArea(int startX, int startY, int startZ, int endX, int endY, int endZ, boolean wx, boolean wy, boolean wz, Block block, int blockMeta) {
 		for (int x=startX; x<=endX; x++) {
 			boolean xc = (x==startX || x==endX) && wx;
@@ -174,6 +195,9 @@ public class StructureBuilder {
 		}
 	}
 	
+	/**
+	 * Attempts to get the rotated metadata of a rotatable block.
+	 */
 	public int getMetadataWithOffset(Block block, int cRotation) {
 		int rot4 =(this.rotation + cRotation) % 4;
 		
