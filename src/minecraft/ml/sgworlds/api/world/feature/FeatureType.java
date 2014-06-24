@@ -11,6 +11,7 @@ import ml.sgworlds.api.world.feature.types.ILightingController;
 import ml.sgworlds.api.world.feature.types.IPopulate;
 import ml.sgworlds.api.world.feature.types.ISkyColor;
 import ml.sgworlds.api.world.feature.types.ISkyFeature;
+import ml.sgworlds.api.world.feature.types.IStructureProvider;
 import ml.sgworlds.api.world.feature.types.ITerrainGenerator;
 import ml.sgworlds.api.world.feature.types.ITerrainModifier;
 import ml.sgworlds.api.world.feature.types.IWeatherController;
@@ -49,6 +50,7 @@ public enum FeatureType {
 	TERRAIN_MODIFIFIER(0, 3, ITerrainModifier.class),
 	CHUNK_POPULATOR(0, 3, IPopulate.class),
 	FEATURE_LOCATOR(0, IFeatureLocator.class),
+	STRUCTURE_PROVIDER(0, IStructureProvider.class),
 	
 	FOG_COLOR(1, IColorProvider.class),
 	SKY_COLOR(1, ISkyColor.class),

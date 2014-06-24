@@ -4,17 +4,21 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.gen.structure.StructureStart;
 
 import ml.sgworlds.api.world.IGateTempleGenerator;
 import ml.sgworlds.api.world.IStaticWorld;
 import ml.sgworlds.api.world.IWorldData;
+import ml.sgworlds.api.world.feature.FeatureProvider;
 import ml.sgworlds.api.world.feature.IFeatureBuilder;
 import ml.sgworlds.api.world.feature.SGWFeature;
 import ml.sgworlds.api.world.feature.WorldFeature;
+import ml.sgworlds.api.world.feature.types.IStructureProvider;
 import ml.sgworlds.world.feature.FeatureBuilder;
 import ml.sgworlds.world.gen.StructureBuilder;
 import ml.sgworlds.world.gen.temples.TemplePyramid;
@@ -101,5 +105,34 @@ public class WorldAbydos implements IStaticWorld {
 			// TODO Add treasure and monsters
 			
 		}
+	}
+	
+	private static class NagadaCityProvider extends WorldFeature implements IStructureProvider {
+
+		public NagadaCityProvider(FeatureProvider provider, IWorldData worldData) {
+			super(provider, worldData);
+			// TODO Auto-generated constructor stub
+		}
+
+		@Override
+		public boolean willProvideStructureFor(int chunkX, int chunkZ) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public StructureStart getStructureStart(int chunkX, int chunkZ) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public StructureStrata getStrata() {
+			return StructureStrata.Aboveground;
+		}
+
+		@Override
+		public void writeNBTData(NBTTagCompound tag) {}
+		
 	}
 }

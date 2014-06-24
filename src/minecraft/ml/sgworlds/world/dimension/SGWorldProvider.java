@@ -40,6 +40,10 @@ public class SGWorldProvider extends WorldProvider {
 		worldData.setWorldProvider(this);
 	}
 	
+	public SGWorldData getWorldData() {
+		return worldData;
+	}
+	
 	@Override
 	public String getDimensionName() {
 		return worldData.getDisplayName();

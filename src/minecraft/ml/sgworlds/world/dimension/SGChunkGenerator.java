@@ -10,8 +10,10 @@ import ml.sgworlds.api.world.feature.FeatureType;
 import ml.sgworlds.api.world.feature.WorldFeature;
 import ml.sgworlds.api.world.feature.types.IFeatureLocator;
 import ml.sgworlds.api.world.feature.types.IPopulate;
+import ml.sgworlds.api.world.feature.types.IStructureProvider.StructureStrata;
 import ml.sgworlds.api.world.feature.types.ITerrainGenerator;
 import ml.sgworlds.api.world.feature.types.ITerrainModifier;
+import ml.sgworlds.world.gen.structure.MapGenStructureExternal;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSand;
 import net.minecraft.entity.EnumCreatureType;
@@ -37,6 +39,10 @@ public class SGChunkGenerator implements IChunkProvider {
 	private double[] stoneNoise = new double[256];
 	private BiomeGenBase[] biomesForGeneration;
 
+	protected MapGenStructureExternal calloutStructureGenUndg = new MapGenStructureExternal(StructureStrata.Underground);
+	protected MapGenStructureExternal calloutStructureGenAbvg = new MapGenStructureExternal(StructureStrata.Aboveground);
+	protected MapGenStructureExternal calloutStructureGenSky = new MapGenStructureExternal(StructureStrata.Sky);
+	
 	public SGChunkGenerator(World world, IWorldData worldData) {
 		this.worldObj = world;
 		this.worldData = worldData;
@@ -61,6 +67,10 @@ public class SGChunkGenerator implements IChunkProvider {
 		this.biomesForGeneration = this.worldObj.getWorldChunkManager().loadBlockGeneratorData(this.biomesForGeneration, chunkX * 16, chunkZ * 16, 16, 16);
 		this.replaceBlocksForBiome(chunkX, chunkZ, blockIds, blockMetas, this.biomesForGeneration);
 
+		calloutStructureGenUndg.generate(this, worldObj, chunkX, chunkZ, null);
+		calloutStructureGenAbvg.generate(this, worldObj, chunkX, chunkZ, null);
+		calloutStructureGenSky.generate(this, worldObj, chunkX, chunkZ, null);
+		
 		for (WorldFeature ft : worldData.getFeatures(FeatureType.TERRAIN_MODIFIFIER)) {
 			((ITerrainModifier)ft).generate(worldObj, chunkX, chunkZ, terrainGenerator, blockIds, blockMetas);
 		}
@@ -167,6 +177,10 @@ public class SGChunkGenerator implements IChunkProvider {
 
 		MinecraftForge.EVENT_BUS.post(new PopulateChunkEvent.Pre(ichunkprovider, worldObj, rand, chunkX, chunkZ, flag));
 
+		calloutStructureGenUndg.generateStructuresInChunk(worldObj, rand, chunkX, chunkZ);
+		calloutStructureGenAbvg.generateStructuresInChunk(worldObj, rand, chunkX, chunkZ);
+		calloutStructureGenSky.generateStructuresInChunk(worldObj, rand, chunkX, chunkZ);
+		
 		for (WorldFeature ft : worldData.getFeatures(FeatureType.CHUNK_POPULATOR)) {
 			((IPopulate)ft).populate(worldObj, rand, chunkX, chunkZ);
 		}
@@ -253,7 +267,9 @@ public class SGChunkGenerator implements IChunkProvider {
 
 	@Override
 	public void recreateStructures(int chunkX, int chunkZ) {
-
+		calloutStructureGenUndg.generate(this, worldObj, chunkX, chunkZ, null);
+		calloutStructureGenAbvg.generate(this, worldObj, chunkX, chunkZ, null);
+		calloutStructureGenSky.generate(this, worldObj, chunkX, chunkZ, null);
 	}
 
 	@Override
