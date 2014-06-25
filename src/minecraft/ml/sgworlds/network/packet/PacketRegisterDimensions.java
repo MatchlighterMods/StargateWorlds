@@ -1,6 +1,7 @@
 package ml.sgworlds.network.packet;
 
 import java.io.IOException;
+import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 
@@ -18,9 +19,12 @@ public class PacketRegisterDimensions extends MLPacket {
 		super(pl, dataIn);
 	}
 	
-	public PacketRegisterDimensions(int[] dims) {
+	public PacketRegisterDimensions(List<Integer> dims) {
 		super(SGWorlds.netChannel);
-		this.dims = dims;
+		this.dims = new int[dims.size()];
+		for (int i=0; i<dims.size(); i++) {
+			this.dims[i] = dims.get(i);
+		}
 	}
 	
 	public PacketRegisterDimensions(int dim) {

@@ -1,4 +1,4 @@
-package ml.sgworlds.world.feature.impl;
+package ml.sgworlds.world.feature.impl.atmosphere;
 
 import ml.sgworlds.api.world.IWorldData;
 import ml.sgworlds.api.world.feature.FeatureProvider;

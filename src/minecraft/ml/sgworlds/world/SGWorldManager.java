@@ -33,7 +33,6 @@ import stargatetech2.api.stargate.Symbol;
 import cpw.mods.fml.common.FMLLog;
 
 public class SGWorldManager implements IDynamicWorldLoader {
-	public static final String FILE_NAME = "SGWorldsData";
 
 	public static SGWorldManager instance;
 	public static final Set<IStaticWorld> staticWorlds = new HashSet<IStaticWorld>();
@@ -73,7 +72,9 @@ public class SGWorldManager implements IDynamicWorldLoader {
 	public SGWorldData getClientWorldData(int dimId) {
 		SGWorldData worldData = getWorldData(dimId);
 		if (worldData == null) {
-			worldData = SGWorldData.generateRandom(); // TODO Default Data?
+			worldData = new SGWorldData("CLIENT", null); // TODO Default Data?
+			worldData.fillFeatures(true);
+			worldData.setDimensionId(dimId);
 			worlds.add(worldData);
 			new PacketWorldData(dimId).dispatchToServer();
 		}
@@ -136,6 +137,7 @@ public class SGWorldManager implements IDynamicWorldLoader {
 	public void loadWorldFor(Address address, IStargatePlacer seedingShip) {
 		SGWorldData worldData = getWorldData(address);
 		try {
+			System.out.println(worldData);
 			if (worldData != null) {
 				worldData.setDimensionId(DimensionManager.getNextFreeDimId());
 				worldData.markDirty();

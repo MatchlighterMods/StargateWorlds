@@ -1,4 +1,4 @@
-package ml.sgworlds.world.feature.impl;
+package ml.sgworlds.world.feature.impl.atmosphere;
 
 import java.util.Random;
 

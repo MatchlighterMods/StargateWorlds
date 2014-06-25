@@ -115,13 +115,13 @@ public class WorldAbydos implements IStaticWorld {
 		}
 
 		@Override
-		public boolean willProvideStructureFor(int chunkX, int chunkZ) {
+		public boolean willProvideStructureFor(World world, int chunkX, int chunkZ) {
 			// TODO Auto-generated method stub
 			return false;
 		}
 
 		@Override
-		public StructureStart getStructureStart(int chunkX, int chunkZ) {
+		public StructureStart getStructureStart(World world, Random rand, int chunkX, int chunkZ) {
 			// TODO Auto-generated method stub
 			return null;
 		}

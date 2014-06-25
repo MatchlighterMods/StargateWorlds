@@ -11,6 +11,7 @@ import net.minecraft.item.ItemDoor;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.structure.StructureBoundingBox;
 
 /**
  * Helper class for making the creation of rotatable structures easier.<br/>
@@ -40,6 +41,7 @@ public class StructureBuilder {
 	public final int rotation;
 	public final ChunkPosition center;
 	public ChunkCoordinates ioffset = new ChunkCoordinates();
+	public ChunkCoordinates absMinimum, absMaximum;
 	
 	public boolean flipXZ = false;
 	public boolean xSymmetry = false;
@@ -94,12 +96,37 @@ public class StructureBuilder {
 	/**
 	 * Converts the relative x,y,z into a global point.
 	 */
-	public ChunkPosition getAbsCoords(int rx, int ry, int rz) {
+	public ChunkCoordinates getAbsCoords(int rx, int ry, int rz) {
 		int bx = flipXZ ? rz : rx;
 		int bz = flipXZ ? rx : rz;
 		bx += ioffset.posX; ry += ioffset.posY; bz += ioffset.posZ;
 		
-		return new ChunkPosition(getAbsX(bx, bz), center.y + ry, getAbsZ(bx, bz));
+		return new ChunkCoordinates(getAbsX(bx, bz), center.y + ry, getAbsZ(bx, bz));
+	}
+	
+	public boolean absCoordsInRange(int ax, int ay, int az) {
+		if (absMinimum == null || absMaximum == null) return true;
+		return  (ax >= absMinimum.posX && ax <= absMaximum.posX) &&
+				(ay >= absMinimum.posY && ay <= absMaximum.posY) &
+				(az >= absMinimum.posZ && az <= absMaximum.posZ); 
+	}
+	
+	public boolean relCoordsInRange(int rx, int ry, int rz) {
+		if (absMinimum == null || absMaximum == null) return true;
+		ChunkCoordinates absPt = getAbsCoords(rx, ry, rz);
+		return (absPt.posX >= absMinimum.posX && absPt.posX <= absMaximum.posX) &&
+				(absPt.posY >= absMinimum.posY && absPt.posY <= absMaximum.posY) &
+				(absPt.posZ >= absMinimum.posZ && absPt.posZ <= absMaximum.posZ); 
+	}
+	
+	public void setMinMax(ChunkCoordinates min, ChunkCoordinates max) {
+		this.absMinimum = min;
+		this.absMaximum = max;
+	}
+	
+	public void setMinMax(StructureBoundingBox bb) {
+		this.absMinimum = new ChunkCoordinates(bb.minX, bb.minY, bb.minZ);
+		this.absMaximum = new ChunkCoordinates(bb.maxX, bb.maxY, bb.maxZ);
 	}
 	
 	public int getBlockIdAt(int rx, int ry, int rz) {
@@ -107,6 +134,8 @@ public class StructureBuilder {
 	}
 	
 	private void setBlockAtAbs(int ax, int ay, int az, Block block, int blockMeta) {
+		if (!absCoordsInRange(ax, ay, az)) return;
+		
 		if (block instanceof BlockDoor) {
 			ItemDoor.placeDoorBlock(world, ax, ay, az, blockMeta, block);
 		} else {

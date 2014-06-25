@@ -55,6 +55,7 @@ public class PacketWorldData extends MLPacket {
 	
 	@Override
 	public void handleServerSide(EntityPlayer epl) throws IOException {
+		System.out.println("Received WorldData Request " + dimId);
 		SGWorldData worldData = SGWorldManager.instance.getWorldData(dimId);
 		if (worldData != null) {
 			new PacketWorldData(worldData).dispatchToPlayer(epl);

@@ -67,7 +67,7 @@ public class SGWorldProvider extends WorldProvider {
 	@Override
 	public void setWorldTime(long time) {
 		worldData.setWorldTime(time);
-		clientDataDirty = true;
+		markDirtyClient();
 	}
 	
 	@Override
@@ -153,11 +153,13 @@ public class SGWorldProvider extends WorldProvider {
 	@Override
 	public void toggleRain() {
 		((IWeatherController)worldData.getFeature(FeatureType.WEATHER_CONTROLLER)).toggleWeather();
+		markDirtyClient();
 	}
 	
 	@Override
 	public void resetRainAndThunder() {
 		((IWeatherController)worldData.getFeature(FeatureType.WEATHER_CONTROLLER)).clearWeather();
+		markDirtyClient();
 	}
 	
 	// Occurs as part of tickBlocksAndAmbience

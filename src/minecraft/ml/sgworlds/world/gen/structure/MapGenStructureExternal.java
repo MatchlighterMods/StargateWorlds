@@ -25,7 +25,7 @@ public class MapGenStructureExternal extends MapGenStructure {
 		SGWorldProvider pvdr = (SGWorldProvider)worldObj.provider;
 		for (WorldFeature ft : pvdr.getWorldData().getFeatures(FeatureType.STRUCTURE_PROVIDER)) {
 			IStructureProvider isp = (IStructureProvider)ft;
-			if (isp.getStrata() == genStrata && isp.willProvideStructureFor(i, j)) return true;
+			if (isp.getStrata() == genStrata && isp.willProvideStructureFor(worldObj, i, j)) return true;
 		}
 		return false;
 	}
@@ -35,8 +35,8 @@ public class MapGenStructureExternal extends MapGenStructure {
 		SGWorldProvider pvdr = (SGWorldProvider)worldObj.provider;
 		for (WorldFeature ft : pvdr.getWorldData().getFeatures(FeatureType.STRUCTURE_PROVIDER)) {
 			IStructureProvider isp = (IStructureProvider)ft;
-			if (isp.getStrata() == genStrata && isp.willProvideStructureFor(i, j)) {
-				StructureStart start = isp.getStructureStart(i, j);;
+			if (isp.getStrata() == genStrata && isp.willProvideStructureFor(worldObj, i, j)) {
+				StructureStart start = isp.getStructureStart(worldObj, rand, i, j);;
 				if (start == null) throw new RuntimeException(String.format("Structure provider \"%s\" reported that it would provide a structure for chunk (%d, %d) but did not!", isp.getClass().getName(), i, j));
 				return start;
 			}

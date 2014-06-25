@@ -40,9 +40,11 @@ public class WorldTest implements IStaticWorld {
 	public List<WorldFeature> getWorldFeatureList(IWorldData worldData) {
 		IFeatureBuilder fbuilder = new FeatureBuilder(worldData);
 		
-		fbuilder.createFeatureConstructor(SGWFeature.BIOME_SIZED.name(), 0);
+		fbuilder.createFeatureConstructor(SGWFeature.BIOME_SIZED.name(), 9);
 		fbuilder.createFeatureConstructor(SGWFeature.MOD_CAVES.name());
 		fbuilder.createFeatureConstructor(SGWFeature.MOD_RAVINES.name());
+		
+		fbuilder.createFeatureConstructor(SGWFeature.WEATHER_RAINY.name());
 		
 		return fbuilder.getFeatureList();
 	}

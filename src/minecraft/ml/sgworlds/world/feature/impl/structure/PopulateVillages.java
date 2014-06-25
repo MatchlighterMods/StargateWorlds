@@ -1,4 +1,4 @@
-package ml.sgworlds.world.feature.impl.populate;
+package ml.sgworlds.world.feature.impl.structure;
 
 import java.util.HashMap;
 import java.util.List;

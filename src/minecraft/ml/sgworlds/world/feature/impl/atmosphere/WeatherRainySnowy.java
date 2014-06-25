@@ -1,4 +1,4 @@
-package ml.sgworlds.world.feature.impl;
+package ml.sgworlds.world.feature.impl.atmosphere;
 
 import net.minecraft.nbt.NBTTagCompound;
 import ml.sgworlds.api.world.IWorldData;

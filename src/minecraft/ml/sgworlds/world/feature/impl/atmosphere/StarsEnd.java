@@ -1,4 +1,4 @@
-package ml.sgworlds.world.feature.impl;
+package ml.sgworlds.world.feature.impl.atmosphere;
 
 import ml.sgworlds.api.world.IWorldData;
 import ml.sgworlds.api.world.feature.FeatureProvider;
@@ -27,7 +27,6 @@ public class StarsEnd extends WorldFeature implements WorldFeatureRender {
 	public void render(float partialTicks, World world, Minecraft mc) {
 		mc.getTextureManager().bindTexture(locationEndSkyPng);
 		Tessellator tessellator = Tessellator.instance;
-
 		for (int i = 0; i < 6; ++i) {
 			GL11.glPushMatrix();
 
