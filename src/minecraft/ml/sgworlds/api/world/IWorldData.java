@@ -4,11 +4,11 @@ import java.util.List;
 
 import ml.sgworlds.api.world.feature.FeatureType;
 import ml.sgworlds.api.world.feature.WorldFeature;
-import net.minecraft.world.WorldProvider;
+import ml.sgworlds.world.dimension.SGWorldProvider;
 
 public interface IWorldData {
 
-	public WorldProvider getWorldProvider();
+	public SGWorldProvider getWorldProvider();
 
 	public List<WorldFeature> getFeatures(FeatureType type);
 

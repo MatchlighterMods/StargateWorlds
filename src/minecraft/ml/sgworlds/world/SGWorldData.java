@@ -21,7 +21,6 @@ import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.ChunkPosition;
-import net.minecraft.world.WorldProvider;
 import stargatetech2.api.StargateTechAPI;
 import stargatetech2.api.stargate.Address;
 
@@ -202,7 +201,7 @@ public class SGWorldData implements IWorldData {
 	}
 	
 	@Override
-	public WorldProvider getWorldProvider() {
+	public SGWorldProvider getWorldProvider() {
 		return worldProvider;
 	}
 	

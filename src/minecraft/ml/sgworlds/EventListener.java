@@ -27,4 +27,12 @@ public class EventListener {
 //			tgen.generateGateTemple(evt.world, new ChunkPosition(evt.chunkX << 4, 150, evt.chunkZ << 4), RandomUtils.randomInt(4));
 //		}
 //	}
+	
+//	@ForgeSubscribe
+//	public void onPopulate(PopulateChunkEvent.Pre evt) {
+//		if (evt.chunkX % 4 == 0 && evt.chunkZ % 4 == 0) {
+//			ComponentCartouche cc = new ComponentCartouche(new ChunkPosition(evt.chunkX << 4, 100, evt.chunkZ << 4), 0);
+//			cc.addComponentParts(evt.world, new Random(), StructureBoundingBox.getNewBoundingBox());
+//		}
+//	}
 }

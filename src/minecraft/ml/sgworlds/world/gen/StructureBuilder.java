@@ -18,7 +18,7 @@ import net.minecraft.world.gen.structure.StructureBoundingBox;
  * Imposes a custom coordinate system:
  * 
  * <pre>
- *              Z+
+ *              Z-
  *              ^
  *              |
  *              N
@@ -26,12 +26,11 @@ import net.minecraft.world.gen.structure.StructureBoundingBox;
  *              S
  *              |
  *              v
- *              Z-
+ *              Z+
  * </pre>
  * 
- * N,E,S,W are default minecraft directions, in global space. Z+, X+, Z-, X- are in local space and are rotated depending on the passed rotation.
- * Rotation works in 90-degree increments, rotating the axes in the above illustration clockwise. e.g. Z+ becomes East, X+ becomes South, etc.<br/>
- * Note: In vanilla MC coordinates, North is Z- and South is Z+.
+ * N,E,S,W are default minecraft directions, in global space. Z-, X+, Z+, X- are in local space and are rotated depending on the passed rotation.
+ * Rotation works in 90-degree increments, rotating the axes in the above illustration clockwise. e.g. Z- becomes East, X+ becomes South, etc.<br/>
  * 
  * @author Matchlighter
  */
@@ -65,11 +64,11 @@ public class StructureBuilder {
 	public int getAbsZ(int x, int z) {
 		switch (rotation) {
 		case 0:
-			return center.z-z;
+			return center.z+z;
 		case 1:
 			return center.z+x;
 		case 2:
-			return center.z+z;
+			return center.z-z;
 		case 3:
 			return center.z-x;
 		}
@@ -84,11 +83,11 @@ public class StructureBuilder {
 		case 0:
 			return center.x+x;
 		case 1:
-			return center.x+z;
+			return center.x-z;
 		case 2:
 			return center.x-x;
 		case 3:
-			return center.x-z;
+			return center.x+z;
 		}
 		return center.x;
 	}
@@ -125,8 +124,13 @@ public class StructureBuilder {
 	}
 	
 	public void setMinMax(StructureBoundingBox bb) {
-		this.absMinimum = new ChunkCoordinates(bb.minX, bb.minY, bb.minZ);
-		this.absMaximum = new ChunkCoordinates(bb.maxX, bb.maxY, bb.maxZ);
+		if (bb != null) {
+			this.absMinimum = new ChunkCoordinates(bb.minX, bb.minY, bb.minZ);
+			this.absMaximum = new ChunkCoordinates(bb.maxX, bb.maxY, bb.maxZ);
+		} else {
+			this.absMinimum = null;
+			this.absMaximum = null;
+		}
 	}
 	
 	public int getBlockIdAt(int rx, int ry, int rz) {
@@ -239,9 +243,9 @@ public class StructureBuilder {
 		} else if (block instanceof BlockStairs) {
 			int rot = rot4;
 			
-			if (rot4 == 0) rot4 = 2;
-			else if (rot4 == 2) rot4 = 3;
-			else if (rot4 == 3) rot4 = 0;
+			if (rot4 == 0) rot = 2;
+			else if (rot4 == 2) rot = 3;
+			else if (rot4 == 3) rot = 0;
 			
 			return rot | (cRotation & 8);
 			
