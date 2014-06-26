@@ -59,6 +59,12 @@ public class StructureBuilder {
 		this.rotation = rot;
 	}
 	
+	public StructureBuilder(World world, ChunkCoordinates pos, int rot) {
+		this.world = world;
+		this.center = new ChunkPosition(pos.posX, pos.posY, pos.posZ);
+		this.rotation = rot;
+	}
+	
 	/**
 	 * Converts the local z passed to a global z-value.
 	 */

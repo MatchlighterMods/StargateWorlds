@@ -4,11 +4,12 @@ import java.util.Random;
 
 import ml.sgworlds.Registry;
 import ml.sgworlds.block.tile.TileEntityEngraved;
+import ml.sgworlds.world.SGWorldData;
+import ml.sgworlds.world.SGWorldManager;
 import ml.sgworlds.world.gen.StructureBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraftforge.common.ForgeDirection;
@@ -16,28 +17,40 @@ import net.minecraftforge.common.ForgeDirection;
 public class ComponentCartouche extends SGWStructrueComponent {
 	
 	private boolean generatedChest1;
+	private String engravedText = "";
 	
 	public ComponentCartouche() {}
 	
-	public ComponentCartouche(ChunkPosition position, int rotation) {
+	public ComponentCartouche(ChunkCoordinates position, int rotation) {
 		super(position, rotation);
+		updateBoundingBox();
+	}
+	
+	private void updateBoundingBox() {
 		this.boundingBox = createBoundingBox(8, 5, 5, 5, 6, 0);
 	}
 	
 	@Override
 	protected void save(NBTTagCompound tag) {
-		// TODO Auto-generated method stub
 		super.save(tag);
+		
+		tag.setBoolean("genChest1", generatedChest1);
+		tag.setString("text", engravedText);
 	}
 	
 	@Override
 	protected void load(NBTTagCompound tag) {
-		// TODO Auto-generated method stub
 		super.load(tag);
+		
+		this.generatedChest1 = tag.getBoolean("genChest1");
+		this.engravedText = tag.getString("text");
 	}
 
 	@Override
 	public boolean addComponentParts(World world, Random random, StructureBoundingBox chunkBox) {
+		//position.posY = Math.min(4, world.getHeightValue(position.posX, position.posZ) - random.nextInt(10));
+		updateBoundingBox();
+		
 		StructureBuilder b = new StructureBuilder(world, position, rotation);
 		b.setMinMax(chunkBox);
 		
@@ -94,27 +107,35 @@ public class ComponentCartouche extends SGWStructrueComponent {
 		// Altar
 		b.fillArea(-1, 1, -2, 1, 1, -1, Block.sandStone, 1);
 		
-		// Engravings MaxLength=240 // TODO
-		String text = crapPadTo(" Proclarush Taonas At ", 240);
+		// Engravings
+		if (engravedText == "") {
+			for (int i=0; i<5; i++) {
+				SGWorldData data = SGWorldManager.instance.worlds.get(random.nextInt(SGWorldManager.instance.worlds.size()));
+				engravedText += data.getDescription(1, 75, " ");
+				if (engravedText.length() >= 240) break;
+				engravedText += " ";
+			}
+			engravedText = crapPadTo(engravedText, 240);
+		}
 		int i = 0;
 		
 		for (int y=4; y>=1; y--) {
 			TileEntityEngraved tee;
 			if (y<=3) {
 				tee = putEngraved(world, b.getAbsCoords(-2, y,-6));
-				tee.setString(b.rotateForgeDir(ForgeDirection.SOUTH).ordinal(), getBlockText(text, i++));
-				tee.setString(b.rotateForgeDir(ForgeDirection.EAST ).ordinal(), getBlockText(text, i++));
+				tee.setString(b.rotateForgeDir(ForgeDirection.SOUTH).ordinal(), getBlockText(engravedText, i++));
+				tee.setString(b.rotateForgeDir(ForgeDirection.EAST ).ordinal(), getBlockText(engravedText, i++));
 			}
 			
 			for (int x=-1; x<=1; x++) {
 				tee = putEngraved(world, b.getAbsCoords(x, y, -7));
-				tee.setString(b.rotateForgeDir(ForgeDirection.SOUTH).ordinal(), getBlockText(text, i++));
+				tee.setString(b.rotateForgeDir(ForgeDirection.SOUTH).ordinal(), getBlockText(engravedText, i++));
 			}
 			
 			if (y<=3) {
 				tee = putEngraved(world, b.getAbsCoords( 2, y,-6));
-				tee.setString(b.rotateForgeDir(ForgeDirection.WEST ).ordinal(), getBlockText(text, i++));
-				tee.setString(b.rotateForgeDir(ForgeDirection.SOUTH).ordinal(), getBlockText(text, i++));
+				tee.setString(b.rotateForgeDir(ForgeDirection.WEST ).ordinal(), getBlockText(engravedText, i++));
+				tee.setString(b.rotateForgeDir(ForgeDirection.SOUTH).ordinal(), getBlockText(engravedText, i++));
 			}
 		}
 		

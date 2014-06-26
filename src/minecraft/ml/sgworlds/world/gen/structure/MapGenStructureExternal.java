@@ -43,5 +43,4 @@ public class MapGenStructureExternal extends MapGenStructure {
 		}
 		return null; // This should never happen.
 	}
-
 }

@@ -61,6 +61,21 @@ public class SGWorldData implements IWorldData {
 		return (name == null || name.equals("")) ? designation : name;
 	}
 	
+	public String getDescription(int detail, int ichance, String sep) {
+		StringBuilder s = new StringBuilder(getPrimaryAddress() != null ? getPrimaryAddress().toString() : "");
+		Random r = new Random();
+		s.append(sep + getDisplayName());
+		
+		for (WorldFeature feature : getFeatures(FeatureType.ALL)) {
+			String desc = feature.getDescription(detail);
+			if (desc != null && desc.length() > 0 && r.nextInt(100) < ichance) {
+				s.append(sep + desc);
+			}
+		}
+		
+		return s.toString();
+	}
+	
 	public void readFromNBT(NBTTagCompound nbt) {
 		this.designation = nbt.getString("designation");
 		this.name = nbt.getString("name");

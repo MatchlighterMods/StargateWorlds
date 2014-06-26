@@ -16,7 +16,6 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 /**
- * A simple, default implementation of {@link WorldFeature}.<br/>
  * Read through the JavaDoc of this class to see all requirements for subclasses!
  * <br/><br/>
  * Instead of overriding {@link FeatureProvider#generateRandom(IWorldData, java.util.Random)}, you can add a constructor with the signature ({@link FeatureProvider}, {@link IWorldData}, {@link Random}).<br/><br/>
@@ -43,6 +42,19 @@ public abstract class WorldFeature {
 	
 	public final FeatureType getType() {
 		return getProvider().type;
+	}
+	
+	/**
+	 * Should return a String for inscribing on Stone Tablets and Cartouche walls.<br/>
+	 * You should use maxLength as a bracketing key instead of trimming a longer string.<br/>
+	 * For example, the maxWords=1 description for WeatherRainy could be "rainy".<br/>
+	 * This will only be called for a random selection of features, not every one. 
+	 * 
+	 * @param maxWords The maximum number of words the description should be.
+	 * @return
+	 */
+	public String getDescription(int maxWords) {
+		return null;
 	}
 	
 	/**

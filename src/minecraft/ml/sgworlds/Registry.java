@@ -1,7 +1,7 @@
 package ml.sgworlds;
 
 import ml.core.block.BlockDelegator;
-import ml.core.block.Delegate;
+import ml.core.block.DelegateBlock;
 import ml.core.block.ItemBlockDelegate;
 import ml.core.network.PacketHandler;
 import ml.sgworlds.block.DelegateEngraved;
@@ -19,11 +19,11 @@ public class Registry {
 	public static SGWorldsConfig config;
 	
 	// Blocks //
-	public static BlockDelegator<Delegate> blockDelegate;
+	public static BlockDelegator<DelegateBlock> blockDelegate;
 	public static DelegateEngraved delegateEngraved;
 	
 	public static void registerBlocks() {
-		blockDelegate = new BlockDelegator<Delegate>(config.engravedBlockId, Material.rock, new Delegate());
+		blockDelegate = new BlockDelegator<DelegateBlock>(config.engravedBlockId, Material.rock, new DelegateBlock());
 		blockDelegate.setCreativeTab(Registry.creativeTab);
 		GameRegistry.registerBlock(blockDelegate, ItemBlockDelegate.class, "delegating");
 		

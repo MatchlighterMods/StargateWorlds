@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import ml.core.world.WorldGenHandler;
 import ml.sgworlds.api.RegisterEvent;
 import ml.sgworlds.api.SGWorldsAPI;
 import ml.sgworlds.api.world.feature.FeatureType;
@@ -40,12 +41,17 @@ import ml.sgworlds.world.feature.impl.populate.PopulateNaquadah;
 import ml.sgworlds.world.feature.impl.populate.PopulateWaterLakes;
 import ml.sgworlds.world.feature.impl.structure.PopulateStrongholds;
 import ml.sgworlds.world.feature.impl.structure.PopulateVillages;
+import ml.sgworlds.world.feature.impl.structure.StructureCartouche;
+import ml.sgworlds.world.gen.structure.ComponentCartouche;
+import ml.sgworlds.world.gen.structure.OverworldGenerator;
+import ml.sgworlds.world.gen.structure.ScatteredStructureStart;
 import ml.sgworlds.world.gen.temples.TempleLibrary;
 import ml.sgworlds.world.gen.temples.TemplePillars;
 import ml.sgworlds.world.gen.temples.TemplePyramid;
 import ml.sgworlds.world.gen.temples.TempleUnderwater;
 import ml.sgworlds.world.prefab.WorldAbydos;
 import ml.sgworlds.world.prefab.WorldTest;
+import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
@@ -132,6 +138,12 @@ public class SGWorlds {
 		api.registerStaticWorld(new WorldTest());
 		api.registerStaticWorld(new WorldAbydos());
 		MinecraftForge.EVENT_BUS.post(new RegisterEvent.RegisterStaticWorlds());
+		
+		// Structure Gens
+		MapGenStructureIO.func_143034_b(ScatteredStructureStart.class, "ScatStart");
+		MapGenStructureIO.func_143031_a(ComponentCartouche.class, "SGWCartouche");
+		
+		WorldGenHandler.instance.registerGenerator("SGWorlds", new OverworldGenerator());
 	}
 
 	@EventHandler
@@ -196,6 +208,9 @@ public class SGWorlds {
 		fm.registerFeature(SGWFeature.POPULATE_LAKES_WATER.name(), FeatureType.CHUNK_POPULATOR, PopulateWaterLakes.class, 50, true);
 		fm.registerFeature(SGWFeature.POPULATE_LAKES_LAVA.name(), FeatureType.CHUNK_POPULATOR, PopulateLavaLakes.class, 40, true);
 
+		// Structures
+		fm.registerFeature(SGWFeature.STRUCTURE_CARTOUCHE.name(), FeatureType.STRUCTURE_PROVIDER, StructureCartouche.class, 40, true);
+		
 		// Weather Controllers
 		fm.registerFeature(SGWFeature.WEATHER_NORMAL.name(), FeatureType.WEATHER_CONTROLLER, BaseWeatherController.class);
 		fm.registerFeature(SGWFeature.WEATHER_CLEAR.name(), FeatureType.WEATHER_CONTROLLER, WeatherClear.class);

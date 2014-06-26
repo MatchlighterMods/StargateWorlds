@@ -2,7 +2,7 @@ package ml.sgworlds.block;
 
 import java.util.ArrayList;
 
-import ml.core.block.Delegate;
+import ml.core.block.DelegateBlock;
 import ml.sgworlds.block.tile.TileEntityEngraved;
 import ml.sgworlds.block.tile.TileEntityFacade;
 import net.minecraft.block.Block;
@@ -13,7 +13,7 @@ import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class DelegateEngraved extends Delegate {
+public class DelegateEngraved extends DelegateBlock {
 
 	@Override
 	public Icon getBlockTexture(IBlockAccess world, int x, int y, int z, int side) {
