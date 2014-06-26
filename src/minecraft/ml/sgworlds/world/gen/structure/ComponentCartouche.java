@@ -48,7 +48,7 @@ public class ComponentCartouche extends SGWStructrueComponent {
 
 	@Override
 	public boolean addComponentParts(World world, Random random, StructureBoundingBox chunkBox) {
-		//position.posY = Math.min(4, world.getHeightValue(position.posX, position.posZ) - random.nextInt(10));
+		position.posY = Math.max(4, world.getHeightValue(position.posX, position.posZ) - 10);
 		updateBoundingBox();
 		
 		StructureBuilder b = new StructureBuilder(world, position, rotation);
@@ -108,7 +108,7 @@ public class ComponentCartouche extends SGWStructrueComponent {
 		b.fillArea(-1, 1, -2, 1, 1, -1, Block.sandStone, 1);
 		
 		// Engravings
-		if (engravedText == "") {
+		if (engravedText.length() == 0) {
 			for (int i=0; i<5; i++) {
 				SGWorldData data = SGWorldManager.instance.worlds.get(random.nextInt(SGWorldManager.instance.worlds.size()));
 				engravedText += data.getDescription(1, 75, " ");
