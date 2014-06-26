@@ -175,7 +175,7 @@ public class ComponentCartouche extends SGWStructrueComponent {
 	}
 
 	protected TileEntityEngraved putEngraved(World world, ChunkCoordinates abs) {
-		Registry.delegateEngraved.setBlockAt(world, abs.posX, abs.posY, abs.posZ, 3);
+		Registry.blockEngraved.setBlockAt(world, abs.posX, abs.posY, abs.posZ, 3);
 		TileEntityEngraved tee = (TileEntityEngraved) world.getBlockTileEntity(abs.posX, abs.posY, abs.posZ);
 		tee.setBlockSide(-1, Block.sandStone, 2);
 		tee.rotation = rotation;

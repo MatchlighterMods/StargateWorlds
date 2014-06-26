@@ -16,7 +16,7 @@ public class SGWorldsConfig extends Config {
 
 	public @Prop boolean preventOverworldNaquadahGen = true;
 
-	@Category("Block")
-	public @Prop int engravedBlockId = 3100;
+	public @Prop int stargateWorldsBlockId = 3100;
+	public @Prop int stargateWorldsItemId = 9377;
 	
 }

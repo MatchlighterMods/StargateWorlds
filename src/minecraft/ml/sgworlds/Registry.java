@@ -3,9 +3,12 @@ package ml.sgworlds;
 import ml.core.block.BlockDelegator;
 import ml.core.block.DelegateBlock;
 import ml.core.block.ItemBlockDelegate;
+import ml.core.item.DelegateItem;
+import ml.core.item.ItemDelegator;
 import ml.core.network.PacketHandler;
 import ml.sgworlds.block.DelegateEngraved;
 import ml.sgworlds.block.tile.TileEntityEngraved;
+import ml.sgworlds.item.DelegateTablet;
 import ml.sgworlds.network.packet.PacketRegisterDimensions;
 import ml.sgworlds.network.packet.PacketWorldData;
 import net.minecraft.block.material.Material;
@@ -19,22 +22,29 @@ public class Registry {
 	public static SGWorldsConfig config;
 	
 	// Blocks //
-	public static BlockDelegator<DelegateBlock> blockDelegate;
-	public static DelegateEngraved delegateEngraved;
+	public static BlockDelegator<DelegateBlock> delegatorBlock;
+	public static DelegateEngraved blockEngraved;
 	
 	public static void registerBlocks() {
-		blockDelegate = new BlockDelegator<DelegateBlock>(config.engravedBlockId, Material.rock, new DelegateBlock());
-		blockDelegate.setCreativeTab(Registry.creativeTab);
-		GameRegistry.registerBlock(blockDelegate, ItemBlockDelegate.class, "delegating");
+		delegatorBlock = new BlockDelegator<DelegateBlock>(config.stargateWorldsBlockId, Material.rock, new DelegateBlock());
+		delegatorBlock.setCreativeTab(Registry.creativeTab);
+		GameRegistry.registerBlock(delegatorBlock, ItemBlockDelegate.class, "delegatingB");
 		
-		delegateEngraved = new DelegateEngraved();
-		blockDelegate.addSubBlock(1, delegateEngraved);
+		blockEngraved = new DelegateEngraved();
+		delegatorBlock.addSubBlock(1, blockEngraved);
 	}
 
 	// Items //
+	public static ItemDelegator<DelegateItem> delegatorItem;
+	public static DelegateTablet itemTablet;
 
 	public static void registerItems() {
-
+		delegatorItem = new ItemDelegator<DelegateItem>(config.stargateWorldsItemId-256, new DelegateItem());
+		delegatorItem.setCreativeTab(creativeTab);
+		GameRegistry.registerItem(delegatorItem, "delegatingI");
+		
+		itemTablet = new DelegateTablet();
+		delegatorItem.addSubItem(1, itemTablet);
 	}
 
 	// TileEntities //

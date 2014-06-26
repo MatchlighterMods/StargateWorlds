@@ -11,7 +11,7 @@ public class SGWorldsCreativeTab extends CreativeTabs {
 
 	@Override
 	public ItemStack getIconItemStack() {
-		return super.getIconItemStack(); // TODO
+		return Registry.itemTablet.createStack(1);
 	}
 
 }
