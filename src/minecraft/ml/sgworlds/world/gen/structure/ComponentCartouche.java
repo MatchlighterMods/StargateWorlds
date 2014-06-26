@@ -11,6 +11,7 @@ import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
+import net.minecraftforge.common.ForgeDirection;
 
 public class ComponentCartouche extends SGWStructrueComponent {
 	
@@ -101,19 +102,19 @@ public class ComponentCartouche extends SGWStructrueComponent {
 			TileEntityEngraved tee;
 			if (y<=3) {
 				tee = putEngraved(world, b.getAbsCoords(-2, y,-6));
-				tee.setString(3, getBlockText(text, i++));
-				tee.setString(5, getBlockText(text, i++));
+				tee.setString(b.rotateForgeDir(ForgeDirection.SOUTH).ordinal(), getBlockText(text, i++));
+				tee.setString(b.rotateForgeDir(ForgeDirection.EAST ).ordinal(), getBlockText(text, i++));
 			}
 			
 			for (int x=-1; x<=1; x++) {
 				tee = putEngraved(world, b.getAbsCoords(x, y, -7));
-				tee.setString(3, getBlockText(text, i++));
+				tee.setString(b.rotateForgeDir(ForgeDirection.SOUTH).ordinal(), getBlockText(text, i++));
 			}
 			
 			if (y<=3) {
 				tee = putEngraved(world, b.getAbsCoords( 2, y,-6));
-				tee.setString(4, getBlockText(text, i++));
-				tee.setString(3, getBlockText(text, i++));
+				tee.setString(b.rotateForgeDir(ForgeDirection.WEST ).ordinal(), getBlockText(text, i++));
+				tee.setString(b.rotateForgeDir(ForgeDirection.SOUTH).ordinal(), getBlockText(text, i++));
 			}
 		}
 		
@@ -123,7 +124,9 @@ public class ComponentCartouche extends SGWStructrueComponent {
 	private Random crnd = new Random();
 	private String crap = "abcdefghijklmnopqrstuvwxyz    ";
 	protected String crapPadTo(String original, int minLength) {
-		int beginCrap = minLength / 2, endCrap = (minLength+1) / 2;
+		int alength = minLength - original.length();
+		int beginCrap = alength / 2 + crnd.nextInt(minLength / 10), endCrap = alength-beginCrap;
+		
 		for (int i=0; i<beginCrap; i++) {
 			original = crap.charAt(crnd.nextInt(crap.length())) + original;
 		}

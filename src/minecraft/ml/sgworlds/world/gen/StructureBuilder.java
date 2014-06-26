@@ -12,6 +12,7 @@ import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
+import net.minecraftforge.common.ForgeDirection;
 
 /**
  * Helper class for making the creation of rotatable structures easier.<br/>
@@ -267,5 +268,16 @@ public class StructureBuilder {
 		}
 		
 		return rot4;
+	}
+	
+	private static final int[][] rotMatrix = {
+		{0,1, 2,3,4,5},
+		{0,1, 5,4,2,3},
+		{0,1, 3,2,5,4},
+		{0,1, 4,5,3,2},
+	};  
+	
+	public ForgeDirection rotateForgeDir(ForgeDirection fdir) {
+		return ForgeDirection.getOrientation(rotMatrix[rotation][fdir.ordinal()]);
 	}
 }

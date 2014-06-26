@@ -30,8 +30,8 @@ public class EventListener {
 	
 //	@ForgeSubscribe
 //	public void onPopulate(PopulateChunkEvent.Pre evt) {
-//		if (evt.chunkX  == 0 && evt.chunkZ  == 0) {
-//			ComponentCartouche cc = new ComponentCartouche(new ChunkPosition(evt.chunkX << 4, 100, evt.chunkZ << 4), 0);
+//		if (evt.chunkX % 4 == 0 && evt.chunkZ % 4 == 0) {
+//			ComponentCartouche cc = new ComponentCartouche(new ChunkPosition(evt.chunkX << 4, 100, evt.chunkZ << 4), RandomUtils.randomInt(4));
 //			cc.addComponentParts(evt.world, new Random(), null);
 //		}
 //	}
