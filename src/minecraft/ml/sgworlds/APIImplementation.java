@@ -11,14 +11,14 @@ import cpw.mods.fml.common.FMLLog;
 
 public class APIImplementation extends SGWorldsAPI {
 
-	public static void expose() {
+	public static void initAPI() {
 		FMLLog.info("Exposing SGWorlds API Instance");
 		sgworldsAPI = new APIImplementation();
 	}
 
 	@Override
 	public CreativeTabs getSGWorldsCreativeTab() {
-		return SGWorlds.sgwTab;
+		return Registry.creativeTab;
 	}
 
 	@Override

@@ -27,7 +27,7 @@ public class ClientProxy extends CommonProxy {
 			@Override
 			public int getCharWidth(char par1) {
 				if (Character.isLetterOrDigit(par1)) return 4;
-				if (par1 == ' ') return 3;
+				if (par1 == ' ') return 4;
 				return 0;
 			}
 		};

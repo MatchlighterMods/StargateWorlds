@@ -11,7 +11,7 @@ public class TileEntityEngraved extends TileEntityFacade {
 	public String[] sideStrings = new String[6];
 	public float scale = 1.0F;
 	public int rotation = 0;
-	public int fontColor = 0x686442;
+	public int fontColor = 0x484422;
 	
 	public void setString(int side, String str) {
 		sideStrings[side] = str;
@@ -39,7 +39,7 @@ public class TileEntityEngraved extends TileEntityFacade {
 	
 	@SideOnly(Side.CLIENT)
 	public FontRenderer getFontRenderer() {
-		return ClientProxy.fontRendererAncient; //Minecraft.getMinecraft().fontRenderer;
+		return ClientProxy.fontRendererAncient;
 	}
 	
 }

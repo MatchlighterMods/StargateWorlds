@@ -46,7 +46,6 @@ import ml.sgworlds.world.gen.temples.TemplePyramid;
 import ml.sgworlds.world.gen.temples.TempleUnderwater;
 import ml.sgworlds.world.prefab.WorldAbydos;
 import ml.sgworlds.world.prefab.WorldTest;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
@@ -77,8 +76,6 @@ public class SGWorlds {
 
 	@Instance("sgworlds")
 	public static SGWorlds instance;
-
-	public static CreativeTabs sgwTab = new SGWorldsCreativeTab();
 
 	public static String netChannel = "sgworlds";
 	
@@ -116,7 +113,7 @@ public class SGWorlds {
 		
 		proxy.load();
 
-		APIImplementation.expose();
+		APIImplementation.initAPI();
 		SGWorldsAPI api = SGWorldsAPI.getSGWorldsAPI();
 
 		// Features

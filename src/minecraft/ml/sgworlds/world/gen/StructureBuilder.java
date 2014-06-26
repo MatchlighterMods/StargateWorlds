@@ -266,6 +266,6 @@ public class StructureBuilder {
 		} else {
 		}
 		
-		return cRotation;
+		return rot4;
 	}
 }

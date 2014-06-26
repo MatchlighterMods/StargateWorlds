@@ -2,15 +2,18 @@ package ml.sgworlds.world.gen.structure;
 
 import java.util.Random;
 
+import ml.sgworlds.Registry;
+import ml.sgworlds.block.tile.TileEntityEngraved;
 import ml.sgworlds.world.gen.StructureBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 
 public class ComponentCartouche extends SGWStructrueComponent {
-
+	
 	private boolean generatedChest1;
 	
 	public ComponentCartouche() {}
@@ -90,12 +93,68 @@ public class ComponentCartouche extends SGWStructrueComponent {
 		// Altar
 		b.fillArea(-1, 1, -2, 1, 1, -1, Block.sandStone, 1);
 		
-		// Engravings // TODO
-		b.fillArea(-1, 1, -7, 1, 4, -7, Block.cloth, 11);
-		b.fillArea(-2, 1, -6,-2, 3, -6, Block.cloth, 11);
-		b.fillArea( 2, 1, -6, 2, 3, -6, Block.cloth, 11);
+		// Engravings MaxLength=240 // TODO
+		String text = crapPadTo(" Proclarush Taonas At ", 240);
+		int i = 0;
+		
+		for (int y=4; y>=1; y--) {
+			TileEntityEngraved tee;
+			if (y<=3) {
+				tee = putEngraved(world, b.getAbsCoords(-2, y,-6));
+				tee.setString(3, getBlockText(text, i++));
+				tee.setString(5, getBlockText(text, i++));
+			}
+			
+			for (int x=-1; x<=1; x++) {
+				tee = putEngraved(world, b.getAbsCoords(x, y, -7));
+				tee.setString(3, getBlockText(text, i++));
+			}
+			
+			if (y<=3) {
+				tee = putEngraved(world, b.getAbsCoords( 2, y,-6));
+				tee.setString(4, getBlockText(text, i++));
+				tee.setString(3, getBlockText(text, i++));
+			}
+		}
 		
 		return true;
 	}
+	
+	private Random crnd = new Random();
+	private String crap = "abcdefghijklmnopqrstuvwxyz    ";
+	protected String crapPadTo(String original, int minLength) {
+		int beginCrap = minLength / 2, endCrap = (minLength+1) / 2;
+		for (int i=0; i<beginCrap; i++) {
+			original = crap.charAt(crnd.nextInt(crap.length())) + original;
+		}
+		for (int i=0; i<endCrap; i++) {
+			original = original + crap.charAt(crnd.nextInt(crap.length()));
+		}
+		return original;
+	}
+	
+	private int[] lines = {3,7,7,7};
+	protected String getBlockText(String source, int blk) {
+		int lnWidth=blk;
+		int add = 0;
+		for (int ln : lines) {
+			lnWidth -= ln;
+			if (lnWidth < 0) {
+				lnWidth = ln;
+				break;
+			}
+			add += ln;
+		}
+		int ln1 = (blk+add) * 5;
+		int ln2 = ln1 + (lnWidth*5);
+		return source.substring(ln1, ln1+5)+"\n"+source.substring(ln2, ln2+5);
+	}
 
+	protected TileEntityEngraved putEngraved(World world, ChunkCoordinates abs) {
+		Registry.delegateEngraved.setBlockAt(world, abs.posX, abs.posY, abs.posZ, 3);
+		TileEntityEngraved tee = (TileEntityEngraved) world.getBlockTileEntity(abs.posX, abs.posY, abs.posZ);
+		tee.setBlockSide(-1, Block.sandStone, 2);
+		tee.rotation = rotation;
+		return tee;
+	}
 }

@@ -17,7 +17,7 @@ public class MapGenStructureExternal extends MapGenStructure {
 	
 	@Override
 	public String func_143025_a() {
-		return "SGWStructure";
+		return "SGWStructure" + genStrata.toString();
 	}
 
 	@Override

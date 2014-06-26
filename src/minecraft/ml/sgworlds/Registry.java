@@ -1,24 +1,34 @@
 package ml.sgworlds;
 
+import ml.core.block.BlockDelegator;
+import ml.core.block.Delegate;
+import ml.core.block.ItemBlockDelegate;
 import ml.core.network.PacketHandler;
-import ml.sgworlds.block.BlockEngraved;
+import ml.sgworlds.block.DelegateEngraved;
 import ml.sgworlds.block.tile.TileEntityEngraved;
 import ml.sgworlds.network.packet.PacketRegisterDimensions;
 import ml.sgworlds.network.packet.PacketWorldData;
-import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.creativetab.CreativeTabs;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class Registry {
 
-	/**
-	 * Takes the place of Blocks.air for quick 1.7.2 conversion
-	 */
-	public static final Block blockAir = null;
+	public static CreativeTabs creativeTab = new SGWorldsCreativeTab();
 	public static SGWorldsConfig config;
-
+	
+	// Blocks //
+	public static BlockDelegator<Delegate> blockDelegate;
+	public static DelegateEngraved delegateEngraved;
+	
 	public static void registerBlocks() {
-		GameRegistry.registerBlock(new BlockEngraved(), "Engraved");
+		blockDelegate = new BlockDelegator<Delegate>(config.engravedBlockId, Material.rock, new Delegate());
+		blockDelegate.setCreativeTab(Registry.creativeTab);
+		GameRegistry.registerBlock(blockDelegate, ItemBlockDelegate.class, "delegating");
+		
+		delegateEngraved = new DelegateEngraved();
+		blockDelegate.addSubBlock(1, delegateEngraved);
 	}
 
 	// Items //
@@ -46,5 +56,5 @@ public class Registry {
 	public static void registerRecipes() {
 
 	}
-	
+
 }
