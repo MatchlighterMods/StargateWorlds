@@ -43,8 +43,9 @@ import ml.sgworlds.world.feature.impl.structure.PopulateStrongholds;
 import ml.sgworlds.world.feature.impl.structure.PopulateVillages;
 import ml.sgworlds.world.feature.impl.structure.StructureCartouche;
 import ml.sgworlds.world.gen.structure.ComponentCartouche;
-import ml.sgworlds.world.gen.structure.OverworldGenerator;
+import ml.sgworlds.world.gen.structure.OverworldStructureGen;
 import ml.sgworlds.world.gen.structure.ScatteredStructureStart;
+import ml.sgworlds.world.gen.structure.city.CityStructureStart;
 import ml.sgworlds.world.gen.temples.TempleLibrary;
 import ml.sgworlds.world.gen.temples.TemplePillars;
 import ml.sgworlds.world.gen.temples.TemplePyramid;
@@ -140,10 +141,12 @@ public class SGWorlds {
 		MinecraftForge.EVENT_BUS.post(new RegisterEvent.RegisterStaticWorlds());
 		
 		// Structure Gens
+		MapGenStructureIO.func_143034_b(CityStructureStart.class, "CityStart");
+		
 		MapGenStructureIO.func_143034_b(ScatteredStructureStart.class, "ScatStart");
 		MapGenStructureIO.func_143031_a(ComponentCartouche.class, "SGWCartouche");
 		
-		WorldGenHandler.instance.registerGenerator("SGWorlds", new OverworldGenerator());
+		WorldGenHandler.instance.registerGenerator("SGWorlds", new OverworldStructureGen());
 	}
 
 	@EventHandler

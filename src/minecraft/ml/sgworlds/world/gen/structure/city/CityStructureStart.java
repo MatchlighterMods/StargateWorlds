@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import net.minecraft.world.World;
-import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraft.world.gen.structure.StructureStart;
 
 public class CityStructureStart extends StructureStart {
@@ -34,14 +33,5 @@ public class CityStructureStart extends StructureStart {
 		// TODO Plan walls
 		
 		this.updateBoundingBox();
-	}
-	
-	public static void registerComponent(Class<? extends CityComponent> componentClass, String ident) {
-		MapGenStructureIO.func_143031_a(componentClass, "City_" + ident);
-	}
-
-	static {
-		MapGenStructureIO.func_143034_b(CityStructureStart.class, "CityStart");
-		
 	}
 }

@@ -6,7 +6,7 @@ import net.minecraft.item.ItemStack;
 public class SGWorldsCreativeTab extends CreativeTabs {
 
 	public SGWorldsCreativeTab() {
-		super("Stargate Worlds");
+		super("StargateWorlds");
 	}
 
 	@Override

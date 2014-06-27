@@ -28,7 +28,7 @@ public class ClientProxy extends CommonProxy {
 			public int getCharWidth(char par1) {
 				if (Character.isLetterOrDigit(par1)) return 4;
 				if (par1 == ' ') return 4;
-				return -1;
+				return 4;
 			}
 		};
 		((ReloadableResourceManager)mc.getResourceManager()).registerReloadListener(fontRendererAncient);

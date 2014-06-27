@@ -24,6 +24,7 @@ public class ComponentCartouche extends SGWStructrueComponent {
 	public ComponentCartouche(ChunkCoordinates position, int rotation) {
 		super(position, rotation);
 		updateBoundingBox();
+		this.position.posY = -1;
 	}
 	
 	private void updateBoundingBox() {
@@ -48,8 +49,10 @@ public class ComponentCartouche extends SGWStructrueComponent {
 
 	@Override
 	public boolean addComponentParts(World world, Random random, StructureBoundingBox chunkBox) {
-		position.posY = Math.max(4, world.getHeightValue(position.posX, position.posZ) - 10);
-		updateBoundingBox();
+		if (position.posY < 0) {
+			position.posY = Math.max(4, world.getHeightValue(position.posX, position.posZ) - 10);
+			updateBoundingBox();
+		}
 		
 		StructureBuilder b = new StructureBuilder(world, position, rotation);
 		b.setMinMax(chunkBox);
@@ -67,7 +70,6 @@ public class ComponentCartouche extends SGWStructrueComponent {
 		// Pillars
 		b.xSymmetry = true;
 		b.fillArea(5, 0, -3, 5, 3, 3, Block.sandStone, 2);
-		b.fillArea(4, 4, -4, 4, 4, 4, Block.sandStone, 2);
 		
 		for (int z=-3; z<=3; z+=2) {
 			for (int y=1; y<=3; y++) {
@@ -76,6 +78,8 @@ public class ComponentCartouche extends SGWStructrueComponent {
 			b.setBlockAt(5, 2, z, Block.sandStone, 1);
 			b.setBlockAt(4, 3, z, Block.torchWood, 0);
 		}
+		
+		b.fillArea(4, 4, -4, 4, 4, 4, Block.sandStone, 2);
 		
 		for (int z=-4; z<=4; z+=2) {
 			for (int y=1; y<=3; y++) {
