@@ -12,6 +12,7 @@ public class ScatteredStructureStart extends StructureStart {
 	public ScatteredStructureStart() {}
 	
 	public ScatteredStructureStart(World world, Random rand, int chunkX, int chunkZ, StructureComponent structComponent) {
+		super(chunkX, chunkZ);
 		this.components.add(structComponent);
 		structComponent.buildComponent(structComponent, components, rand);
 		this.updateBoundingBox();
