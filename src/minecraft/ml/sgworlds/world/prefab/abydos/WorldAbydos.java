@@ -1,4 +1,4 @@
-package ml.sgworlds.world.prefab;
+package ml.sgworlds.world.prefab.abydos;
 
 import java.util.List;
 import java.util.Random;

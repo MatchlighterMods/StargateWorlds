@@ -51,7 +51,7 @@ public class TemplePillars implements IGateTempleGenerator {
 	@Override
 	public ChunkPosition getGateCoords(World world, int gateRotation) {
 		Random rnd = new Random(world.getSeed());
-		int x = rnd.nextInt(500), z = rnd.nextInt(500);
+		int x = rnd.nextInt(1000)-500, z = rnd.nextInt(1000)-500;
 		
 		return new ChunkPosition(x, world.getHeightValue(x, z)-1, z);
 	}

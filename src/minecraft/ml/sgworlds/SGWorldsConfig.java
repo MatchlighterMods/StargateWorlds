@@ -17,6 +17,6 @@ public class SGWorldsConfig extends Config {
 	public @Prop boolean preventOverworldNaquadahGen = true;
 
 	public @Prop int stargateWorldsBlockId = 3100;
-	public @Prop int stargateWorldsItemId = 9377;
+	public @Prop int stargateWorldsItemId = 9477;
 	
 }
