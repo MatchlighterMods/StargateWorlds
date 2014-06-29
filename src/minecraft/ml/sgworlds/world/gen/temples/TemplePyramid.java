@@ -67,24 +67,24 @@ public class TemplePyramid implements IGateTempleGenerator {
 	@Override
 	public void generateGateTemple(World world, ChunkPosition gateCoords, int gateRotation) {
 		StructureBuilder th = new StructureBuilder(world, gateCoords, gateRotation);
-		th.ioffset.posZ = -gateOffset-sanctumOffset;
+		th.ioffset.posZ = gateOffset+sanctumOffset;
 		
-		int front = plevels+1, back = -plevels;
+		int front = -(plevels+1), back = plevels;
 		
 		// Floor
-		th.fillArea(-plevels, -1, back, plevels, 0, front, Block.sandStone, 2);
+		th.fillArea(-plevels, -1, front, plevels, 0, back, Block.sandStone, 2);
 		
 		// Towers
-		int tCenterX = 8, tCenterZ = front - 2;
+		int tCenterX = 8, tCenterZ = front + 2;
 		
-		th.xSymmetry = true;
+		th.symmetryX = true;
 		th.wallArea(tCenterX-2, 1, tCenterZ-2, tCenterX+2, 8, tCenterZ+2, true, false,true, Block.sandStone, 2);
 		th.fillArea(tCenterX-1, 9, tCenterZ-1, tCenterX+1, 9, tCenterZ+1, Block.sandStone, 2);
 		
-		ankh(tCenterX, 2, tCenterZ+2, th);
+		ankh(tCenterX, 2, tCenterZ-2, th);
 		th.flipXZ = true;
 		ankh(tCenterZ, 2, tCenterX+2, th);
-		th.xSymmetry = false;
+		th.symmetryX = false;
 		th.flipXZ = false;
 		
 		// Pyramid
@@ -96,7 +96,7 @@ public class TemplePyramid implements IGateTempleGenerator {
 		}
 		
 		// Inner Sanctum
-		th.ioffset.posZ = -gateOffset;
+		th.ioffset.posZ = gateOffset;
 		
 		th.wallArea(-9, 1, -10, 9, Math.min(plevels - 9, gateRoomHeight), 10, true, false, true, Block.sandStone, 2);
 		if (plevels > gateRoomHeight) {
@@ -121,9 +121,9 @@ public class TemplePyramid implements IGateTempleGenerator {
 			}
 		}
 		
-		th.xSymmetry = true;
+		th.symmetryX = true;
 		for (int i=0; i<9; i++) {
-			int x = 7, z = -8 + 2*i;
+			int x = 7, z = 8 - 2*i;
 			for (int y=1; y<= Math.min(plevels-7, gateRoomHeight); y++) {
 				th.setBlockAt(x, y, z, Block.sandStone, y==2 ? 1 : 2);
 			}
@@ -131,7 +131,7 @@ public class TemplePyramid implements IGateTempleGenerator {
 		
 		for (int i=0; i<4; i++) {
 			int h = Math.min(plevels-(i==1 || i==2 ? 4 : 6), gateRoomHeight);
-			int x = -4, z = -6 + i*4;
+			int x = -4, z = 6 - i*4;
 			for (int y=1; y<1+h; y++) {
 				th.setBlockAt(x, y, z, Block.sandStone, y==2 ? 1 : 2);
 				if (y==3) {
@@ -140,15 +140,15 @@ public class TemplePyramid implements IGateTempleGenerator {
 				}
 			}
 		}
-		th.xSymmetry = false;
+		th.symmetryX = false;
 		
-		th.ioffset.posZ = -gateOffset-sanctumOffset;
+		th.ioffset.posZ = gateOffset+sanctumOffset;
 		
 		// Entrance
-		th.fillArea(-2, 1, 9+sanctumOffset, 2, 3, front, Block.sandStone, 2);
-		th.fillArea(-2, 4, 8+sanctumOffset, 2, 4, 9+sanctumOffset, Block.sandStone, 2);
-		th.fillArea(-1, 4,10+sanctumOffset, 1, 4, front, Block.sandStone, 2);
-		th.fillArea(-1, 1, 8+sanctumOffset, 1, 3, front, null, 0);
+		th.fillArea(-2, 1, front, 2, 3, -(9+sanctumOffset), Block.sandStone, 2);
+		th.fillArea(-2, 4, -(9+sanctumOffset), 2, 4, -(8+sanctumOffset), Block.sandStone, 2);
+		th.fillArea(-1, 4, front, 1, 4,-(10+sanctumOffset), Block.sandStone, 2);
+		th.fillArea(-1, 1, front, 1, 3, -(8+sanctumOffset), null, 0);
 		
 		th.setBlockAt(-2, 4, front, Block.sandStone, 2);
 		th.setBlockAt( 2, 4, front, Block.sandStone, 2);

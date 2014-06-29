@@ -9,7 +9,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
 
-public class SGWStructrueComponent extends StructureComponent {
+public abstract class SGWStructrueComponent extends StructureComponent {
 
 	protected ChunkCoordinates position;
 	protected int rotation;
@@ -47,8 +47,10 @@ public class SGWStructrueComponent extends StructureComponent {
 		StructureBuilder b = new StructureBuilder(world, position, rotation);
 		b.setMinMax(chunkBox);
 		
-		return true;
+		return addComponentParts(b, world, random, chunkBox);
 	}
+	
+	protected abstract boolean addComponentParts(StructureBuilder bldr, World world, Random rand, StructureBoundingBox chunkBox);
 
 	protected StructureBoundingBox createBoundingBox(int snorth, int ssouth, int seast, int swest, int sup, int sdown) {
 		rotation %= 4;

@@ -97,7 +97,7 @@ public class WorldAbydos implements IStaticWorld {
 		public void generateGateTemple(World world, ChunkPosition gateCoords, int gateRotation) {
 			super.generateGateTemple(world, gateCoords, gateRotation);
 			StructureBuilder th = new StructureBuilder(world, gateCoords, gateRotation);
-			th.ioffset.posZ = -gateOffset;
+			th.ioffset.posZ = gateOffset;
 			
 			// Transport Rings
 			th.setBlockAt(0, -1, 0, ModuleTransport.transportRing, 0);
@@ -105,7 +105,7 @@ public class WorldAbydos implements IStaticWorld {
 			
 			
 			// Upper Floor
-			th.ioffset.posZ = -gateOffset - sanctumOffset;
+			th.ioffset.posZ = gateOffset + sanctumOffset;
 			int out = plevels - (gateRoomHeight + 2);
 			th.fillArea(-out, gateRoomHeight+2, -out, out, gateRoomHeight+2, out, Block.sandStone, 2);
 			

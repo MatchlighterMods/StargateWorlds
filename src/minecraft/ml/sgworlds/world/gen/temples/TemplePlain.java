@@ -12,8 +12,8 @@ public class TemplePlain implements IGateTempleGenerator {
 	public void generateGateTemple(World world, ChunkPosition gateCoords, int gateRotation) {
 		StructureBuilder hp = new StructureBuilder(world, gateCoords, gateRotation);
 		
-		hp.fillArea(-4, 1, -2, 4, 5, 8, null, 0);
-		hp.fillArea(-4,-2, -2, 4, 0, 8, Block.stone, 0);
+		hp.fillArea(-4, 1, -8, 4, 5, 2, null, 0);
+		hp.fillArea(-4,-2, -8, 4, 0, 2, Block.stone, 0);
 		hp.fillArea(-2, 0, 0, 2, 0, 0, null, 0);
 		
 	}

@@ -54,7 +54,11 @@ public class ComponentCartouche extends SGWStructrueComponent {
 			updateBoundingBox();
 		}
 		
-		StructureBuilder b = new StructureBuilder(world, position, rotation);
+		return super.addComponentParts(world, random, chunkBox);
+	}
+	
+	@Override
+	protected boolean addComponentParts(StructureBuilder b, World world, Random rand, StructureBoundingBox chunkBox) {
 		b.setMinMax(chunkBox);
 		
 		b.fillArea(-3, 1,-6, 3, 5, 4, null, 0);
@@ -68,7 +72,7 @@ public class ComponentCartouche extends SGWStructrueComponent {
 		b.fillArea(-1, 1, 5, 1, 3, 5, null, 0);
 		
 		// Pillars
-		b.xSymmetry = true;
+		b.symmetryX = true;
 		b.fillArea(5, 0, -3, 5, 3, 3, Block.sandStone, 2);
 		
 		for (int z=-3; z<=3; z+=2) {
@@ -96,17 +100,17 @@ public class ComponentCartouche extends SGWStructrueComponent {
 		b.setBlockAt(2, 4,-6, Block.sandStone, 2);
 		b.setBlockAt(2, 5,-6, Block.sandStone, 2);
 		
-		b.xSymmetry = false;
+		b.symmetryX = false;
 		
 		b.fillArea(-2, 5, 4, 2, 5, 4, Block.sandStone, 2);
 		b.fillArea(-1, 5,-7, 1, 5,-6, Block.sandStone, 2);
 		b.fillArea(-2, 6,-6, 2, 6, 3, Block.sandStone, 2);
 		
-		b.xSymmetry = true;
+		b.symmetryX = true;
 		b.setBlockAt(2, 6, 3, null, 0);
 		b.setBlockAt(2, 6,-6, null, 0);
 		
-		b.xSymmetry = false;
+		b.symmetryX = false;
 		
 		// Altar
 		b.fillArea(-1, 1, -2, 1, 1, -1, Block.sandStone, 1);
@@ -114,7 +118,7 @@ public class ComponentCartouche extends SGWStructrueComponent {
 		// Engravings
 		if (engravedText.length() == 0) {
 			for (int i=0; i<5; i++) {
-				SGWorldData data = SGWorldManager.instance.worlds.get(random.nextInt(SGWorldManager.instance.worlds.size()));
+				SGWorldData data = SGWorldManager.instance.worlds.get(rand.nextInt(SGWorldManager.instance.worlds.size()));
 				engravedText += data.getDescription(1, 75, " ");
 				if (engravedText.length() >= 240) break;
 				engravedText += " ";

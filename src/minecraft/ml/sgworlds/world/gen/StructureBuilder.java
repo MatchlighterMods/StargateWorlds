@@ -44,8 +44,13 @@ public class StructureBuilder {
 	public ChunkCoordinates absMinimum, absMaximum;
 	
 	public boolean flipXZ = false;
-	public boolean xSymmetry = false;
-	public boolean zSymmetry = false;
+	
+	public boolean symmetryX = false;
+	public boolean symmetryZ = false;
+	
+	public boolean invertX = false;
+	public boolean invertY = false;
+	public boolean invertZ = false;
 	
 	/**
 	 * See {@link StructureBuilder} for details.
@@ -66,9 +71,37 @@ public class StructureBuilder {
 	}
 	
 	/**
+	 * Converts the local x passed to a global x-value.
+	 */
+	public int getAbsX(int x, int z) {
+		if (invertX) x = -x; if (invertZ) z = -z;
+		x += ioffset.posX; z += ioffset.posZ;
+		
+		switch (rotation) {
+		case 0:
+			return center.x+x;
+		case 1:
+			return center.x-z;
+		case 2:
+			return center.x-x;
+		case 3:
+			return center.x+z;
+		}
+		return center.x;
+	}
+	
+	public int getAbsY(int oy) {
+		if (invertY) oy = -oy;
+		return center.y + oy + ioffset.posY;
+	}
+	
+	/**
 	 * Converts the local z passed to a global z-value.
 	 */
 	public int getAbsZ(int x, int z) {
+		if (invertX) x = -x; if (invertZ) z = -z;
+		x += ioffset.posX; z += ioffset.posZ;
+		
 		switch (rotation) {
 		case 0:
 			return center.z+z;
@@ -83,31 +116,13 @@ public class StructureBuilder {
 	}
 	
 	/**
-	 * Converts the local x passed to a global x-value.
-	 */
-	public int getAbsX(int x, int z) {
-		switch (rotation) {
-		case 0:
-			return center.x+x;
-		case 1:
-			return center.x-z;
-		case 2:
-			return center.x-x;
-		case 3:
-			return center.x+z;
-		}
-		return center.x;
-	}
-	
-	/**
 	 * Converts the relative x,y,z into a global point.
 	 */
 	public ChunkCoordinates getAbsCoords(int rx, int ry, int rz) {
 		int bx = flipXZ ? rz : rx;
 		int bz = flipXZ ? rx : rz;
-		bx += ioffset.posX; ry += ioffset.posY; bz += ioffset.posZ;
 		
-		return new ChunkCoordinates(getAbsX(bx, bz), center.y + ry, getAbsZ(bx, bz));
+		return new ChunkCoordinates(getAbsX(bx, bz), getAbsY(ry), getAbsZ(bx, bz));
 	}
 	
 	public boolean absCoordsInRange(int ax, int ay, int az) {
@@ -141,7 +156,8 @@ public class StructureBuilder {
 	}
 	
 	public int getBlockIdAt(int rx, int ry, int rz) {
-		return world.getBlockId(getAbsX(rx, rz), center.y + ry, getAbsZ(rx, rz));
+		ChunkCoordinates p = getAbsCoords(rx, ry, rz);
+		return world.getBlockId(p.posX, p.posY, p.posZ);
 	}
 	
 	private void setBlockAtAbs(int ax, int ay, int az, Block block, int blockMeta) {
@@ -162,18 +178,17 @@ public class StructureBuilder {
 		
 		int bx = flipXZ ? rz : rx;
 		int bz = flipXZ ? rx : rz;
-		bx += ioffset.posX; ry += ioffset.posY; bz += ioffset.posZ;
 		
-		setBlockAtAbs(getAbsX(bx, bz), center.y + ry, getAbsZ(bx, bz), block, blockMeta);
+		setBlockAtAbs(getAbsX(bx, bz), getAbsY(ry), getAbsZ(bx, bz), block, blockMeta);
 		
-		if (xSymmetry && zSymmetry) {
-			setBlockAtAbs(getAbsX(-bx, -bz), center.y + ry, getAbsZ(-bx, -bz), block, blockMeta);
+		if (symmetryX && symmetryZ) {
+			setBlockAtAbs(getAbsX(-bx, -bz), getAbsY(ry), getAbsZ(-bx, -bz), block, blockMeta);
 		}
-		if (xSymmetry) {
-			setBlockAtAbs(getAbsX(-bx, bz), center.y + ry, getAbsZ(-bx, bz), block, blockMeta);
+		if (symmetryX) {
+			setBlockAtAbs(getAbsX(-bx, bz), getAbsY(ry), getAbsZ(-bx, bz), block, blockMeta);
 		}
-		if (zSymmetry) {
-			setBlockAtAbs(getAbsX(bx, -bz), center.y + ry, getAbsZ(bx, -bz), block, blockMeta);
+		if (symmetryZ) {
+			setBlockAtAbs(getAbsX(bx, -bz), getAbsY(ry), getAbsZ(bx, -bz), block, blockMeta);
 		}
 	}
 	

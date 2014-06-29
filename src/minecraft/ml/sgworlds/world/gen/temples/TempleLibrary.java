@@ -13,6 +13,7 @@ public class TempleLibrary implements IGateTempleGenerator {
 	@Override
 	public void generateGateTemple(World world, ChunkPosition gateCoords, int gateRotation) {
 		StructureBuilder th = new StructureBuilder(world, gateCoords, gateRotation);
+		th.invertZ = true;
 		
 		th.fillArea(-8, -1, -2, 8, 0, 15, Block.stoneDoubleSlab, 0); // Foundation
 		th.fillArea(-7, 0, -1, 7, 0, 14, Block.planks, 0); // Floor
@@ -44,14 +45,14 @@ public class TempleLibrary implements IGateTempleGenerator {
 		}
 		
 		// Small Windows
-		th.xSymmetry = true;
+		th.symmetryX = true;
 		for (int i=0; i<4; i++) {
 			th.setBlockAt(8, 2, 2+3*i, Block.thinGlass, 0);
 			th.setBlockAt(8, 7, 2+3*i, Block.thinGlass, 0);
 			th.setBlockAt(7, 2, 2+3*i, null, 0);
 			th.setBlockAt(7, 7, 2+3*i, null, 0);
 		}
-		th.xSymmetry = false;
+		th.symmetryX = false;
 		
 		for (int x=-6; x<=6; x+=2) {
 			th.setBlockAt(x, 7, 15, Block.thinGlass, 0);
@@ -92,7 +93,7 @@ public class TempleLibrary implements IGateTempleGenerator {
 		th.setBlockAt(1, 9, 9, Block.torchWood, 0);
 		th.setBlockAt(1, 9, 10, Block.torchWood, 0);
 		
-		th.xSymmetry = true;
+		th.symmetryX = true;
 		
 		// Interior Bookshelves
 		for (int i=0; i<6; i++) {
@@ -123,7 +124,7 @@ public class TempleLibrary implements IGateTempleGenerator {
 		th.setBlockAt(2, 3, 3, Block.torchWood, 0);
 		th.setBlockAt(2, 3, 7, Block.torchWood, 0);
 		
-		th.xSymmetry = false;
+		th.symmetryX = false;
 		
 		// Door
 		th.fillArea(-1, 1, 15, 1, 3, 15, Block.thinGlass, 0);
@@ -135,9 +136,9 @@ public class TempleLibrary implements IGateTempleGenerator {
 		th.fillArea(-2, 4, 16, 2, 4, 17, Block.stoneSingleSlab, 0);
 		th.fillArea(-1, 4, 16, 1, 4, 16, Block.stoneDoubleSlab, 0);
 		
-		th.xSymmetry = true;
+		th.symmetryX = true;
 		th.fillArea(2, 1, 17, 2, 3, 17, Block.fence, 0);
-		th.xSymmetry = false;
+		th.symmetryX = false;
 		
 		// Gate
 		th.fillArea(-2, 0, 0, 2, 0, 0, null, 0);

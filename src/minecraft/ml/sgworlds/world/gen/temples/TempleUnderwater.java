@@ -26,6 +26,7 @@ public class TempleUnderwater implements IGateTempleGenerator {
 	@Override
 	public void generateGateTemple(World world, ChunkPosition gpos, int gateRotation) {
 		StructureBuilder th = new StructureBuilder(world, gpos, gateRotation);
+		th.ioffset.posZ = -gateOffset;
 		
 		int radSqr = domeRadius*domeRadius;
 		int radISqr = (domeRadius-1)*(domeRadius-1);
@@ -35,25 +36,27 @@ public class TempleUnderwater implements IGateTempleGenerator {
 				for (int y=floor-domeRadius; y<=domeRadius; y++) {
 					int dsqr = x*x + y*y + z*z; 
 					int ay = y+floor;
-					int az = z+gateOffset;
 					
 					if (dsqr > radISqr && dsqr <= radSqr) {
-						int abId = th.getBlockIdAt(x, ay, az);
+						int abId = th.getBlockIdAt(x, ay, z);
 						if ((abId == Block.waterStill.blockID || abId == Block.waterMoving.blockID || abId == Block.glass.blockID) && ay>1) {
-							th.setBlockAt(x, ay, az, Block.glass, 0);
+							th.setBlockAt(x, ay, z, Block.glass, 0);
 						} else {
-							th.setBlockAt(x, ay, az, Block.stoneBrick, 0);
+							th.setBlockAt(x, ay, z, Block.stoneBrick, 0);
 						}
 						
 					} else if (ay < 1 && dsqr<radSqr) {
-						th.setBlockAt(x, ay, az, Block.stoneBrick, 0);
+						th.setBlockAt(x, ay, z, Block.stoneBrick, 0);
 						
 					} else if (dsqr < radSqr) {
-						th.setBlockAt(x, ay, az, null, 0);
+						th.setBlockAt(x, ay, z, null, 0);
 					}
 				}
 			}
 		}
+		
+		th.ioffset.posZ = 0;
+		th.invertZ = true;
 		
 		boolean nsr = gateRotation==0 || gateRotation==2;
 		th.fillArea(-4, 0, -1, 4, 0, 1, Block.blockNetherQuartz, nsr ? 4 : 3);
@@ -70,8 +73,6 @@ public class TempleUnderwater implements IGateTempleGenerator {
 		setBlockSymX(th, 2, 1, 7, Block.torchWood, 5);
 		setBlockSymX(th, 5, 1, 9, Block.torchWood, 5);
 		setBlockSymX(th, 2, 1, 11, Block.torchWood, 5);
-		
-		th.fillArea(-2, 0, 0, 2, 0, 0, null, 0);
 		
 	}
 	

@@ -10,7 +10,7 @@ import ml.sgworlds.world.gen.StructureBuilder;
 
 public class TempleRuins implements IGateTempleGenerator {
 
-	private int[] nlengs = {0,-1,-1,-1,-1,-1,-1,-1,0}, plengs = {6,7,5,4,4,4,5,7,6};
+	private int[] blengs = {0,1,1,1,1,1,1,1,0}, flengs = {6,7,5,4,4,4,5,7,6};
 	
 	@Override
 	public void generateGateTemple(World world, ChunkPosition gateCoords, int gateRotation) {
@@ -18,7 +18,7 @@ public class TempleRuins implements IGateTempleGenerator {
 		Random rnd = new Random();
 		
 		for (int x=-4; x<=4; x++) {
-			for (int z=nlengs[x+4]; z<=plengs[x+4]; z++) {
+			for (int z=-flengs[x+4]; z<=blengs[x+4]; z++) {
 				b.setBlockAt(x, 0, z, Block.stoneBrick, rnd.nextInt(3));
 			}
 		}

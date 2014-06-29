@@ -15,6 +15,7 @@ public class TemplePillars implements IGateTempleGenerator {
 	@Override
 	public void generateGateTemple(World world, ChunkPosition gateCoords, int gateRotation) {
 		StructureBuilder th = new StructureBuilder(world, gateCoords, gateRotation);
+		th.invertZ = true;
 		
 		for (int i=6; i>=0; i--) {
 			int r = 14 + i*2;
