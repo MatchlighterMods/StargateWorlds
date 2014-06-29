@@ -6,7 +6,7 @@ public class DelegateTablet extends DelegateItem {
 	
 	public DelegateTablet() {
 		setUnlocalizedName("stone_tablet");
-		setIconString("stone_tablet");
+		setIconString("SGWorlds:stone_tablet");
 	}
 	
 }
