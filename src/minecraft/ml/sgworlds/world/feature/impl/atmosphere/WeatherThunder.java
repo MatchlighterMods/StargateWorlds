@@ -19,4 +19,8 @@ public class WeatherThunder extends WeatherAbstract {
 		this.enableLightning = true;
 	}
 
+	@Override
+	public String getDescription(int maxWords) {
+		return "thundering";
+	}
 }

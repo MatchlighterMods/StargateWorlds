@@ -17,4 +17,8 @@ public class WeatherClear extends WeatherAbstract {
 	@Override
 	public void startWeather() {}
 
+	@Override
+	public String getDescription(int maxWords) {
+		return "clear skys";
+	}
 }

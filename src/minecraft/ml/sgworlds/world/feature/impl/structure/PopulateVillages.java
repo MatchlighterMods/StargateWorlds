@@ -69,4 +69,9 @@ public class PopulateVillages extends WorldFeature implements IPopulate, ITerrai
 	public void getSecondaryTypes(List<FeatureType> types) {
 		types.add(FeatureType.TERRAIN_MODIFIFIER);
 	}
+	
+	@Override
+	public String getDescription(int maxWords) {
+		return "populated";
+	}
 }

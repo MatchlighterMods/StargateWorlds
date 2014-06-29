@@ -19,4 +19,8 @@ public class WeatherRainySnowy extends WeatherAbstract {
 		this.rainStrength = 1.0F;
 	}
 
+	@Override
+	public String getDescription(int maxWords) {
+		return "rainy";
+	}
 }
