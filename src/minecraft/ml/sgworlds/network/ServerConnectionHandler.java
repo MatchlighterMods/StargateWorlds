@@ -43,6 +43,7 @@ public class ServerConnectionHandler implements IConnectionHandler {
 	@Override
 	public void connectionClosed(INetworkManager manager) {
 		if (connectedToRemote) {
+			connectedToRemote = false;
 			SGWorldManager.instance.unregisterDimensions();
 			SGWorldManager.instance = null;
 		}

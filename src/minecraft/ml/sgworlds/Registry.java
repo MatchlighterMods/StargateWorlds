@@ -8,6 +8,8 @@ import ml.core.item.ItemDelegator;
 import ml.core.network.PacketHandler;
 import ml.sgworlds.block.DelegateEngraved;
 import ml.sgworlds.block.tile.TileEntityEngraved;
+import ml.sgworlds.item.DelegateAncientBook;
+import ml.sgworlds.item.DelegateJournal;
 import ml.sgworlds.item.DelegateTablet;
 import ml.sgworlds.network.packet.PacketRegisterDimensions;
 import ml.sgworlds.network.packet.PacketWorldData;
@@ -37,6 +39,8 @@ public class Registry {
 	// Items //
 	public static ItemDelegator<DelegateItem> delegatorItem;
 	public static DelegateTablet itemTablet;
+	public static DelegateAncientBook itemBookTranslate;
+	public static DelegateJournal itemBookJournal;
 
 	public static void registerItems() {
 		delegatorItem = new ItemDelegator<DelegateItem>(config.stargateWorldsItemId-256, new DelegateItem());
@@ -45,6 +49,12 @@ public class Registry {
 		
 		itemTablet = new DelegateTablet();
 		delegatorItem.addSubItem(1, itemTablet);
+		
+		itemBookTranslate = new DelegateAncientBook();
+		delegatorItem.addSubItem(2, itemBookTranslate);
+		
+		itemBookJournal = new DelegateJournal();
+		delegatorItem.addSubItem(3, itemBookJournal);
 	}
 
 	// TileEntities //
