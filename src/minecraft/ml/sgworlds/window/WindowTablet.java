@@ -18,10 +18,16 @@ public class WindowTablet extends Window {
 
 	public WindowTablet(EntityPlayer epl, Side side, ItemStack tablet) {
 		super(epl, side);
-		setCustomResource("window", "SGWorlds:textures/gui/stone_tablet");
+		
 		setSize(256, 256);
 	}
 
+	@Override
+	public void constructClient() {
+		setCustomResource("window", "SGWorlds:textures/gui/stone_tablet");
+		super.constructClient();
+	}
+	
 	@Override
 	public void drawForeground(float partialTick) {
 		FontRenderer fr = ClientProxy.fontRendererAncient;

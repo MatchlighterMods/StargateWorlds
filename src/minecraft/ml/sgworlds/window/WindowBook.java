@@ -26,7 +26,6 @@ public class WindowBook extends Window {
 	
 	public WindowBook(EntityPlayer epl, Side side, Book book) {
 		super(epl, side);
-		setCustomResource("window", "SGworlds:textures/gui/book_double");
 		setSize(278, 175);
 		
 		this.book = book;
@@ -34,6 +33,12 @@ public class WindowBook extends Window {
 		if (side == Side.CLIENT) {
 			this.book.initContents(this);
 		}
+	}
+	
+	@Override
+	public void constructClient() {
+		setCustomResource("window", "SGworlds:textures/gui/book_double");
+		super.constructClient();
 	}
 
 	public int getPageWidth() {
@@ -104,9 +109,15 @@ public class WindowBook extends Window {
 		
 		public TabBookmark(ControlTabManager ctm, Bookmark mark) {
 			super(ctm);
-			setCustomResource("ledger", "SGWorlds:textures/gui/tab_bookmark");
+			
 			this.mark = mark;
 			this.tabColor = mark.getColor();
+		}
+		
+		@Override
+		public void constructClient() {
+			setCustomResource("ledger", "SGWorlds:textures/gui/tab_bookmark");
+			super.constructClient();
 		}
 		
 		@Override
