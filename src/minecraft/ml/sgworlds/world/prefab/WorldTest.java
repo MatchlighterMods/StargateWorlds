@@ -54,4 +54,8 @@ public class WorldTest implements IStaticWorld {
 		return new TemplePillars();
 	}
 
+	@Override
+	public String getDescription() {
+		return null;
+	}
 }

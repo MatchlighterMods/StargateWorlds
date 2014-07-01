@@ -3,7 +3,7 @@ package ml.sgworlds.book.page;
 import java.util.ArrayList;
 import java.util.List;
 
-import ml.sgworlds.book.Book;
+import ml.sgworlds.window.WindowBook;
 import net.minecraft.client.Minecraft;
 
 public class ChapterHeaderPage extends Page {
@@ -11,14 +11,14 @@ public class ChapterHeaderPage extends Page {
 	public List<String> title;
 	public List<String> text = new ArrayList<String>();
 	
-	public ChapterHeaderPage(Book book, String title, List<String> text) {
-		super(book);
+	public ChapterHeaderPage(WindowBook window, String title, List<String> text) {
+		super(window);
 
-		this.title = getFontRenderer().listFormattedStringToWidth(title, book.window.getPageWidth());
+		this.title = getFontRenderer().listFormattedStringToWidth(title, window.getPageWidth());
 		
-		int h = (int)(book.window.pageHeight * 0.25F) + (this.title.size()*getFontRenderer().FONT_HEIGHT)/2 + getFontRenderer().FONT_HEIGHT;
+		int h = (int)(window.pageHeight * 0.25F) + (this.title.size()*getFontRenderer().FONT_HEIGHT)/2 + getFontRenderer().FONT_HEIGHT;
 		
-		while ((h+=getFontRenderer().FONT_HEIGHT) < book.window.getPageHeight() && text.size()>0) {
+		while ((h+=getFontRenderer().FONT_HEIGHT) < window.getPageHeight() && text.size()>0) {
 			this.text.add(text.remove(0));
 		}
 	}

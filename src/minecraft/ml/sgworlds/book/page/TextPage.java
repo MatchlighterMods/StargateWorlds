@@ -3,18 +3,18 @@ package ml.sgworlds.book.page;
 import java.util.ArrayList;
 import java.util.List;
 
-import ml.sgworlds.book.Book;
+import ml.sgworlds.window.WindowBook;
 import net.minecraft.client.Minecraft;
 
 public class TextPage extends Page {
 
 	protected List<String> text = new ArrayList<String>();
 	
-	public TextPage(Book book, List<String> text) {
-		super(book);
+	public TextPage(WindowBook window, List<String> text) {
+		super(window);
 		
 		int h = 0;
-		while ((h+=getFontRenderer().FONT_HEIGHT) < book.window.getPageHeight() && text.size()>0) {
+		while ((h+=getFontRenderer().FONT_HEIGHT) < window.getPageHeight() && text.size()>0) {
 			this.text.add(text.remove(0));
 		}
 	}

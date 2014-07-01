@@ -1,18 +1,18 @@
 package ml.sgworlds.book.page;
 
+import ml.sgworlds.window.WindowBook;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import ml.sgworlds.book.Book;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 
 public abstract class Page {
 
-	public final Book book;
+	public final WindowBook window;
 
-	public Page(Book book) {
-		this.book = book;
+	public Page(WindowBook window) {
+		this.window = window;
 	}
 
 	@SideOnly(Side.CLIENT)

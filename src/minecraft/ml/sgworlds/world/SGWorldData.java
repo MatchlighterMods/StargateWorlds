@@ -62,6 +62,9 @@ public class SGWorldData implements IWorldData {
 	}
 	
 	public String getDescription(int detail, int ichance, String sep) {
+		IStaticWorld statw = getStaticWorld();
+		if (statw != null && statw.getDescription() != null) return statw.getDescription();
+		
 		StringBuilder s = new StringBuilder(getPrimaryAddress() != null ? getPrimaryAddress().toString() : "");
 		Random r = new Random();
 		s.append(sep + getDisplayName());
@@ -74,6 +77,15 @@ public class SGWorldData implements IWorldData {
 		}
 		
 		return s.toString();
+	}
+	
+	public IStaticWorld getStaticWorld() {
+		for (IStaticWorld sWorld : SGWorldManager.staticWorlds) {
+			if (sWorld.getAddress().equals(primaryAddress)) {
+				return sWorld;
+			}
+		}
+		return null;
 	}
 	
 	public void readFromNBT(NBTTagCompound nbt) {

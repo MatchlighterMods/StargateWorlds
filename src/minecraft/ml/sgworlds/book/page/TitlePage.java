@@ -2,7 +2,7 @@ package ml.sgworlds.book.page;
 
 import java.util.List;
 
-import ml.sgworlds.book.Book;
+import ml.sgworlds.window.WindowBook;
 import net.minecraft.client.Minecraft;
 
 import org.lwjgl.opengl.GL11;
@@ -12,8 +12,8 @@ public class TitlePage extends Page {
 	protected String title;
 	protected String subtitle;
 	
-	public TitlePage(Book book, String title, String subtitle) {
-		super(book);
+	public TitlePage(WindowBook window, String title, String subtitle) {
+		super(window);
 		this.title = title;
 		this.subtitle = subtitle;
 	}

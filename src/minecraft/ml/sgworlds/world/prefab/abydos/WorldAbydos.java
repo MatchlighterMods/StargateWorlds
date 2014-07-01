@@ -87,6 +87,11 @@ public class WorldAbydos implements IStaticWorld {
 	public IGateTempleGenerator getTempleGenerator(WorldServer world) {
 		return new TempleAbydos();
 	}
+	
+	@Override
+	public String getDescription() {
+		return "Insert description here"; // TODO
+	}
 
 	private class TempleAbydos extends TemplePyramid {
 		public TempleAbydos() {

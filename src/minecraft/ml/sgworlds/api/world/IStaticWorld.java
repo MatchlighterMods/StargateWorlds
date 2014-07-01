@@ -30,6 +30,8 @@ public interface IStaticWorld {
 	 */
 	public String getName();
 	
+	public String getDescription();
+	
 	/**
 	 * Gets a list of features for this static world.<br/>
 	 * Skipping a required feature type will result in a) The default feature, or b) A randomly generated feature.<br/>

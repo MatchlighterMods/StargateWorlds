@@ -52,6 +52,7 @@ public class SGWorldManager implements IDynamicWorldLoader {
 	}
 	
 	public SGWorldData getWorldData(int dimId) {
+		if (dimId == 0) return null;
 		for (SGWorldData data : worlds) {
 			if (data.getDimensionId() == dimId) {
 				return data;
@@ -60,7 +61,7 @@ public class SGWorldManager implements IDynamicWorldLoader {
 		return null;
 	}
 	
-	public IWorldData getWorldData(String designation) {
+	public SGWorldData getWorldData(String designation) {
 		for (SGWorldData data : worlds) {
 			if (data.getDesignation() == designation) {
 				return data;

@@ -27,13 +27,18 @@ public class PacketWorldData extends MLPacket {
 	public PacketWorldData(SGWorldData worldData) {
 		super(SGWorlds.netChannel);
 		dimId = worldData.getDimensionId();
-		worldDataNBT = new NBTTagCompound(); 
+		worldDataNBT = new NBTTagCompound();
 		worldData.writeToNBT(worldDataNBT);
 	}
 	
 	public PacketWorldData(int dimId) {
 		super(SGWorlds.netChannel);
 		this.dimId = dimId;
+		this.worldDataNBT = new NBTTagCompound();
+	}
+	
+	public PacketWorldData(String designation) {
+		super(SGWorlds.netChannel);
 		this.worldDataNBT = new NBTTagCompound();
 	}
 	
@@ -53,7 +58,6 @@ public class PacketWorldData extends MLPacket {
 	
 	@Override
 	public void handleServerSide(EntityPlayer epl) throws IOException {
-		System.out.println("Received WorldData Request " + dimId);
 		SGWorldData worldData = SGWorldManager.instance.getWorldData(dimId);
 		if (worldData != null) {
 			new PacketWorldData(worldData).dispatchToPlayer(epl);

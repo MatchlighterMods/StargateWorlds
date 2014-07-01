@@ -1,12 +1,12 @@
 package ml.sgworlds.book.page;
 
-import ml.sgworlds.book.Book;
+import ml.sgworlds.window.WindowBook;
 import net.minecraft.client.Minecraft;
 
 public class BlankPage extends Page {
 
-	public BlankPage(Book book) {
-		super(book);
+	public BlankPage(WindowBook window) {
+		super(window);
 	}
 
 	@Override
