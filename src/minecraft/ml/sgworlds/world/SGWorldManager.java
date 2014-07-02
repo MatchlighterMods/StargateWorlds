@@ -15,7 +15,6 @@ import ml.sgworlds.Registry;
 import ml.sgworlds.SGWorlds;
 import ml.sgworlds.api.world.IGateTempleGenerator;
 import ml.sgworlds.api.world.IStaticWorld;
-import ml.sgworlds.api.world.IWorldData;
 import ml.sgworlds.network.packet.PacketRegisterDimensions;
 import ml.sgworlds.network.packet.PacketWorldData;
 import ml.sgworlds.world.gen.temples.TemplePlain;

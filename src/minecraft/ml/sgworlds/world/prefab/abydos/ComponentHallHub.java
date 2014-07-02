@@ -2,12 +2,12 @@ package ml.sgworlds.world.prefab.abydos;
 
 import java.util.Random;
 
+import ml.sgworlds.world.gen.StructureBuilder;
+import ml.sgworlds.world.gen.structure.SGWStructrueComponent;
 import net.minecraft.block.Block;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
-import ml.sgworlds.world.gen.StructureBuilder;
-import ml.sgworlds.world.gen.structure.SGWStructrueComponent;
 
 
 public class ComponentHallHub extends SGWStructrueComponent {
@@ -16,7 +16,7 @@ public class ComponentHallHub extends SGWStructrueComponent {
 	
 	public ComponentHallHub(ChunkCoordinates position, int rotation) {
 		super(position, rotation);
-		this.boundingBox = createBoundingBox(3, 3, 3, 3, 4, 1);
+		setLocalBoundingBox(-3, -1, -3, 3, 4, 3);
 	}
 	
 	@Override

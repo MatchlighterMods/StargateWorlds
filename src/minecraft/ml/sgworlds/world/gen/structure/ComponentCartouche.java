@@ -28,7 +28,7 @@ public class ComponentCartouche extends SGWStructrueComponent {
 	}
 	
 	private void updateBoundingBox() {
-		this.boundingBox = createBoundingBox(8, 5, 5, 5, 6, 0);
+		setLocalBoundingBox(-5, 0, -8, 5, 6, 5);
 	}
 	
 	@Override

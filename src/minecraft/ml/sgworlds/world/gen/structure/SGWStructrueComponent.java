@@ -13,6 +13,7 @@ public abstract class SGWStructrueComponent extends StructureComponent {
 
 	protected ChunkCoordinates position;
 	protected int rotation;
+	protected StructureBoundingBox lboundingbox;
 	
 	public boolean componentNorth, componentEast, componentSouth, componentWest;
 	
@@ -21,6 +22,17 @@ public abstract class SGWStructrueComponent extends StructureComponent {
 	public SGWStructrueComponent(ChunkCoordinates position, int rotation) {
 		this.position = position;
 		this.rotation = rotation;
+	}
+	
+	protected void setLocalBoundingBox(StructureBoundingBox nbox) {
+		lboundingbox = nbox;
+		this.boundingBox = globalizeBoundingBox(nbox);
+	}
+	
+	protected void setLocalBoundingBox(int nx, int ny, int nz, int px, int py, int pz) {
+		StructureBoundingBox nbox = new StructureBoundingBox(-nx, -ny, -nz, px, py, pz);
+		lboundingbox = nbox;
+		this.boundingBox = globalizeBoundingBox(nbox);
 	}
 	
 	// Save
@@ -64,39 +76,6 @@ public abstract class SGWStructrueComponent extends StructureComponent {
 	
 	protected abstract boolean addComponentParts(StructureBuilder bldr, World world, Random rand, StructureBoundingBox chunkBox);
 
-	protected StructureBoundingBox createBoundingBox(int snorth, int ssouth, int seast, int swest, int sup, int sdown) {
-		rotation %= 4;
-		StructureBoundingBox box = new StructureBoundingBox();
-		box.minY = position.posY - sdown;
-		box.maxY = position.posY + sup;
-		if (rotation == 0) {
-			box.minX = position.posX-swest;
-			box.maxX = position.posX+seast;
-			box.minZ = position.posZ-snorth;
-			box.maxZ = position.posZ+ssouth;
-			
-		} else if (rotation == 1) {
-			box.minX = position.posX-ssouth;
-			box.maxX = position.posX+snorth;
-			box.minZ = position.posZ-swest;
-			box.maxZ = position.posZ+seast;
-			
-		} else if (rotation == 2) {
-			box.minX = position.posX-seast;
-			box.maxX = position.posX+swest;
-			box.minZ = position.posZ-ssouth;
-			box.maxZ = position.posZ+snorth;
-			
-		} else if (rotation == 3) {
-			box.minX = position.posX-snorth;
-			box.maxX = position.posX+ssouth;
-			box.minZ = position.posZ-seast;
-			box.maxZ = position.posZ+swest;
-			
-		}
-		return box;
-	}
-	
 	public int rotatedX(int x, int z) {
 		switch (rotation) {
 		case 0:
@@ -123,5 +102,31 @@ public abstract class SGWStructrueComponent extends StructureComponent {
 			return -x;
 		}
 		return z;
+	}
+	
+	public StructureBoundingBox globalizeBoundingBox(StructureBoundingBox box) {
+		int nx, px, nz, pz;
+		if (rotation == 1) {
+			nx = box.minZ;
+			nz = box.maxX;
+			px = box.maxZ;
+			pz = box.minX;
+		} else if (rotation == 2) {
+			nx = box.maxX;
+			nz = box.maxZ;
+			px = box.minX;
+			pz = box.minZ;
+		} else if (rotation == 3) {
+			nx = box.maxZ;
+			nz = box.minX;
+			px = box.minZ;
+			pz = box.maxX;
+		} else {
+			nx = box.minX;
+			nz = box.minZ;
+			px = box.maxX;
+			pz = box.maxZ;
+		}
+		return new StructureBoundingBox(position.posX-nx, position.posY-box.minY, position.posZ-nz, position.posX+px, position.posY+box.maxY, position.posZ+pz);
 	}
 }

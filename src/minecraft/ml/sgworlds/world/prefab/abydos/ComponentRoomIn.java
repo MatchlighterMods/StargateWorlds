@@ -2,12 +2,12 @@ package ml.sgworlds.world.prefab.abydos;
 
 import java.util.Random;
 
+import ml.sgworlds.world.gen.StructureBuilder;
+import ml.sgworlds.world.gen.structure.SGWStructrueComponent;
 import net.minecraft.block.Block;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
-import ml.sgworlds.world.gen.StructureBuilder;
-import ml.sgworlds.world.gen.structure.SGWStructrueComponent;
 
 public class ComponentRoomIn extends SGWStructrueComponent {
 
@@ -15,7 +15,7 @@ public class ComponentRoomIn extends SGWStructrueComponent {
 	
 	public ComponentRoomIn(ChunkCoordinates position, int rotation) {
 		super(position, rotation);
-		this.boundingBox = createBoundingBox(4, 4, 4, 4, 4, 1);
+		setLocalBoundingBox(-4, -1, -4, 4, 4, 4);
 	}
 	
 	@Override

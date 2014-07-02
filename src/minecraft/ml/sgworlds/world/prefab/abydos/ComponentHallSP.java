@@ -20,7 +20,7 @@ public class ComponentHallSP extends SGWStructrueComponent {
 	
 	public ComponentHallSP(ChunkCoordinates position, int rotation) {
 		super(position, rotation);
-		this.boundingBox = createBoundingBox(4, 4, 4, 4, 4, 1);
+		setLocalBoundingBox(-4, -1, -4, 4, 4, 4);
 	}
 	
 	@Override
