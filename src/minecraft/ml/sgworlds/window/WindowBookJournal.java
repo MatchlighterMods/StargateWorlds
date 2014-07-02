@@ -23,6 +23,7 @@ public class WindowBookJournal extends WindowBook {
 		
 		// Worlds
 		addChapter("Worlds", "", 0x3590FF);
+		// TODO
 	}
 
 	

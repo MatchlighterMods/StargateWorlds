@@ -7,6 +7,7 @@ import net.minecraft.block.BlockLever;
 import net.minecraft.block.BlockPistonBase;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.BlockStairs;
+import net.minecraft.block.BlockTorch;
 import net.minecraft.item.ItemDoor;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.ChunkPosition;
@@ -166,7 +167,7 @@ public class StructureBuilder {
 		if (block instanceof BlockDoor) {
 			ItemDoor.placeDoorBlock(world, ax, ay, az, blockMeta, block);
 		} else {
-			world.setBlock(ax, ay, az, block != null ? block.blockID : 0, blockMeta, 2);
+			world.setBlock(ax, ay, az, block != null ? block.blockID : 0, blockMeta, 3);
 		}
 	}
 	
@@ -181,13 +182,13 @@ public class StructureBuilder {
 		
 		setBlockAtAbs(getAbsX(bx, bz), getAbsY(ry), getAbsZ(bx, bz), block, blockMeta);
 		
-		if (symmetryX && symmetryZ) {
+		if (symmetryX && symmetryZ && bx != 0 && bz != 0) {
 			setBlockAtAbs(getAbsX(-bx, -bz), getAbsY(ry), getAbsZ(-bx, -bz), block, blockMeta);
 		}
-		if (symmetryX) {
+		if (symmetryX && bx != 0) {
 			setBlockAtAbs(getAbsX(-bx, bz), getAbsY(ry), getAbsZ(-bx, bz), block, blockMeta);
 		}
-		if (symmetryZ) {
+		if (symmetryZ && bz != 0) {
 			setBlockAtAbs(getAbsX(bx, -bz), getAbsY(ry), getAbsZ(bx, -bz), block, blockMeta);
 		}
 	}
@@ -253,7 +254,7 @@ public class StructureBuilder {
 	/**
 	 * Attempts to get the rotated metadata of a rotatable block.
 	 */
-	public int getMetadataWithOffset(Block block, int cRotation) {
+	public int getRotatedMeta(Block block, int cRotation) {
 		int rot4 =(this.rotation + cRotation) % 4;
 		
 		if (block instanceof BlockRailBase) {
@@ -277,7 +278,7 @@ public class StructureBuilder {
 			else if (rot4 == 2) return 3;
 			else if (rot4 == 3) return 4;
 			
-		} else if (block instanceof BlockButton || block instanceof BlockLever) {
+		} else if (block instanceof BlockButton || block instanceof BlockLever || block instanceof BlockTorch) {
 			if (rot4 == 0) return 4;
 			if (rot4 == 1) return 1;
 			else if (rot4 == 2) return 3;

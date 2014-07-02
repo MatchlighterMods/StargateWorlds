@@ -14,6 +14,8 @@ public abstract class SGWStructrueComponent extends StructureComponent {
 	protected ChunkCoordinates position;
 	protected int rotation;
 	
+	public boolean componentNorth, componentEast, componentSouth, componentWest;
+	
 	public SGWStructrueComponent() {}
 	
 	public SGWStructrueComponent(ChunkCoordinates position, int rotation) {
@@ -29,6 +31,11 @@ public abstract class SGWStructrueComponent extends StructureComponent {
 		tag.setInteger("pos_z", position.posZ);
 		
 		tag.setInteger("rotation", rotation);
+		
+		tag.setBoolean("cNorth", componentNorth);
+		tag.setBoolean("cEast", componentEast);
+		tag.setBoolean("cSouth", componentSouth);
+		tag.setBoolean("cWest", componentWest);
 		save(tag);
 	}
 	protected void save(NBTTagCompound tag) {}
@@ -38,6 +45,11 @@ public abstract class SGWStructrueComponent extends StructureComponent {
 	protected void func_143011_b(NBTTagCompound tag) {
 		this.position = new ChunkCoordinates(tag.getInteger("pos_x"), tag.getInteger("pos_y"), tag.getInteger("pos_z"));
 		this.rotation = tag.getInteger("rotation");
+		
+		this.componentNorth = tag.getBoolean("cNorth");
+		this.componentEast = tag.getBoolean("cEast");
+		this.componentSouth = tag.getBoolean("cSouth");
+		this.componentWest = tag.getBoolean("cWest");
 		load(tag);
 	}
 	protected void load(NBTTagCompound tag) {}
@@ -83,5 +95,33 @@ public abstract class SGWStructrueComponent extends StructureComponent {
 			
 		}
 		return box;
+	}
+	
+	public int rotatedX(int x, int z) {
+		switch (rotation) {
+		case 0:
+			return x;
+		case 1:
+			return -z;
+		case 2:
+			return -x;
+		case 3:
+			return z;
+		}
+		return x;
+	}
+	
+	public int rotatedZ(int x, int z) {
+		switch (rotation) {
+		case 0:
+			return z;
+		case 1:
+			return x;
+		case 2:
+			return -z;
+		case 3:
+			return -x;
+		}
+		return z;
 	}
 }
