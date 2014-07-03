@@ -1,17 +1,16 @@
-package ml.sgworlds.world.prefab.abydos;
+package ml.sgworlds.world.gen.structure.deserthold;
 
 import java.util.List;
 import java.util.Random;
 
 import ml.sgworlds.world.gen.StructureBuilder;
-import ml.sgworlds.world.gen.structure.SGWStructrueComponent;
 import net.minecraft.block.Block;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
 
-public class ComponentHallSP extends SGWStructrueComponent {
+public class ComponentHallSP extends ComponentDesertHold {
 
 	public boolean genPassage1=true;
 	public boolean genPassage2=true;

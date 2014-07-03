@@ -11,9 +11,9 @@ import net.minecraft.world.gen.structure.StructureComponent;
 
 public abstract class SGWStructrueComponent extends StructureComponent {
 
-	protected ChunkCoordinates position;
-	protected int rotation;
-	protected StructureBoundingBox lboundingbox;
+	public ChunkCoordinates position;
+	public int rotation;
+	public StructureBoundingBox lboundingbox;
 	
 	public boolean componentNorth, componentEast, componentSouth, componentWest;
 	
@@ -26,13 +26,15 @@ public abstract class SGWStructrueComponent extends StructureComponent {
 	
 	protected void setLocalBoundingBox(StructureBoundingBox nbox) {
 		lboundingbox = nbox;
-		this.boundingBox = globalizeBoundingBox(nbox);
+		refreshBoundingBox();
+	}
+	
+	protected void refreshBoundingBox() {
+		this.boundingBox = globalizeBoundingBox(lboundingbox);
 	}
 	
 	protected void setLocalBoundingBox(int nx, int ny, int nz, int px, int py, int pz) {
-		StructureBoundingBox nbox = new StructureBoundingBox(-nx, -ny, -nz, px, py, pz);
-		lboundingbox = nbox;
-		this.boundingBox = globalizeBoundingBox(nbox);
+		setLocalBoundingBox(new StructureBoundingBox(-nx, -ny, -nz, px, py, pz));
 	}
 	
 	// Save
@@ -76,34 +78,6 @@ public abstract class SGWStructrueComponent extends StructureComponent {
 	
 	protected abstract boolean addComponentParts(StructureBuilder bldr, World world, Random rand, StructureBoundingBox chunkBox);
 
-	public int rotatedX(int x, int z) {
-		switch (rotation) {
-		case 0:
-			return x;
-		case 1:
-			return -z;
-		case 2:
-			return -x;
-		case 3:
-			return z;
-		}
-		return x;
-	}
-	
-	public int rotatedZ(int x, int z) {
-		switch (rotation) {
-		case 0:
-			return z;
-		case 1:
-			return x;
-		case 2:
-			return -z;
-		case 3:
-			return -x;
-		}
-		return z;
-	}
-	
 	public StructureBoundingBox globalizeBoundingBox(StructureBoundingBox box) {
 		int nx, px, nz, pz;
 		if (rotation == 1) {
@@ -128,5 +102,21 @@ public abstract class SGWStructrueComponent extends StructureComponent {
 			pz = box.maxZ;
 		}
 		return new StructureBoundingBox(position.posX-nx, position.posY-box.minY, position.posZ-nz, position.posX+px, position.posY+box.maxY, position.posZ+pz);
+	}
+	
+	/**
+	 * Gets the location of the door on the specified side, assuming the door is aligned with the position. 
+	 */
+	public ChunkCoordinates getOutPos(int dRotation) {
+		if (rotation == 0) {
+			return new ChunkCoordinates(position.posX+StructureHelper.getRotatedX(0, -lboundingbox.minZ, rotation), position.posY, position.posZ+StructureHelper.getRotatedZ(0, -lboundingbox.minZ, rotation));
+		} else if (rotation == 1) {
+			return new ChunkCoordinates(position.posX+StructureHelper.getRotatedX(lboundingbox.maxX, 0, rotation), position.posY, position.posZ+StructureHelper.getRotatedZ(lboundingbox.maxX, 0, rotation));
+		} else if (rotation == 2) {
+			return new ChunkCoordinates(position.posX+StructureHelper.getRotatedX(0, lboundingbox.maxZ, rotation), position.posY, position.posZ+StructureHelper.getRotatedZ(0, lboundingbox.maxZ, rotation));
+		} else if (rotation == 3) {
+			return new ChunkCoordinates(position.posX+StructureHelper.getRotatedX(-lboundingbox.minX, 0, rotation), position.posY, position.posZ+StructureHelper.getRotatedZ(-lboundingbox.minX, 0, rotation));
+		}
+		return new ChunkCoordinates(position);
 	}
 }

@@ -28,4 +28,32 @@ public class StructureHelper {
 
 		return (k == i1 && l == j1);
 	}
+	
+	public static int getRotatedX(int x, int z, int rotation) {
+		switch (rotation) {
+		case 0:
+			return x;
+		case 1:
+			return -z;
+		case 2:
+			return -x;
+		case 3:
+			return z;
+		}
+		return x;
+	}
+	
+	public static int getRotatedZ(int x, int z, int rotation) {
+		switch (rotation) {
+		case 0:
+			return z;
+		case 1:
+			return x;
+		case 2:
+			return -z;
+		case 3:
+			return -x;
+		}
+		return z;
+	}
 }

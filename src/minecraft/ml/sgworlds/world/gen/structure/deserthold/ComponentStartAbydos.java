@@ -1,19 +1,18 @@
-package ml.sgworlds.world.prefab.abydos;
+package ml.sgworlds.world.gen.structure.deserthold;
 
 import java.util.Random;
 
 import ml.sgworlds.world.gen.StructureBuilder;
-import ml.sgworlds.world.gen.structure.SGWStructrueComponent;
 import net.minecraft.block.Block;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 
-public class ComponentRoomIn extends SGWStructrueComponent {
+public class ComponentStartAbydos extends ComponentHoldStart {
 
-	public ComponentRoomIn() {}
+	public ComponentStartAbydos() {}
 	
-	public ComponentRoomIn(ChunkCoordinates position, int rotation) {
+	public ComponentStartAbydos(ChunkCoordinates position, int rotation) {
 		super(position, rotation);
 		setLocalBoundingBox(-4, -1, -4, 4, 4, 4);
 	}

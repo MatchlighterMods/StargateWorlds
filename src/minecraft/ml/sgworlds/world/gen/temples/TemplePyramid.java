@@ -71,6 +71,8 @@ public class TemplePyramid implements IGateTempleGenerator {
 		
 		int front = -(plevels+1), back = plevels;
 		
+		th.fillDown(-plevels, -2, front, plevels, back, Block.sand, 0);
+		
 		// Floor
 		th.fillArea(-plevels, -1, front, plevels, 0, back, Block.sandStone, 2);
 		

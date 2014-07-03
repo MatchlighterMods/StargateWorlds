@@ -6,6 +6,7 @@ import net.minecraft.block.BlockDoor;
 import net.minecraft.block.BlockLever;
 import net.minecraft.block.BlockPistonBase;
 import net.minecraft.block.BlockRailBase;
+import net.minecraft.block.BlockRedstoneRepeater;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.item.ItemDoor;
@@ -251,6 +252,19 @@ public class StructureBuilder {
 		}
 	}
 	
+	public void fillDown(int startX, int startY, int startZ, int endX, int endZ, Block block, int blockMeta) {
+		for (int x=startX; x<=endX; x++) {
+			for (int z=startZ; z<=endZ; z++) {
+				for (int y=startY; getAbsY(y)>0; y--) {
+					if (getBlockIdAt(x, y, z) != 0) {
+						break;
+					}
+					setBlockAt(x, y, z, block, blockMeta);
+				}
+			}
+		}
+	}
+	
 	/**
 	 * Attempts to get the rotated metadata of a rotatable block.
 	 */
@@ -286,7 +300,8 @@ public class StructureBuilder {
 			
 		} else if (block instanceof BlockPistonBase || block instanceof BlockLever || block == Block.dispenser) {
 			// TODO
-		} else {
+		} else if (block instanceof BlockRedstoneRepeater) {
+			return rot4;
 		}
 		
 		return rot4;
