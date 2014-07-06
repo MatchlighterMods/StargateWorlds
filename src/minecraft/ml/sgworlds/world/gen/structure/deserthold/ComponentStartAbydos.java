@@ -51,5 +51,5 @@ public class ComponentStartAbydos extends ComponentHoldStart {
 		
 		return true;
 	}
-
+	
 }

@@ -1,9 +1,9 @@
 package ml.sgworlds.world.gen.structure.deserthold;
 
-import ml.sgworlds.world.gen.structure.SGWStructrueComponent;
+import ml.sgworlds.world.gen.structure.SGWStructureComponent;
 import net.minecraft.util.ChunkCoordinates;
 
-public abstract class ComponentDesertHold extends SGWStructrueComponent {
+public abstract class ComponentDesertHold extends SGWStructureComponent {
 
 	public ComponentDesertHold() {}
 	

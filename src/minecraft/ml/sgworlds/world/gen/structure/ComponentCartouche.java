@@ -14,7 +14,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraftforge.common.ForgeDirection;
 
-public class ComponentCartouche extends SGWStructrueComponent {
+public class ComponentCartouche extends SGWStructureComponent {
 	
 	private boolean generatedChest1;
 	private String engravedText = "";

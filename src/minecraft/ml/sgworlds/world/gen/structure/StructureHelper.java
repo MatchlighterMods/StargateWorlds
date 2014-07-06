@@ -2,6 +2,7 @@ package ml.sgworlds.world.gen.structure;
 
 import java.util.Random;
 
+import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 
 public class StructureHelper {
@@ -55,5 +56,13 @@ public class StructureHelper {
 			return -x;
 		}
 		return z;
+	}
+	
+	public static ChunkCoordinates getRotatedCoords(ChunkCoordinates coord, int rotation) {
+		return new ChunkCoordinates(getRotatedX(coord.posX, coord.posZ, rotation), coord.posY, getRotatedZ(coord.posX, coord.posZ, rotation));
+	}
+	
+	public static ChunkCoordinates addCoords(ChunkCoordinates a, ChunkCoordinates b) {
+		return new ChunkCoordinates(a.posX + b.posX, a.posY + b.posY, a.posZ + b.posZ);
 	}
 }

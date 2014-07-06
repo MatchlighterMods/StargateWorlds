@@ -10,6 +10,7 @@ import net.minecraft.block.BlockRedstoneRepeater;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.item.ItemDoor;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
@@ -115,6 +116,11 @@ public class StructureBuilder {
 			return center.z-x;
 		}
 		return center.z;
+	}
+	
+	public TileEntity getTileEntityAt(int rx, int ry, int rz) {
+		ChunkCoordinates abs = getAbsCoords(rx, ry, rz);
+		return world.getBlockTileEntity(abs.posX, abs.posY, abs.posZ);
 	}
 	
 	/**

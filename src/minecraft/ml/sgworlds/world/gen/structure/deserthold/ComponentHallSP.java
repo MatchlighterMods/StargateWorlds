@@ -23,9 +23,9 @@ public class ComponentHallSP extends ComponentDesertHold {
 	}
 	
 	@Override
-	public void buildComponent(StructureComponent par1StructureComponent, List par2List, Random par3Random) {
-		// TODO Auto-generated method stub
-		super.buildComponent(par1StructureComponent, par2List, par3Random);
+	public void buildComponent(StructureComponent par1StructureComponent, List par2List, Random rnd) {
+		ComponentHoldStart strt = (ComponentHoldStart)par1StructureComponent;
+		componentNorth = strt.getNextStructureRoomPath(this, 0, getOutPos(0), rnd) != null;
 	}
 	
 	@Override

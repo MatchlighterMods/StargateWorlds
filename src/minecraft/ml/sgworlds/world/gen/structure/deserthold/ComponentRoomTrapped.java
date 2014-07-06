@@ -132,6 +132,7 @@ public class ComponentRoomTrapped extends ComponentDesertHold {
 			b.setBlockAt(0, 5,-3, Block.redstoneWire, 0);
 			b.setBlockAt(0, 5,-4, Block.redstoneWire, 0);
 			b.setBlockAt(0, 5,-5, Block.redstoneWire, 0);
+			// TODO Finish trap
 			break;
 		}
 		
