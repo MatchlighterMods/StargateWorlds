@@ -12,6 +12,8 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
 
+import org.apache.commons.lang3.reflect.ConstructorUtils;
+
 public abstract class SGWStructureComponent extends StructureComponent {
 
 	public ChunkCoordinates position;
@@ -107,6 +109,29 @@ public abstract class SGWStructureComponent extends StructureComponent {
 		return new StructureBoundingBox(position.posX-nx, position.posY-box.minY, position.posZ-nz, position.posX+px, position.posY+box.maxY, position.posZ+pz);
 	}
 	
+	public ChunkCoordinates getAbsOffset(ChunkCoordinates in) {
+		return StructureHelper.addCoords(position, StructureHelper.getRotatedCoords(in, rotation));
+	}
+	
+	public ChunkCoordinates getAbsOffset(int x, int y, int z) {
+		return getAbsOffset(new ChunkCoordinates(x, y, z));
+	}
+	
+	public boolean hasComponentSide(int side) {
+		side %= 4;
+		switch (side) {
+		case 0:
+			return componentNorth;
+		case 1:
+			return componentEast;
+		case 2:
+			return componentSouth;
+		case 3:
+			return componentWest;
+		}
+		return false;
+	}
+	
 	/**
 	 * Gets the location of the door on the specified side, assuming the door is aligned with the position. 
 	 */
@@ -140,12 +165,19 @@ public abstract class SGWStructureComponent extends StructureComponent {
 		
 		public SGWStructureComponent getNextStructureComponent(SGWStructureComponent prev, int oRotation, List<WeightedComponent> componentWeights, List<StructureComponent> existingComponents, ChunkCoordinates entrancePosition, Random rnd) {
 			WeightedComponent chosenWeighted = (WeightedComponent)WeightedRandom.getRandomItem(rnd, componentWeights);
-			SGWStructureComponent nComponent = chosenWeighted.constructComponent(entrancePosition, rotation+oRotation);
+			SGWStructureComponent nComponent = null;
 			
+			try {
+				nComponent = ConstructorUtils.invokeConstructor(chosenWeighted.cls, entrancePosition, (rotation+oRotation) % 4);
+			} catch (Exception e) {
+				e.printStackTrace();
+				return null;
+			}
+			
+			nComponent.rotation = (rotation + oRotation) % 4;
 			nComponent.componentSouth = true; // South is entrance
 			
 			int centerdist = nComponent.lboundingbox.maxZ;
-			//if (prev instanceof ComponentHallSP && nComponent instanceof ComponentHallSP) centerdist -= 1; // TODO Find a place for this.
 			nComponent.position = new ChunkCoordinates(entrancePosition.posX + StructureHelper.getRotatedX(0, -centerdist, nComponent.rotation), entrancePosition.posY, entrancePosition.posZ + StructureHelper.getRotatedZ(0, -centerdist, nComponent.rotation));
 			nComponent.refreshBoundingBox();
 			

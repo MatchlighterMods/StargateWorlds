@@ -1,8 +1,5 @@
 package ml.sgworlds.world.gen.structure;
 
-import org.apache.commons.lang3.reflect.ConstructorUtils;
-
-import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.WeightedRandomItem;
 
 public class WeightedComponent extends WeightedRandomItem {
@@ -13,13 +10,4 @@ public class WeightedComponent extends WeightedRandomItem {
 		super(weight);
 	}
 	
-	public SGWStructureComponent constructComponent(ChunkCoordinates entrancePosition, int rotation) {
-		try {
-			return ConstructorUtils.invokeConstructor(cls, entrancePosition, (rotation)%4);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
 }

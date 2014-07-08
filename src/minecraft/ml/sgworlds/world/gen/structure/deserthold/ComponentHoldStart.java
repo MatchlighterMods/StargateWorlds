@@ -2,11 +2,16 @@ package ml.sgworlds.world.gen.structure.deserthold;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
+import ml.sgworlds.world.gen.structure.SGWStructureComponent;
+import ml.sgworlds.world.gen.structure.WeightedComponent;
+import ml.sgworlds.world.gen.structure.SGWStructureComponent.SGWInitialComponent;
 import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.world.gen.structure.StructureComponent;
 
 
-public abstract class ComponentHoldStart extends ComponentDesertHold {
+public abstract class ComponentHoldStart extends SGWInitialComponent {
 
 	public static final List<Class<? extends ComponentDesertHold>> VALID_ROOMS = new ArrayList<Class<? extends ComponentDesertHold>>();
 	
@@ -16,4 +21,14 @@ public abstract class ComponentHoldStart extends ComponentDesertHold {
 		super(position, rotation);
 	}
 	
+	@Override
+	public SGWStructureComponent getNextStructureComponent(SGWStructureComponent prev, int oRotation, List<WeightedComponent> componentWeights, List<StructureComponent> existingComponents, ChunkCoordinates entrancePosition, Random rnd) {
+		SGWStructureComponent newComponent = super.getNextStructureComponent(prev, oRotation, componentWeights, existingComponents, entrancePosition, rnd);
+		if (prev instanceof ComponentHallSP && newComponent instanceof ComponentHallSP) {
+			// TODO Shift south 1
+		}
+		return newComponent;
+	}
+	
+	public abstract List<WeightedComponent> getValidRoomComponents();
 }

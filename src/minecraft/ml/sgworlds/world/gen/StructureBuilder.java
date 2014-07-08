@@ -55,6 +55,8 @@ public class StructureBuilder {
 	public boolean invertY = false;
 	public boolean invertZ = false;
 	
+	public int rotationOffset = 0;
+	
 	/**
 	 * See {@link StructureBuilder} for details.
 	 * @param world
@@ -73,14 +75,21 @@ public class StructureBuilder {
 		this.rotation = rot;
 	}
 	
+	public StructureBuilder(World world, int x, int y, int z, int rot) {
+		this.world = world;
+		this.center = new ChunkPosition(x, y, z);
+		this.rotation = rot;
+	}
+	
 	/**
 	 * Converts the local x passed to a global x-value.
 	 */
 	public int getAbsX(int x, int z) {
 		if (invertX) x = -x; if (invertZ) z = -z;
 		x += ioffset.posX; z += ioffset.posZ;
+		int mrot = (rotation + rotationOffset) % 4;
 		
-		switch (rotation) {
+		switch (mrot) {
 		case 0:
 			return center.x+x;
 		case 1:
@@ -104,8 +113,9 @@ public class StructureBuilder {
 	public int getAbsZ(int x, int z) {
 		if (invertX) x = -x; if (invertZ) z = -z;
 		x += ioffset.posX; z += ioffset.posZ;
+		int mrot = (rotation + rotationOffset) % 4;
 		
-		switch (rotation) {
+		switch (mrot) {
 		case 0:
 			return center.z+z;
 		case 1:
