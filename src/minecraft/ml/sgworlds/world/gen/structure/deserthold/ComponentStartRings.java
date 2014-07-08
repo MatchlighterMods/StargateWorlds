@@ -1,12 +1,10 @@
 package ml.sgworlds.world.gen.structure.deserthold;
 
-import java.util.List;
 import java.util.Random;
 
 import ml.sgworlds.world.gen.StructureBuilder;
 import ml.sgworlds.world.gen.structure.RingsPlatforms;
 import ml.sgworlds.world.gen.structure.RingsPlatforms.PlatformStyle;
-import ml.sgworlds.world.gen.structure.WeightedComponent;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
@@ -24,12 +22,6 @@ public class ComponentStartRings extends ComponentHoldStart {
 		RingsPlatforms.generateRingsPlatform(world, b.getAbsX(0, 0), b.getAbsZ(0, 0), b.rotation, PlatformStyle.SandstoneInset);
 		// TODO Auto-generated method stub
 		return true;
-	}
-
-	@Override
-	public List<WeightedComponent> getValidRoomComponents() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

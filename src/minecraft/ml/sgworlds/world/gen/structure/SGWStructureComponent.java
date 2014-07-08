@@ -139,16 +139,12 @@ public abstract class SGWStructureComponent extends StructureComponent {
 		int x=0,z=0;
 		if (dRotation == 0) {
 			z = -lboundingbox.minZ;
-			//return new ChunkCoordinates(position.posX+StructureHelper.getRotatedX(0, -lboundingbox.minZ, rotation), position.posY, position.posZ+StructureHelper.getRotatedZ(0, -lboundingbox.minZ, rotation));
 		} else if (rotation == 1) {
 			x = lboundingbox.maxX;
-			//return new ChunkCoordinates(position.posX+StructureHelper.getRotatedX(lboundingbox.maxX, 0, rotation), position.posY, position.posZ+StructureHelper.getRotatedZ(lboundingbox.maxX, 0, rotation));
 		} else if (rotation == 2) {
 			z = lboundingbox.maxZ;
-			//return new ChunkCoordinates(position.posX+StructureHelper.getRotatedX(0, lboundingbox.maxZ, rotation), position.posY, position.posZ+StructureHelper.getRotatedZ(0, lboundingbox.maxZ, rotation));
 		} else if (rotation == 3) {
 			x = -lboundingbox.minX;
-			//return new ChunkCoordinates(position.posX+StructureHelper.getRotatedX(-lboundingbox.minX, 0, rotation), position.posY, position.posZ+StructureHelper.getRotatedZ(-lboundingbox.minX, 0, rotation));
 		}
 		return StructureHelper.addCoords(position, StructureHelper.getRotatedCoords(new ChunkCoordinates(x, 0, z), rotation));
 	}
@@ -181,7 +177,8 @@ public abstract class SGWStructureComponent extends StructureComponent {
 			nComponent.position = new ChunkCoordinates(entrancePosition.posX + StructureHelper.getRotatedX(0, -centerdist, nComponent.rotation), entrancePosition.posY, entrancePosition.posZ + StructureHelper.getRotatedZ(0, -centerdist, nComponent.rotation));
 			nComponent.refreshBoundingBox();
 			
-			if (StructureComponent.findIntersecting(existingComponents, nComponent.boundingBox) != null) return null;
+			StructureComponent intersect = StructureComponent.findIntersecting(existingComponents, nComponent.boundingBox);
+			if (intersect != null && intersect != prev) return null;
 			
 			unbuiltComponents.add(nComponent);
 			existingComponents.add(nComponent);

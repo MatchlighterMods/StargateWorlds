@@ -24,11 +24,11 @@ public abstract class ComponentHoldStart extends SGWInitialComponent {
 	@Override
 	public SGWStructureComponent getNextStructureComponent(SGWStructureComponent prev, int oRotation, List<WeightedComponent> componentWeights, List<StructureComponent> existingComponents, ChunkCoordinates entrancePosition, Random rnd) {
 		SGWStructureComponent newComponent = super.getNextStructureComponent(prev, oRotation, componentWeights, existingComponents, entrancePosition, rnd);
-		if (prev instanceof ComponentHallSP && newComponent instanceof ComponentHallSP) {
-			// TODO Shift south 1
+		if (oRotation == 0 && prev instanceof ComponentHallBase && newComponent instanceof ComponentHallBase) {
+			newComponent.position = newComponent.getAbsOffset(0, 0, 1);
+			newComponent.refreshBoundingBox();
 		}
 		return newComponent;
 	}
 	
-	public abstract List<WeightedComponent> getValidRoomComponents();
 }

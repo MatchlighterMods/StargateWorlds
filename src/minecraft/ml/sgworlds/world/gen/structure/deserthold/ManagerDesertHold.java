@@ -24,10 +24,14 @@ public class ManagerDesertHold {
 	
 	static {
 		registerHallComponent("DHHH", ComponentHallHub.class, 100);
-		registerHallComponent("DHHSP", ComponentHallSP.class, 100);
+		registerHallComponent("DHHSP", ComponentHallPassage.class, 100);
+		registerHallComponent("DHHSt", ComponentHallStraight.class, 100);
+		registerHallComponent("DHHSm", ComponentHallSimple.class, 100);
 		
 		registerRoomComponent("DHMR", ComponentMonsterRoom.class, 100);
-		registerRoomComponent("DHRT", ComponentRoomTrapped.class, 100);
+		registerRoomComponent("DHTD", ComponentTrapDispenser.class, 100);
+		registerRoomComponent("DHTSP", ComponentTrapSandPit.class, 100);
+		registerRoomComponent("DHTTNT", ComponentTrapTNT.class, 100);
 		
 		MapGenStructureIO.func_143031_a(ComponentPyramidCenter.class, "DHPC");
 		

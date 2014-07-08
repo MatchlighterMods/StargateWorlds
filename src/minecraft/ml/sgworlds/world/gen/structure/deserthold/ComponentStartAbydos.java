@@ -1,12 +1,9 @@
 package ml.sgworlds.world.gen.structure.deserthold;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import ml.sgworlds.world.gen.StructureBuilder;
-import ml.sgworlds.world.gen.structure.StructureHelper;
-import ml.sgworlds.world.gen.structure.WeightedComponent;
 import net.minecraft.block.Block;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
@@ -28,11 +25,16 @@ public class ComponentStartAbydos extends ComponentHoldStart {
 		this.componentNorth = true;
 		
 		for (int i=0; i<2; i++) {
-			ComponentHallSP hall = new ComponentHallSP(StructureHelper.addCoords(position, StructureHelper.getRotatedCoords(new ChunkCoordinates(0, 0, -9 - 8*i), this.rotation)), this.rotation);
+			ComponentHallPassage hall = new ComponentHallPassage(getAbsOffset(0, 0, -9 - 8*i), this.rotation);
 			hall.componentSouth = hall.componentNorth = true;
 			existingComponents.add(hall);
 			//ic.unbuiltComponents.add(hall);
 		}
+		
+		ComponentPyramidCenter center = new ComponentPyramidCenter(getAbsOffset(0, 0, -24), rotation);
+		center.componentSouth = true;
+		existingComponents.add(center);
+		ic.unbuiltComponents.add(center);
 	}
 	
 	@Override
@@ -70,12 +72,4 @@ public class ComponentStartAbydos extends ComponentHoldStart {
 		return true;
 	}
 
-	@Override
-	public List<WeightedComponent> getValidRoomComponents() {
-		List<WeightedComponent> ls = new ArrayList<WeightedComponent>();
-		ls.add(new WeightedComponent(ComponentHallHub.class, 100));
-		
-		return ls;
-	}
-	
 }

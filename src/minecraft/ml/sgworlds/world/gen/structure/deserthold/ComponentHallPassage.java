@@ -10,60 +10,38 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
 
-public class ComponentHallSP extends ComponentDesertHold {
+public class ComponentHallPassage extends ComponentHallBase {
 
-	public boolean genPassage1=true;
-	public boolean genPassage2=true;
+	public ComponentHallPassage() {}
 	
-	public ComponentHallSP() {}
-	
-	public ComponentHallSP(ChunkCoordinates position, int rotation) {
+	public ComponentHallPassage(ChunkCoordinates position, int rotation) {
 		super(position, rotation);
 		setLocalBoundingBox(-4, -1, -4, 4, 4, 4);
 	}
 	
 	@Override
 	public void buildComponent(StructureComponent par1StructureComponent, List par2List, Random rnd) {
-		ComponentHoldStart strt = (ComponentHoldStart)par1StructureComponent;
-		//componentNorth = strt.getNextStructureRoomPath(this, 0, getOutPos(0), rnd) != null;
+		super.buildComponent(par1StructureComponent, par2List, rnd);
+		
+		SGWInitialComponent ic = (SGWInitialComponent)par1StructureComponent;
+		componentEast = ic.getNextStructureComponent(this, 1, ManagerDesertHold.holdRooms, par2List, getAbsOffset( 5, 0, 0), rnd) != null;
+		componentWest = ic.getNextStructureComponent(this, 3, ManagerDesertHold.holdRooms, par2List, getAbsOffset(-5, 0, 0), rnd) != null;
 	}
 	
 	@Override
-	protected boolean addComponentParts(StructureBuilder b, World world, Random rand, StructureBoundingBox chunkBox) {
-		// Floor
-		b.fillArea(-3, 0, -4, 3, 0, 4, Block.sandStone, 2);
+	protected boolean addHallComponentParts(StructureBuilder b, World world, Random rand, StructureBoundingBox chunkBox) {
 		
-		// Roof
-		b.fillArea(-2, 4, -4, 2, 4, 4, Block.sandStone, 2);
-		
-		// Walls
-		b.symmetryX = true;
-		b.fillArea(3, 1, -4, 3, 3, 4, Block.sandStone, 2);
-		b.fillArea(2, 3, -4, 2, 3, 4, Block.sandStone, 2);
-		
-		for (int z=-3; z<=3; z+=2) {
-			b.setBlockAt(2, 1, z, Block.sandStone, 2);
-			b.setBlockAt(2, 2, z, Block.sandStone, 1);
-		}
-		b.symmetryX = false;
-		
-		// Torches
-		b.setBlockAt( 2, 2, 2, Block.torchWood, b.getRotatedMeta(Block.torchWood, 3));
-		b.setBlockAt( 2, 2,-2, Block.torchWood, b.getRotatedMeta(Block.torchWood, 3));
-		b.setBlockAt(-2, 2, 2, Block.torchWood, b.getRotatedMeta(Block.torchWood, 1));
-		b.setBlockAt(-2, 2,-2, Block.torchWood, b.getRotatedMeta(Block.torchWood, 1));
-		
-		if (componentEast && genPassage1) { // +X
-			buildHall(b);
+		if (componentEast) { // +X
+			buildSecretPassage(b);
 			
 			b.setBlockAt(4, 2, 2, Block.torchRedstoneActive, b.getRotatedMeta(Block.torchRedstoneActive, 1));
 			b.setBlockAt(3,-1, 2, Block.torchRedstoneActive, b.getRotatedMeta(Block.torchRedstoneActive, 3));
 			b.setBlockAt(4, 1, 2, Block.torchRedstoneActive, b.getRotatedMeta(Block.torchRedstoneActive, 0));
 		}
 		
-		if (componentWest && genPassage2) { // -X
+		if (componentWest) { // -X
 			b.invertX = b.invertZ = true;
-			buildHall(b);
+			buildSecretPassage(b);
 			
 			b.setBlockAt(4, 2, 2, Block.torchRedstoneActive, b.getRotatedMeta(Block.torchRedstoneActive, 3));
 			b.setBlockAt(3,-1, 2, Block.torchRedstoneActive, b.getRotatedMeta(Block.torchRedstoneActive, 1));
@@ -71,13 +49,10 @@ public class ComponentHallSP extends ComponentDesertHold {
 			b.invertX = b.invertZ = false;
 		}
 		
-		if (!componentNorth) b.fillArea(-2, 1,-4, 2, 3,-4, Block.sandStone, 2);
-		if (!componentSouth) b.fillArea(-2, 1, 4, 2, 3, 4, Block.sandStone, 2);
-		
 		return true;
 	}
 	
-	private void buildHall(StructureBuilder b) {
+	private void buildSecretPassage(StructureBuilder b) {
 		b.fillArea(4, 0, -1, 7, 4, 1, Block.sandStone, 2);
 		b.fillArea(4, 1, 0, 7, 2, 0, null, 0);
 		b.setBlockAt(3, 0, 0, null, 0);
