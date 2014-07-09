@@ -5,15 +5,11 @@ import java.util.Random;
 import ml.core.world.structure.MLStructureComponent;
 import ml.core.world.structure.StructureBuilder;
 import ml.sgworlds.Registry;
-import ml.sgworlds.block.tile.TileEntityEngraved;
-import ml.sgworlds.world.SGWorldData;
-import ml.sgworlds.world.SGWorldManager;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
-import net.minecraftforge.common.ForgeDirection;
 
 public class ComponentCartouche extends MLStructureComponent {
 	
@@ -117,77 +113,81 @@ public class ComponentCartouche extends MLStructureComponent {
 		b.fillArea(-1, 1, -2, 1, 1, -1, Block.sandStone, 1);
 		
 		// Engravings
-		if (engravedText.length() == 0) {
-			for (int i=0; i<5; i++) {
-				SGWorldData data = SGWorldManager.instance.worlds.get(rand.nextInt(SGWorldManager.instance.worlds.size()));
-				engravedText += data.getDescription(1, 75, " ");
-				if (engravedText.length() >= 240) break;
-				engravedText += " ";
-			}
-			engravedText = crapPadTo(engravedText, 240);
-		}
-		int i = 0;
+//		if (engravedText.length() == 0) {
+//			for (int i=0; i<5; i++) {
+//				SGWorldData data = SGWorldManager.instance.worlds.get(rand.nextInt(SGWorldManager.instance.worlds.size()));
+//				engravedText += data.getDescription(1, 75, " ");
+//				if (engravedText.length() >= 240) break;
+//				engravedText += " ";
+//			}
+//			engravedText = crapPadTo(engravedText, 240);
+//		}
+//		int i = 0;
+//		
+//		for (int y=4; y>=1; y--) {
+//			TileEntityEngraved tee;
+//			if (y<=3) {
+//				tee = putEngraved(world, b.getAbsCoords(-2, y,-6));
+//				tee.setString(b.rotateForgeDir(ForgeDirection.SOUTH).ordinal(), getBlockText(engravedText, i++));
+//				tee.setString(b.rotateForgeDir(ForgeDirection.EAST ).ordinal(), getBlockText(engravedText, i++));
+//			}
+//			
+//			for (int x=-1; x<=1; x++) {
+//				tee = putEngraved(world, b.getAbsCoords(x, y, -7));
+//				tee.setString(b.rotateForgeDir(ForgeDirection.SOUTH).ordinal(), getBlockText(engravedText, i++));
+//			}
+//			
+//			if (y<=3) {
+//				tee = putEngraved(world, b.getAbsCoords( 2, y,-6));
+//				tee.setString(b.rotateForgeDir(ForgeDirection.WEST ).ordinal(), getBlockText(engravedText, i++));
+//				tee.setString(b.rotateForgeDir(ForgeDirection.SOUTH).ordinal(), getBlockText(engravedText, i++));
+//			}
+//		}
 		
-		for (int y=4; y>=1; y--) {
-			TileEntityEngraved tee;
-			if (y<=3) {
-				tee = putEngraved(world, b.getAbsCoords(-2, y,-6));
-				tee.setString(b.rotateForgeDir(ForgeDirection.SOUTH).ordinal(), getBlockText(engravedText, i++));
-				tee.setString(b.rotateForgeDir(ForgeDirection.EAST ).ordinal(), getBlockText(engravedText, i++));
-			}
-			
-			for (int x=-1; x<=1; x++) {
-				tee = putEngraved(world, b.getAbsCoords(x, y, -7));
-				tee.setString(b.rotateForgeDir(ForgeDirection.SOUTH).ordinal(), getBlockText(engravedText, i++));
-			}
-			
-			if (y<=3) {
-				tee = putEngraved(world, b.getAbsCoords( 2, y,-6));
-				tee.setString(b.rotateForgeDir(ForgeDirection.WEST ).ordinal(), getBlockText(engravedText, i++));
-				tee.setString(b.rotateForgeDir(ForgeDirection.SOUTH).ordinal(), getBlockText(engravedText, i++));
-			}
-		}
+		b.fillArea(-1, 1,-7, 1, 4,-7, Registry.delegatorBlock, Registry.blockEngraved.getMetaId()+1);
+		b.fillArea(-2, 1,-6,-2, 3,-6, Registry.delegatorBlock, Registry.blockEngraved.getMetaId()+1);
+		b.fillArea( 2, 1,-6, 2, 3,-6, Registry.delegatorBlock, Registry.blockEngraved.getMetaId()+1);
 		
 		return true;
 	}
 	
-	private Random crnd = new Random();
-	private String crap = "abcdefghijklmnopqrstuvwxyz    ";
-	protected String crapPadTo(String original, int minLength) {
-		int alength = minLength - original.length();
-		int beginCrap = alength / 2 + crnd.nextInt(minLength / 10), endCrap = alength-beginCrap;
-		
-		for (int i=0; i<beginCrap; i++) {
-			original = crap.charAt(crnd.nextInt(crap.length())) + original;
-		}
-		for (int i=0; i<endCrap; i++) {
-			original = original + crap.charAt(crnd.nextInt(crap.length()));
-		}
-		return original;
-	}
-	
-	private int[] lines = {3,7,7,7};
-	protected String getBlockText(String source, int blk) {
-		int lnWidth=blk;
-		int add = 0;
-		for (int ln : lines) {
-			lnWidth -= ln;
-			if (lnWidth < 0) {
-				lnWidth = ln;
-				break;
-			}
-			add += ln;
-		}
-		int ln1 = (blk+add) * 5;
-		int ln2 = ln1 + (lnWidth*5);
-		return source.substring(ln1, ln1+5)+"\n"+source.substring(ln2, ln2+5);
-	}
-
-	protected TileEntityEngraved putEngraved(World world, ChunkCoordinates abs) {
-		Registry.blockEngraved.setBlockAt(world, abs.posX, abs.posY, abs.posZ, 3);
-		TileEntityEngraved tee = (TileEntityEngraved) world.getBlockTileEntity(abs.posX, abs.posY, abs.posZ);
-		tee.setBlockSide(-1, Block.sandStone, 2);
-		tee.rotation = rotation;
-		return tee;
-	}
+//	private Random crnd = new Random();
+//	private String crap = "abcdefghijklmnopqrstuvwxyz    ";
+//	protected String crapPadTo(String original, int minLength) {
+//		int alength = minLength - original.length();
+//		int beginCrap = alength / 2 + crnd.nextInt(minLength / 10), endCrap = alength-beginCrap;
+//		
+//		for (int i=0; i<beginCrap; i++) {
+//			original = crap.charAt(crnd.nextInt(crap.length())) + original;
+//		}
+//		for (int i=0; i<endCrap; i++) {
+//			original = original + crap.charAt(crnd.nextInt(crap.length()));
+//		}
+//		return original;
+//	}
+//	
+//	private int[] lines = {3,7,7,7};
+//	protected String getBlockText(String source, int blk) {
+//		int lnWidth=blk;
+//		int add = 0;
+//		for (int ln : lines) {
+//			lnWidth -= ln;
+//			if (lnWidth < 0) {
+//				lnWidth = ln;
+//				break;
+//			}
+//			add += ln;
+//		}
+//		int ln1 = (blk+add) * 5;
+//		int ln2 = ln1 + (lnWidth*5);
+//		return source.substring(ln1, ln1+5)+"\n"+source.substring(ln2, ln2+5);
+//	}
+//
+//	protected TileEntityEngraved putEngraved(World world, ChunkCoordinates abs) {
+//		Registry.blockEngraved.setBlockAt(world, abs.posX, abs.posY, abs.posZ, 3);
+//		TileEntityEngraved tee = (TileEntityEngraved) world.getBlockTileEntity(abs.posX, abs.posY, abs.posZ);
+//		tee.setBlockSide(-1, Block.sandStone, 2);
+//		tee.rotation = rotation;
+//		return tee;
+//	}
 }

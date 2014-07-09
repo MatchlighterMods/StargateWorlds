@@ -1,24 +1,28 @@
 package ml.sgworlds.block;
 
-import java.util.ArrayList;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import ml.core.block.DelegateBlock;
 import ml.sgworlds.block.tile.TileEntityEngraved;
-import ml.sgworlds.block.tile.TileEntityFacade;
-import net.minecraft.block.Block;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public class DelegateEngraved extends DelegateBlock {
 
+	@SideOnly(Side.CLIENT)
+	public Icon[] icons = new Icon[2];
+	
 	@Override
-	public Icon getBlockTexture(IBlockAccess world, int x, int y, int z, int side) {
-		TileEntity te = world.getBlockTileEntity(x, y, z);
-		return ((TileEntityFacade)te).getIconFromSide(side);
+	public int getMetaLength() {
+		return 2;
+	}
+	
+	@Override
+	public Icon getIcon(int side, int meta) {
+		return icons[meta];
 	}
 	
 	@Override
@@ -29,24 +33,18 @@ public class DelegateEngraved extends DelegateBlock {
 	
 	@Override
 	public boolean hasTileEntity(int metadata) {
-		return true;
+		return false;
 	}
 	
-	@Override
-	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase par5EntityLivingBase, ItemStack par6ItemStack) {
-		super.onBlockPlacedBy(world, x, y, z, par5EntityLivingBase, par6ItemStack);
-		TileEntityEngraved te = (TileEntityEngraved)world.getBlockTileEntity(x, y, z);
-		te.setBlockSide(-1, Block.sandStone, 2);
-	}
-	
-	@Override
-	public ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int metadata, int fortune) {
-		ArrayList<ItemStack> alit = new ArrayList<ItemStack>();
-		return alit;
-	}
-
 	@Override
 	public String getUnlocalizedName(ItemStack stack) {
 		return "engraved";
 	}
+	
+	@Override
+	public void registerIcons(IconRegister ireg) {
+		icons[0] = ireg.registerIcon("SGWorlds:engraved_sandstone_row");
+		icons[1] = ireg.registerIcon("SGWorlds:engraved_sandstone_column");
+	}
+	
 }
