@@ -11,6 +11,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.gen.structure.StructureStart;
 
+import ml.core.world.structure.StructureBuilder;
 import ml.sgworlds.api.world.IGateTempleGenerator;
 import ml.sgworlds.api.world.IStaticWorld;
 import ml.sgworlds.api.world.IWorldData;
@@ -20,7 +21,6 @@ import ml.sgworlds.api.world.feature.SGWFeature;
 import ml.sgworlds.api.world.feature.WorldFeature;
 import ml.sgworlds.api.world.feature.types.IStructureProvider;
 import ml.sgworlds.world.feature.FeatureBuilder;
-import ml.sgworlds.world.gen.StructureBuilder;
 import ml.sgworlds.world.gen.temples.TemplePyramid;
 import stargatetech2.api.StargateTechAPI;
 import stargatetech2.api.stargate.Address;

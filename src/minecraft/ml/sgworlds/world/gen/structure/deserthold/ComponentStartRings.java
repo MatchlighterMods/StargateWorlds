@@ -2,7 +2,7 @@ package ml.sgworlds.world.gen.structure.deserthold;
 
 import java.util.Random;
 
-import ml.sgworlds.world.gen.StructureBuilder;
+import ml.core.world.structure.StructureBuilder;
 import ml.sgworlds.world.gen.structure.RingsPlatforms;
 import ml.sgworlds.world.gen.structure.RingsPlatforms.PlatformStyle;
 import net.minecraft.util.ChunkCoordinates;

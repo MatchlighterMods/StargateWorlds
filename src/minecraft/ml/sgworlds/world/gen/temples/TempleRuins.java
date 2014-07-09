@@ -5,8 +5,8 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
+import ml.core.world.structure.StructureBuilder;
 import ml.sgworlds.api.world.IGateTempleGenerator;
-import ml.sgworlds.world.gen.StructureBuilder;
 
 public class TempleRuins implements IGateTempleGenerator {
 

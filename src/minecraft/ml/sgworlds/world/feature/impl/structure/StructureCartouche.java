@@ -4,13 +4,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+import ml.core.world.structure.StructureHelper;
 import ml.sgworlds.api.world.IWorldData;
 import ml.sgworlds.api.world.feature.FeatureProvider;
 import ml.sgworlds.api.world.feature.WorldFeature;
 import ml.sgworlds.api.world.feature.types.IStructureProvider;
 import ml.sgworlds.world.gen.structure.ComponentCartouche;
 import ml.sgworlds.world.gen.structure.ScatteredStructureStart;
-import ml.sgworlds.world.gen.structure.StructureHelper;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;

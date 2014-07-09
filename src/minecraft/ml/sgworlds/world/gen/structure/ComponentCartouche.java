@@ -2,11 +2,12 @@ package ml.sgworlds.world.gen.structure;
 
 import java.util.Random;
 
+import ml.core.world.structure.MLStructureComponent;
+import ml.core.world.structure.StructureBuilder;
 import ml.sgworlds.Registry;
 import ml.sgworlds.block.tile.TileEntityEngraved;
 import ml.sgworlds.world.SGWorldData;
 import ml.sgworlds.world.SGWorldManager;
-import ml.sgworlds.world.gen.StructureBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChunkCoordinates;
@@ -14,7 +15,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraftforge.common.ForgeDirection;
 
-public class ComponentCartouche extends SGWStructureComponent {
+public class ComponentCartouche extends MLStructureComponent {
 	
 	private boolean generatedChest1;
 	private String engravedText = "";

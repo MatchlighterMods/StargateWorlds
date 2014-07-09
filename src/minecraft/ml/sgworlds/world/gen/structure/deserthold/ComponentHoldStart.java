@@ -1,29 +1,30 @@
 package ml.sgworlds.world.gen.structure.deserthold;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import ml.sgworlds.world.gen.structure.SGWStructureComponent;
-import ml.sgworlds.world.gen.structure.WeightedComponent;
-import ml.sgworlds.world.gen.structure.SGWStructureComponent.SGWInitialComponent;
+import ml.core.world.structure.MLStructureComponent;
+import ml.core.world.structure.WeightedComponent;
+import ml.core.world.structure.MLStructureComponent.InitialStructureComponent;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.gen.structure.StructureComponent;
 
 
-public abstract class ComponentHoldStart extends SGWInitialComponent {
+public abstract class ComponentHoldStart extends InitialStructureComponent {
 
-	public static final List<Class<? extends ComponentDesertHold>> VALID_ROOMS = new ArrayList<Class<? extends ComponentDesertHold>>();
+	// TODO
+	public List<WeightedComponent> roomWeightedComponents;
+	public List<WeightedComponent> hallWeightedComponents;
 	
 	public ComponentHoldStart() {}
 	
 	public ComponentHoldStart(ChunkCoordinates position, int rotation) {
-		super(position, rotation);
+		super(position, rotation, 50);
 	}
 	
 	@Override
-	public SGWStructureComponent getNextStructureComponent(SGWStructureComponent prev, int oRotation, List<WeightedComponent> componentWeights, List<StructureComponent> existingComponents, ChunkCoordinates entrancePosition, Random rnd) {
-		SGWStructureComponent newComponent = super.getNextStructureComponent(prev, oRotation, componentWeights, existingComponents, entrancePosition, rnd);
+	public MLStructureComponent getNextStructureComponent(MLStructureComponent prev, int oRotation, List<WeightedComponent> componentWeights, List<StructureComponent> existingComponents, ChunkCoordinates entrancePosition, Random rnd) {
+		MLStructureComponent newComponent = super.getNextStructureComponent(prev, oRotation, componentWeights, existingComponents, entrancePosition, rnd);
 		if (oRotation == 0 && prev instanceof ComponentHallBase && newComponent instanceof ComponentHallBase) {
 			newComponent.position = newComponent.getAbsOffset(0, 0, 1);
 			newComponent.refreshBoundingBox();

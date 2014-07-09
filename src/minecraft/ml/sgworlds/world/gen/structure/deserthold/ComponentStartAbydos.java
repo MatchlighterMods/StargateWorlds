@@ -3,7 +3,9 @@ package ml.sgworlds.world.gen.structure.deserthold;
 import java.util.List;
 import java.util.Random;
 
-import ml.sgworlds.world.gen.StructureBuilder;
+import ml.core.world.structure.MLStructureComponent;
+import ml.core.world.structure.StructureBuilder;
+import ml.core.world.structure.WeightedComponent;
 import net.minecraft.block.Block;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
@@ -21,11 +23,11 @@ public class ComponentStartAbydos extends ComponentHoldStart {
 	
 	@Override
 	public void buildComponent(StructureComponent par1StructureComponent, List existingComponents, Random rnd) {
-		SGWInitialComponent ic = (SGWInitialComponent)par1StructureComponent;
+		InitialStructureComponent ic = (InitialStructureComponent)par1StructureComponent;
 		this.componentNorth = true;
 		
 		for (int i=0; i<2; i++) {
-			ComponentHallPassage hall = new ComponentHallPassage(getAbsOffset(0, 0, -9 - 8*i), this.rotation);
+			ComponentHallStraight hall = new ComponentHallStraight(getAbsOffset(0, 0, -9 - 8*i), this.rotation);
 			hall.componentSouth = hall.componentNorth = true;
 			existingComponents.add(hall);
 			//ic.unbuiltComponents.add(hall);
@@ -72,4 +74,10 @@ public class ComponentStartAbydos extends ComponentHoldStart {
 		return true;
 	}
 
+	@Override
+	public MLStructureComponent getNextStructureComponent(MLStructureComponent prev, int oRotation, List<WeightedComponent> componentWeights, List<StructureComponent> existingComponents, ChunkCoordinates entrancePosition, Random rnd) {
+		MLStructureComponent next = super.getNextStructureComponent(prev, oRotation, componentWeights, existingComponents, entrancePosition, rnd);
+		// TODO Check if next is inside the pyramid
+		return next;
+	}
 }

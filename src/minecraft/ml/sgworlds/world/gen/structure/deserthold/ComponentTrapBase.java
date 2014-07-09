@@ -2,7 +2,7 @@ package ml.sgworlds.world.gen.structure.deserthold;
 
 import java.util.Random;
 
-import ml.sgworlds.world.gen.StructureBuilder;
+import ml.core.world.structure.StructureBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChunkCoordinates;

@@ -3,7 +3,7 @@ package ml.sgworlds.world.gen.structure.deserthold;
 import java.util.List;
 import java.util.Random;
 
-import ml.sgworlds.world.gen.StructureBuilder;
+import ml.core.world.structure.StructureBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
@@ -22,9 +22,9 @@ public class ComponentHallSimple extends ComponentHallBase {
 	public void buildComponent(StructureComponent par1StructureComponent, List par2List, Random rnd) {
 		super.buildComponent(par1StructureComponent, par2List, rnd);
 		
-		SGWInitialComponent ic = (SGWInitialComponent)par1StructureComponent;
-		componentEast = ic.getNextStructureComponent(this, 1, ManagerDesertHold.holdRooms, par2List, getAbsOffset( 4, 0, 0), rnd) != null;
-		componentWest = ic.getNextStructureComponent(this, 3, ManagerDesertHold.holdRooms, par2List, getAbsOffset(-4, 0, 0), rnd) != null;
+		ComponentHoldStart ic = (ComponentHoldStart)par1StructureComponent;
+		componentEast = ic.getNextStructureComponent(this, 1, ic.roomWeightedComponents, par2List, getAbsOffset( 4, 0, 0), rnd) != null;
+		componentWest = ic.getNextStructureComponent(this, 3, ic.roomWeightedComponents, par2List, getAbsOffset(-4, 0, 0), rnd) != null;
 	}
 	
 	@Override
