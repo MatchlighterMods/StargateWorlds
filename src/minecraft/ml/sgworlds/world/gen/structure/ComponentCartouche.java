@@ -144,9 +144,9 @@ public class ComponentCartouche extends MLStructureComponent {
 //			}
 //		}
 		
-		b.fillArea(-1, 1,-7, 1, 4,-7, Registry.delegatorBlock, Registry.blockEngraved.getMetaId()+1);
-		b.fillArea(-2, 1,-6,-2, 3,-6, Registry.delegatorBlock, Registry.blockEngraved.getMetaId()+1);
-		b.fillArea( 2, 1,-6, 2, 3,-6, Registry.delegatorBlock, Registry.blockEngraved.getMetaId()+1);
+		b.fillArea(-1, 1,-7, 1, 4,-7, Registry.delegatorDecorative, Registry.blockEngraved.getMetaId()+1);
+		b.fillArea(-2, 1,-6,-2, 3,-6, Registry.delegatorDecorative, Registry.blockEngraved.getMetaId()+1);
+		b.fillArea( 2, 1,-6, 2, 3,-6, Registry.delegatorDecorative, Registry.blockEngraved.getMetaId()+1);
 		
 		return true;
 	}

@@ -8,7 +8,6 @@ import ml.core.item.ItemDelegator;
 import ml.core.network.PacketHandler;
 import ml.sgworlds.block.DelegateEngraved;
 import ml.sgworlds.block.tile.TileEntityEngraved;
-import ml.sgworlds.item.DelegateAncientBook;
 import ml.sgworlds.item.DelegateJournal;
 import ml.sgworlds.item.DelegateTablet;
 import ml.sgworlds.network.packet.PacketRegisterDimensions;
@@ -24,22 +23,21 @@ public class Registry {
 	public static SGWorldsConfig config;
 	
 	// Blocks //
-	public static BlockDelegator<DelegateBlock> delegatorBlock;
+	public static BlockDelegator<DelegateBlock> delegatorDecorative;
 	public static DelegateEngraved blockEngraved;
 	
 	public static void registerBlocks() {
-		delegatorBlock = new BlockDelegator<DelegateBlock>(config.stargateWorldsBlockId, Material.rock, new DelegateBlock());
-		delegatorBlock.setCreativeTab(Registry.creativeTab);
-		GameRegistry.registerBlock(delegatorBlock, ItemBlockDelegate.class, "delegatingB");
+		delegatorDecorative = new BlockDelegator<DelegateBlock>(config.decorativeBlockId, Material.rock, new DelegateBlock());
+		delegatorDecorative.setCreativeTab(Registry.creativeTab);
+		GameRegistry.registerBlock(delegatorDecorative, ItemBlockDelegate.class, "delegateDecorative");
 		
 		blockEngraved = new DelegateEngraved();
-		delegatorBlock.addSubBlock(1, blockEngraved);
+		delegatorDecorative.addSubBlock(0, blockEngraved);
 	}
 
 	// Items //
 	public static ItemDelegator<DelegateItem> delegatorItem;
 	public static DelegateTablet itemTablet;
-	public static DelegateAncientBook itemBookTranslate;
 	public static DelegateJournal itemBookJournal;
 
 	public static void registerItems() {
@@ -49,9 +47,6 @@ public class Registry {
 		
 		itemTablet = new DelegateTablet();
 		delegatorItem.addSubItem(1, itemTablet);
-		
-		itemBookTranslate = new DelegateAncientBook();
-		delegatorItem.addSubItem(2, itemBookTranslate);
 		
 		itemBookJournal = new DelegateJournal();
 		delegatorItem.addSubItem(3, itemBookJournal);

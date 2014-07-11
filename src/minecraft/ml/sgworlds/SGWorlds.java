@@ -46,6 +46,7 @@ import ml.sgworlds.world.gen.structure.ComponentCartouche;
 import ml.sgworlds.world.gen.structure.OverworldStructureGen;
 import ml.sgworlds.world.gen.structure.ScatteredStructureStart;
 import ml.sgworlds.world.gen.structure.city.CityStructureStart;
+import ml.sgworlds.world.gen.structure.deserthold.DesertHoldComponents;
 import ml.sgworlds.world.gen.temples.TempleLibrary;
 import ml.sgworlds.world.gen.temples.TemplePillars;
 import ml.sgworlds.world.gen.temples.TemplePyramid;
@@ -147,6 +148,8 @@ public class SGWorlds {
 		
 		MapGenStructureIO.func_143034_b(ScatteredStructureStart.class, "ScatStart");
 		MapGenStructureIO.func_143031_a(ComponentCartouche.class, "SGWCartouche");
+		
+		DesertHoldComponents.registerComponentClasses();
 		
 		WorldGenHandler.instance.registerGenerator("SGWorlds", new OverworldStructureGen());
 	}

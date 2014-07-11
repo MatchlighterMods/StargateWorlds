@@ -8,4 +8,5 @@ item.book_translate.name=The Ancients
 item.journal.name=Journal
 
 # Blocks
-tile.engraved.name=Engraved Wall
+tile.engraved_row.name=Engraved Row
+tile.engraved_column.name=Engraved Column

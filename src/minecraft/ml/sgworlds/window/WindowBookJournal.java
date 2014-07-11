@@ -1,5 +1,6 @@
 package ml.sgworlds.window;
 
+import ml.sgworlds.book.page.AlphabetPage;
 import ml.sgworlds.book.page.BlankPage;
 import ml.sgworlds.book.page.TitlePage;
 import net.minecraft.entity.player.EntityPlayer;
@@ -21,8 +22,17 @@ public class WindowBookJournal extends WindowBook {
 		addPage(new BlankPage(this));
 		addPage(new TitlePage(this, "Personal Journal", tag.getString("owner")));
 		
+		// History
+		addChapter("History", "The Ancients, or more correctly, the Alterans, were an ancient race of people that evolved on this planet long before humans did. " +
+				"", 0x3590FF);
+		
+		// Language
+		addChapter("Language", "The written language of the Ancients is quite similar to English in grammar and spelling. However, the alphabet is significantly different.", 0x35FF90);
+		
+		addPage(new AlphabetPage(this));
+		
 		// Worlds
-		addChapter("Worlds", "", 0x3590FF);
+		addChapter("Worlds", "", 0xFF3590);
 		// TODO
 	}
 
