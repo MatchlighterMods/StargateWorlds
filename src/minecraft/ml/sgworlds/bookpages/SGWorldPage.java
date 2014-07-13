@@ -1,6 +1,7 @@
-package ml.sgworlds.book.page;
+package ml.sgworlds.bookpages;
 
-import ml.sgworlds.window.WindowBook;
+import ml.core.book.Page;
+import ml.core.book.WindowBook;
 import ml.sgworlds.world.SGWorldData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -23,9 +24,12 @@ public class SGWorldPage extends Page {
 	@Override
 	public void drawPage(Minecraft mc, int x, int y, int w, int h, float partialTick) {
 		FontRenderer fr = getFontRenderer();
-		y+= drawLine(wData.getDisplayName(), x, y, w);
+		String tl = wData.getDisplayName();
+		if (!tl.equals(wData.getDesignation())) tl += " (" + wData.getDesignation() + ")";
+		
+		y+= drawLine(tl, x, y, w);
 		y+=fr.FONT_HEIGHT/2;
-		y+= drawLine("Designation: " + wData.getDesignation(), x, y, w);
+		//y+= drawLine("Designation: " + wData.getDesignation(), x, y, w);
 		
 		if (wData.getPrimaryAddress() != null)
 			y+= drawLine("Address: " + wData.getPrimaryAddress().toString(), x, y, w);

@@ -75,9 +75,9 @@ public class ComponentStartAbydos extends ComponentHoldStart {
 	}
 
 	@Override
-	public MLStructureComponent getNextStructureComponent(MLStructureComponent prev, int oRotation, List<WeightedComponent> componentWeights, List<StructureComponent> existingComponents, ChunkCoordinates entrancePosition, Random rnd) {
-		MLStructureComponent next = super.getNextStructureComponent(prev, oRotation, componentWeights, existingComponents, entrancePosition, rnd);
-		// TODO Check if next is inside the pyramid
+	protected MLStructureComponent createComponent(WeightedComponent wComponent, MLStructureComponent prev, int nRotation, List<StructureComponent> existingComponents, ChunkCoordinates entrancePosition, Random rnd) {
+		MLStructureComponent next = super.createComponent(wComponent, prev, nRotation, existingComponents, entrancePosition, rnd);
+		// TODO Check if next is contained within the pyramid
 		return next;
 	}
 }

@@ -118,7 +118,8 @@ public class SGWorldData implements IWorldData {
 	public void writeToNBT(NBTTagCompound nbt) {
 		nbt.setString("designation", designation);
 		nbt.setString("name", name);
-		nbt.setString("address", primaryAddress.toString());
+		if (primaryAddress != null)
+			nbt.setString("address", primaryAddress.toString());
 		if (gateLocation != null) {
 			nbt.setInteger("gateX", gateLocation.x);
 			nbt.setInteger("gateY", gateLocation.y);

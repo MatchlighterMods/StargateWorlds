@@ -3,6 +3,7 @@ package ml.sgworlds.world.gen.structure.deserthold;
 import java.util.List;
 import java.util.Random;
 
+import ml.core.world.structure.MLStructureComponent;
 import ml.core.world.structure.StructureBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.util.ChunkCoordinates;
@@ -17,6 +18,18 @@ public abstract class ComponentHallBase extends ComponentDesertHold {
 	public ComponentHallBase(ChunkCoordinates position, int rotation) {
 		super(position, rotation);
 		setLocalBoundingBox(-3, -1, -4, 3, 4, 4);
+	}
+	
+	@Override
+	public MLStructureComponent constructComponent(MLStructureComponent previous, int rotation, ChunkCoordinates entranceCoords, Random rnd) {
+		super.constructComponent(previous, rotation, entranceCoords, rnd);
+		
+		if (rotation == previous.rotation && previous instanceof ComponentHallBase) {
+			this.position = getAbsOffset(0, 0, 1);
+			refreshBoundingBox();
+		}
+		
+		return this;
 	}
 	
 	@Override

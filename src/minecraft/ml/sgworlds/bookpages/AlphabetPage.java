@@ -1,7 +1,8 @@
-package ml.sgworlds.book.page;
+package ml.sgworlds.bookpages;
 
+import ml.core.book.Page;
+import ml.core.book.WindowBook;
 import ml.sgworlds.client.ClientProxy;
-import ml.sgworlds.window.WindowBook;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 

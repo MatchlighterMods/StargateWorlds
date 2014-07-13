@@ -62,7 +62,7 @@ public class SGWorldManager implements IDynamicWorldLoader {
 	
 	public SGWorldData getWorldData(String designation) {
 		for (SGWorldData data : worlds) {
-			if (data.getDesignation() == designation) {
+			if (designation.equals(data.getDesignation())) {
 				return data;
 			}
 		}
