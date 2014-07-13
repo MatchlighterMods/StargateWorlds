@@ -1,5 +1,6 @@
 package ml.sgworlds;
 
+import stargatetech2.api.StargateTechAPI;
 import ml.core.block.BlockDelegator;
 import ml.core.block.DelegateBlock;
 import ml.core.block.ItemBlockDelegate;
@@ -14,6 +15,7 @@ import ml.sgworlds.network.packet.PacketRegisterDimensions;
 import ml.sgworlds.network.packet.PacketWorldData;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -69,7 +71,7 @@ public class Registry {
 
 	// Recipes //
 	public static void registerRecipes() {
-
+		GameRegistry.addShapelessRecipe(itemBookJournal.createStack(1), Item.book, StargateTechAPI.api().getStackManager().get("naquadahPlate", 1));
 	}
 
 }

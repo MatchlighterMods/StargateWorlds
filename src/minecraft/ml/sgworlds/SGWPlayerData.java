@@ -1,7 +1,6 @@
 package ml.sgworlds;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashSet;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -12,7 +11,7 @@ import net.minecraftforge.common.DimensionManager;
 
 public class SGWPlayerData extends WorldSavedData {
 
-	public List<String> discoveredWorlds = new ArrayList<String>();
+	public LinkedHashSet<String> discoveredWorlds = new LinkedHashSet<String>();
 	
 	public SGWPlayerData(String par1Str) {
 		super(par1Str);
@@ -34,6 +33,7 @@ public class SGWPlayerData extends WorldSavedData {
 		for (String des : discoveredWorlds) {
 			tglst.appendTag(new NBTTagString("", des));
 		}
+		tag.setTag("discoveredWorlds", tglst);
 	}
 
 	public static SGWPlayerData getPlayerData(String pln) {
@@ -42,7 +42,7 @@ public class SGWPlayerData extends WorldSavedData {
 		WorldSavedData wsd = ms.loadData(SGWPlayerData.class, fln);
 		if (wsd == null) {
 			wsd = new SGWPlayerData(fln);
-			wsd.markDirty();
+			//wsd.markDirty();
 			ms.setData(fln, wsd);
 		}
 		return (SGWPlayerData)wsd;

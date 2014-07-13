@@ -2,7 +2,9 @@ package ml.sgworlds;
 
 import ml.sgworlds.world.SGWorldManager;
 import ml.sgworlds.world.dimension.SGWorldProvider;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import stargatetech2.api.stargate.StargateEvent;
 
@@ -18,6 +20,18 @@ public class EventListener {
 		// Make gates created by SGWorlds unbreakable.
 		if (evt.world.provider instanceof SGWorldProvider &&
 				SGWorldManager.instance.getWorldData(evt.address) != null) evt.setCanceled(true);
+	}
+	
+	@ForgeSubscribe
+	public void entityJoinedWorld(EntityJoinWorldEvent evt) {
+		if (evt.entity instanceof EntityPlayer && !evt.world.isRemote) {
+			if (evt.world.provider instanceof SGWorldProvider) {
+				SGWorldProvider sgwp = (SGWorldProvider)evt.world.provider;
+				EntityPlayer epl = (EntityPlayer)evt.entity;
+				SGWPlayerData pld = SGWPlayerData.getPlayerData(epl.username);
+				if (pld.discoveredWorlds.add(sgwp.getWorldData().getDesignation())) pld.markDirty();
+			}
+		}
 	}
 	
 //	private IGateTempleGenerator tgen = new TemplePyramid();

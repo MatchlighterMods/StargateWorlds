@@ -72,6 +72,7 @@ import cpw.mods.fml.common.event.FMLInterModComms.IMCEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerAboutToStartEvent;
+import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.event.FMLServerStoppedEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
@@ -101,7 +102,6 @@ public class SGWorlds {
 		Registry.registerTileEntities();
 		Registry.registerBlocks();
 		Registry.registerItems();
-		Registry.registerRecipes();
 
 		DimensionManager.registerProviderType(Registry.config.worldProviderId, SGWorldProvider.class, false);
 
@@ -156,7 +156,7 @@ public class SGWorlds {
 
 	@EventHandler
 	public void PostInit(FMLPostInitializationEvent e) {
-
+		Registry.registerRecipes();
 	}
 
 	@EventHandler
@@ -173,6 +173,11 @@ public class SGWorlds {
 		SGWorldManager.instance = null;
 	}
 
+	@EventHandler
+	public void serverStarting(FMLServerStartingEvent evt) {
+		evt.registerServerCommand(new CommandSGW());
+	}
+	
 	@EventHandler
 	public void handleIMC(IMCEvent evt) {
 

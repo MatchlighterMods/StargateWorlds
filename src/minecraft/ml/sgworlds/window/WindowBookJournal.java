@@ -9,13 +9,12 @@ import ml.core.item.StackUtils;
 import ml.sgworlds.SGWPlayerData;
 import ml.sgworlds.bookpages.AlphabetPage;
 import ml.sgworlds.bookpages.SGWorldPage;
+import ml.sgworlds.item.DelegateJournal;
 import ml.sgworlds.world.SGWorldData;
 import ml.sgworlds.world.SGWorldManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.world.storage.MapStorage;
-import net.minecraftforge.common.DimensionManager;
 import cpw.mods.fml.relauncher.Side;
 
 public class WindowBookJournal extends WindowBook {
@@ -30,11 +29,18 @@ public class WindowBookJournal extends WindowBook {
 		addPage(new TitlePage(this, "Personal Journal", StackUtils.getTag(player.getHeldItem(), "", "owner")));
 		
 		// History
-		addChapter("History", "The Ancients, or more correctly, the Alterans, were an ancient race of people that evolved on this planet long before humans did. " +
-				"", 0x3590FF);
+		addChapter("History", "I have discovered remnants of an ancient race of people. " +
+				"I believe that their formal name was \"Alteran\", but for now I will refer to them as \"Ancients\". " +
+				"From the information I have gathered, I believe that they were the first humanoid evolution that occured on our planet, " +
+				"but their civilization was destroyed by a virulent plague long before humans evolved. " +
+				"I have found some vague references to a lost city where some of the Ancients were able to escape the plague, but I haven't found any real evidence.\n\n" +
+				"The Ancients appear to have been a very advanced race in terms of technology. So advanced, in fact, that " +
+				"I believe that they are the true creators of the Stargates. ", 0x3590FF);
 		
 		// Language
-		addChapter("Language", "The written language of the Ancients is quite similar to English in grammar and spelling. However, the alphabet is significantly different.", 0x35FF90);
+		addChapter("Language", "With some effort, I have been able to decipher the language of the ancients. " +
+				"Their written language seems to be similar to English in spelling, grammar, and mechanics, but the alphabet is significantly different: " +
+				"", 0x35FF90);
 		
 		addPage(new AlphabetPage(this));
 		
@@ -46,26 +52,32 @@ public class WindowBookJournal extends WindowBook {
 	public void initControls() {
 		super.initControls();
 		if (side == Side.SERVER) {
-			String pln = StackUtils.getTag(player.getHeldItem(), "", "owner");
+			NBTTagCompound ptag = new NBTTagCompound();
+			NBTTagList plst = new NBTTagList();
 			
-			MapStorage ms = DimensionManager.getWorld(0).mapStorage;
-			SGWPlayerData jsd = SGWPlayerData.getPlayerData(pln);
-			if (jsd != null) {
-				NBTTagCompound ptag = new NBTTagCompound();
-				NBTTagList plst = new NBTTagList();
-				
-				for (String des : jsd.discoveredWorlds) {
-					SGWorldData sgwd = SGWorldManager.instance.getWorldData(des);
-					if (sgwd != null) {
-						NBTTagCompound wtag = new NBTTagCompound();
-						sgwd.writeToNBT(wtag);
-						plst.appendTag(wtag);
+			if (DelegateJournal.isCreativeSpawned(player.getHeldItem())) {
+				for (SGWorldData sgwd : SGWorldManager.instance.worlds) {
+					NBTTagCompound wtag = new NBTTagCompound();
+					sgwd.writeToNBT(wtag);
+					plst.appendTag(wtag);
+				}
+			} else {
+				String pln = DelegateJournal.getOwnerName(player.getHeldItem());
+				if (pln != null) {
+					SGWPlayerData jsd = SGWPlayerData.getPlayerData(pln);
+					for (String des : jsd.discoveredWorlds) {
+						SGWorldData sgwd = SGWorldManager.instance.getWorldData(des);
+						if (sgwd != null) {
+							NBTTagCompound wtag = new NBTTagCompound();
+							sgwd.writeToNBT(wtag);
+							plst.appendTag(wtag);
+						}
 					}
 				}
-				
-				ptag.setTag("worlds", plst);
-				sendPacket(ptag, Side.CLIENT);
 			}
+			
+			ptag.setTag("worlds", plst);
+			sendPacket(ptag, Side.CLIENT);
 		}
 	}
 

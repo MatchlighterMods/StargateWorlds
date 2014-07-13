@@ -10,3 +10,16 @@ item.journal.name=Journal
 # Blocks
 tile.engraved_row.name=Engraved Row
 tile.engraved_column.name=Engraved Column
+
+# Commands
+command.sgw.usage=/sgw <discover, generate>
+command.sgw.discover.usage=Usage: <count, all, designation [designation...]>
+command.sgw.discover.success.count=You just discovered %d worlds!
+command.sgw.discover.success.all=You just discovered all worlds!
+command.sgw.discover.success.list=You just discovered %s!
+
+command.sgw.generate.usage=<count>
+command.sgw.generate.success=Generated data for %d worlds.
+command.sgw.generate.error.minmax=<count> must be between 1 and 50!
+
+command.sgw.help.usage=<topic>

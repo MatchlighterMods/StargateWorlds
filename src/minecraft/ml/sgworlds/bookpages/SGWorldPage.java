@@ -35,7 +35,7 @@ public class SGWorldPage extends Page {
 			y+= drawLine("Address: " + wData.getPrimaryAddress().toString(), x, y, w);
 		
 		y+=fr.FONT_HEIGHT;
-		y+= drawLine(wData.getDescription(3, 75, " "), x, y, w);
+		y+= drawLine(wData.getDescription(3, 100, " "), x, y, w);
 	}
 
 }
