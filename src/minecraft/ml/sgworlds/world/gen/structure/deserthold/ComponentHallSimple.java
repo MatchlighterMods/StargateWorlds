@@ -5,7 +5,6 @@ import java.util.Random;
 
 import ml.core.world.structure.StructureBuilder;
 import net.minecraft.block.Block;
-import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
@@ -13,10 +12,6 @@ import net.minecraft.world.gen.structure.StructureComponent;
 public class ComponentHallSimple extends ComponentHallBase {
 
 	public ComponentHallSimple() {}
-	
-	public ComponentHallSimple(ChunkCoordinates position, int rotation) {
-		super(position, rotation);
-	}
 	
 	@Override
 	public void buildComponent(StructureComponent par1StructureComponent, List par2List, Random rnd) {

@@ -13,10 +13,7 @@ import net.minecraft.world.gen.structure.StructureComponent;
 
 public abstract class ComponentHallBase extends ComponentDesertHold {
 
-	public ComponentHallBase() {}
-	
-	public ComponentHallBase(ChunkCoordinates position, int rotation) {
-		super(position, rotation);
+	public ComponentHallBase() {
 		setLocalBoundingBox(-3, -1, -4, 3, 4, 4);
 	}
 	
@@ -40,6 +37,9 @@ public abstract class ComponentHallBase extends ComponentDesertHold {
 	
 	@Override
 	protected boolean addComponentParts(StructureBuilder b, World world, Random rand, StructureBoundingBox chunkBox) {
+		
+		b.fillArea(-3, 0, -4, 3, 4, 4, null, 0);
+		
 		// Floor
 		b.fillArea(-3, 0, -4, 3, 0, 4, Block.sandStone, 2);
 		

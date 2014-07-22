@@ -5,7 +5,6 @@ import java.util.Random;
 import ml.core.world.structure.StructureBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 
@@ -13,10 +12,8 @@ public abstract class ComponentTrapBase extends ComponentDesertHold {
 
 	protected boolean placedChest1;
 	
-	public ComponentTrapBase() {}
-	
-	public ComponentTrapBase(ChunkCoordinates position, int rotation) {
-		super(position, rotation);
+	public ComponentTrapBase() {
+		setLocalBoundingBox(-4, -2, -7, 4, 20, 0);
 	}
 	
 	@Override
@@ -39,7 +36,8 @@ public abstract class ComponentTrapBase extends ComponentDesertHold {
 		b.fillArea(-2, 4, -5, 2, 4, 0, Block.sandStone, 2);
 		
 		// Inside
-		b.fillArea(-2, 1, -5, 2, 3, 0, null, 0);
+		b.fillArea(-2, 1, -5, 2, 2, 0, null, 0);
+		b.fillArea(-1, 3, -4, 1, 3, 1, null, 0);
 		
 		// Pillars
 		b.symmetryX = true;

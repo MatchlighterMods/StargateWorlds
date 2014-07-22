@@ -1,5 +1,9 @@
 package ml.sgworlds.world.gen.structure.deserthold;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import ml.core.world.structure.WeightedComponent;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 
 public class DesertHoldComponents {
@@ -25,4 +29,25 @@ public class DesertHoldComponents {
 		MapGenStructureIO.func_143031_a(ComponentPyramidCenter.class,	"DHPC");
 	}
 	
+	public static List<WeightedComponent> getHallWeights() {
+		List<WeightedComponent> components = new ArrayList<WeightedComponent>();
+		
+		components.add(new WeightedComponent(ComponentHallHub.class, 100, 0));
+		components.add(new WeightedComponent(ComponentHallSimple.class, 100, 0));
+		components.add(new WeightedComponent(ComponentHallStraight.class, 100, 0));
+		components.add(new WeightedComponent(ComponentHallPassage.class, 50, 0));
+		
+		return components;
+	}
+	
+	public static List<WeightedComponent> getRoomWeights() {
+		List<WeightedComponent> components = new ArrayList<WeightedComponent>();
+		
+		components.add(new WeightedComponent(ComponentMonsterRoom.class, 50, 0));
+		components.add(new WeightedComponent(ComponentTrapDispenser.class, 100, 0));
+		components.add(new WeightedComponent(ComponentTrapSandPit.class, 100, 0));
+		components.add(new WeightedComponent(ComponentTrapTNT.class, 100, 0));
+		
+		return components;
+	}
 }

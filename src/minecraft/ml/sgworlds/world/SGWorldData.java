@@ -65,9 +65,8 @@ public class SGWorldData implements IWorldData {
 		IStaticWorld statw = getStaticWorld();
 		if (statw != null && statw.getDescription() != null) return statw.getDescription();
 		
-		StringBuilder s = new StringBuilder(getPrimaryAddress() != null ? getPrimaryAddress().toString() : "");
+		StringBuilder s = new StringBuilder();
 		Random r = new Random();
-		s.append(sep + getDisplayName());
 		
 		for (WorldFeature feature : getFeatures(FeatureType.ALL)) {
 			String desc = feature.getDescription(detail);

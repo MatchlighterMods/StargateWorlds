@@ -5,18 +5,14 @@ import java.util.Random;
 
 import ml.core.world.structure.StructureBuilder;
 import net.minecraft.block.Block;
-import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
 
 public class ComponentHallPassage extends ComponentHallBase {
 
-	public ComponentHallPassage() {}
-	
-	public ComponentHallPassage(ChunkCoordinates position, int rotation) {
-		super(position, rotation);
-		setLocalBoundingBox(-4, -1, -4, 4, 4, 4);
+	public ComponentHallPassage() {
+		setLocalBoundingBox(-4, -2, -4, 4, 4, 4);
 	}
 	
 	@Override

@@ -10,13 +10,13 @@ import net.minecraft.util.ChunkCoordinates;
 public abstract class ComponentHoldStart extends InitialStructureComponent {
 
 	// TODO
-	public List<WeightedComponent> roomWeightedComponents;
-	public List<WeightedComponent> hallWeightedComponents;
+	public List<WeightedComponent> roomWeightedComponents = DesertHoldComponents.getRoomWeights();
+	public List<WeightedComponent> hallWeightedComponents = DesertHoldComponents.getHallWeights();
 	
 	public ComponentHoldStart() {}
 	
 	public ComponentHoldStart(ChunkCoordinates position, int rotation) {
-		super(position, rotation, 50);
+		super(position, rotation, 200);
 	}
 	
 }

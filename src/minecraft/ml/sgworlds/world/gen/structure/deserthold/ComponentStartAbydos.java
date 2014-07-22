@@ -14,7 +14,9 @@ import net.minecraft.world.gen.structure.StructureComponent;
 
 public class ComponentStartAbydos extends ComponentHoldStart {
 
-	public ComponentStartAbydos() {}
+	public ComponentStartAbydos() {
+		setLocalBoundingBox(-4, -1, -4, 4, 4, 4);
+	}
 	
 	public ComponentStartAbydos(ChunkCoordinates position, int rotation) {
 		super(position, rotation);
@@ -27,13 +29,15 @@ public class ComponentStartAbydos extends ComponentHoldStart {
 		this.componentNorth = true;
 		
 		for (int i=0; i<2; i++) {
-			ComponentHallStraight hall = new ComponentHallStraight(getAbsOffset(0, 0, -9 - 8*i), this.rotation);
+			ComponentHallStraight hall = new ComponentHallStraight();
+			hall.constructComponent(ic, rotation, getAbsOffset(0, 0, -5 - 8*i), rnd);
 			hall.componentSouth = hall.componentNorth = true;
 			existingComponents.add(hall);
 			//ic.unbuiltComponents.add(hall);
 		}
 		
-		ComponentPyramidCenter center = new ComponentPyramidCenter(getAbsOffset(0, 0, -24), rotation);
+		ComponentPyramidCenter center = new ComponentPyramidCenter();
+		center.constructComponent(ic, rotation, getAbsOffset(0, 0, -22), rnd);
 		center.componentSouth = true;
 		existingComponents.add(center);
 		ic.unbuiltComponents.add(center);

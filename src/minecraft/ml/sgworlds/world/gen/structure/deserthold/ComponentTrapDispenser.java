@@ -4,16 +4,13 @@ import java.util.Random;
 
 import ml.core.world.structure.StructureBuilder;
 import net.minecraft.block.Block;
-import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 
 public class ComponentTrapDispenser extends ComponentTrapBase {
 
-	public ComponentTrapDispenser() {}
-	
-	public ComponentTrapDispenser(ChunkCoordinates position, int rotation) {
-		super(position, rotation);
+	public ComponentTrapDispenser() {
+		setLocalBoundingBox(-5, -2, -8, 5, 6, 0);
 	}
 	
 	@Override
@@ -28,9 +25,9 @@ public class ComponentTrapDispenser extends ComponentTrapBase {
 		b.setBlockAt(0,-1,-5, Block.redstoneWire, 0);
 		b.setBlockAt(0,-1,-6, Block.redstoneRepeaterIdle, b.getRotatedMeta(Block.redstoneRepeaterIdle, 0));
 		
-		b.setBlockAt(0, 0,-7, Block.torchRedstoneActive, 0);
-		b.setBlockAt(0, 2,-7, Block.torchRedstoneIdle, 0);
-		b.setBlockAt(0, 4,-6, Block.torchRedstoneActive, b.getRotatedMeta(Block.torchRedstoneActive, 2));
+		b.setBlockAt(0, 0,-7, Block.torchRedstoneActive, 5);
+		b.setBlockAt(0, 2,-7, Block.torchRedstoneIdle, 5);
+		b.setBlockAt(0, 3,-6, Block.torchRedstoneActive, b.getRotatedMeta(Block.torchRedstoneActive, 2));
 		
 		b.setBlockAt( 3, 3,-4, Block.torchRedstoneIdle, b.getRotatedMeta(Block.torchRedstoneIdle, 1));
 		b.setBlockAt(-3, 3,-4, Block.torchRedstoneIdle, b.getRotatedMeta(Block.torchRedstoneIdle, 3));
@@ -39,6 +36,7 @@ public class ComponentTrapDispenser extends ComponentTrapBase {
 		
 		b.symmetryX = true;
 		// Pistons
+		b.setBlockAt(3, 4,-2, Block.sandStone, 2);
 		b.setBlockAt(3, 4,-1, Block.pistonStickyBase, 0);
 		b.setBlockAt(3, 4,-3, Block.pistonStickyBase, 0);
 		b.setBlockAt(3, 3,-1, null, 0);

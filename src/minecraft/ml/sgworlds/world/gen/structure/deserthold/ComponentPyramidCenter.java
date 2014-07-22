@@ -5,17 +5,14 @@ import java.util.Random;
 
 import ml.core.world.structure.StructureBuilder;
 import net.minecraft.block.Block;
-import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
 
 public class ComponentPyramidCenter extends ComponentDesertHold {
 
-	public ComponentPyramidCenter() {}
-	
-	public ComponentPyramidCenter(ChunkCoordinates position, int rotation) {
-		super(position, rotation);
+	public ComponentPyramidCenter() {
+		setLocalBoundingBox(-6, 0, -6, 6, 9, 6);
 	}
 	
 	@Override
@@ -23,15 +20,15 @@ public class ComponentPyramidCenter extends ComponentDesertHold {
 		ComponentHoldStart ic = (ComponentHoldStart)par1StructureComponent;
 		
 		this.componentNorth = ic.getNextStructureComponent(this, 0, ic.hallWeightedComponents, par2List, getAbsOffset(0, 0,-7), rnd) != null;
-		this.componentEast = ic.getNextStructureComponent(this, 0, ic.hallWeightedComponents, par2List, getAbsOffset( 7, 0, 0), rnd) != null;
-		this.componentWest = ic.getNextStructureComponent(this, 0, ic.hallWeightedComponents, par2List, getAbsOffset(-7, 0, 0), rnd) != null;
+		this.componentEast = ic.getNextStructureComponent(this, 1, ic.hallWeightedComponents, par2List, getAbsOffset( 7, 0, 0), rnd) != null;
+		this.componentWest = ic.getNextStructureComponent(this, 3, ic.hallWeightedComponents, par2List, getAbsOffset(-7, 0, 0), rnd) != null;
 	}
 	
 	@Override
 	protected boolean addComponentParts(StructureBuilder b, World world, Random rand, StructureBoundingBox chunkBox) {
 		
 		// Clear
-		b.fillArea(-6, 0, -6, 6, 0, 6, null, 0);
+		b.fillArea(-6, 0, -6, 6, 6, 6, null, 0);
 		
 		// Floor
 		b.fillArea(-6, 0, -6, 6, 0, 6, Block.sandStone, 2);
@@ -50,10 +47,10 @@ public class ComponentPyramidCenter extends ComponentDesertHold {
 		b.setBlockAt(0, 0, 4, Block.stainedClay, 1);
 		b.setBlockAt(0, 0, 5, Block.stainedClay,14);
 		
-		b.setBlockAt(3, 0, 3, Block.torchWood, 0);
+		b.setBlockAt(3, 1, 3, Block.torchWood, 0);
 		
 		// Ceiling / Walls
-		b.wallArea  (-6, 1, -6, 6, 4, 6, Block.sandStone, 2);
+		b.wallArea  (-6, 1, -6, 6, 4, 6, true, false, true, Block.sandStone, 2);
 		b.borderArea(-5, 5, -5, 5, 5, 5, Block.sandStone, 2);
 		b.borderArea(-4, 6, -4, 4, 6, 4, Block.sandStone, 2);
 		b.borderArea(-3, 7, -3, 3, 7, 3, Block.sandStone, 2);

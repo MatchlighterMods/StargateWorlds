@@ -4,16 +4,13 @@ import java.util.Random;
 
 import ml.core.world.structure.StructureBuilder;
 import net.minecraft.block.Block;
-import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 
 public class ComponentTrapSandPit extends ComponentTrapBase {
 
-	public ComponentTrapSandPit() {}
-	
-	public ComponentTrapSandPit(ChunkCoordinates position, int rotation) {
-		super(position, rotation);
+	public ComponentTrapSandPit() {
+		setLocalBoundingBox(-4, -2, -8, 4, 20, 0);
 	}
 	
 	@Override
