@@ -1,14 +1,11 @@
 package ml.sgworlds.client;
 
 import ml.sgworlds.CommonProxy;
-import ml.sgworlds.block.tile.TileEntityEngraved;
-import ml.sgworlds.client.render.TEEngravedRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.resources.ReloadableResourceManager;
 import net.minecraft.util.ResourceLocation;
 import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.client.registry.ClientRegistry;
 
 public class ClientProxy extends CommonProxy {
 
@@ -32,8 +29,6 @@ public class ClientProxy extends CommonProxy {
 			}
 		};
 		((ReloadableResourceManager)mc.getResourceManager()).registerReloadListener(fontRendererAncient);
-		
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityEngraved.class, new TEEngravedRenderer());
 		
 	}
 }

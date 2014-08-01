@@ -12,7 +12,7 @@ import net.minecraft.world.gen.structure.StructureComponent;
 public class ComponentHallPassage extends ComponentHallBase {
 
 	public ComponentHallPassage() {
-		setLocalBoundingBox(-4, -2, -4, 4, 4, 4);
+		setLocalBoundingBox(-5, -2, -4, 5, 4, 4);
 	}
 	
 	@Override
@@ -20,8 +20,8 @@ public class ComponentHallPassage extends ComponentHallBase {
 		super.buildComponent(par1StructureComponent, par2List, rnd);
 		
 		ComponentHoldStart ic = (ComponentHoldStart)par1StructureComponent;
-		componentEast = ic.getNextStructureComponent(this, 1, ic.roomWeightedComponents, par2List, getAbsOffset( 5, 0, 0), rnd) != null;
-		componentWest = ic.getNextStructureComponent(this, 3, ic.roomWeightedComponents, par2List, getAbsOffset(-5, 0, 0), rnd) != null;
+		componentEast = ic.getNextStructureComponent(this, 1, ic.roomWeightedComponents, par2List, getAbsOffset( 6, 0, 0), rnd) != null;
+		componentWest = ic.getNextStructureComponent(this, 3, ic.roomWeightedComponents, par2List, getAbsOffset(-6, 0, 0), rnd) != null;
 	}
 	
 	@Override

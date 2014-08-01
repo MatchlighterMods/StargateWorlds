@@ -1,15 +1,12 @@
 package ml.sgworlds.block;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import ml.core.block.DelegateBlock;
-import ml.sgworlds.block.tile.TileEntityEngraved;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
-import net.minecraft.world.World;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class DelegateEngraved extends DelegateBlock {
 
@@ -29,11 +26,11 @@ public class DelegateEngraved extends DelegateBlock {
 		return icons[meta & 3];
 	}
 	
-	@Override
-	public TileEntity createTileEntity(World world, int meta) {
-		TileEntityEngraved tee = new TileEntityEngraved();
-		return tee;
-	}
+//	@Override
+//	public TileEntity createTileEntity(World world, int meta) {
+//		TileEntityEngraved tee = new TileEntityEngraved();
+//		return tee;
+//	}
 	
 	@Override
 	public boolean hasTileEntity(int metadata) {

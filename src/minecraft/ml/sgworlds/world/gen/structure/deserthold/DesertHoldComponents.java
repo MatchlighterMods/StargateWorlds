@@ -15,6 +15,8 @@ public class DesertHoldComponents {
 		MapGenStructureIO.func_143031_a(ComponentHallStraight.class,	"DHHSt");
 		MapGenStructureIO.func_143031_a(ComponentHallSimple.class,		"DHHSm");
 		
+		MapGenStructureIO.func_143031_a(ComponentHallStairsUp.class,	"DHHSUp");
+		
 		// Rooms
 		MapGenStructureIO.func_143031_a(ComponentMonsterRoom.class,		"DHMR");
 		MapGenStructureIO.func_143031_a(ComponentTrapDispenser.class,	"DHTD");

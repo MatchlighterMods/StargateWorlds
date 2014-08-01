@@ -1,6 +1,5 @@
 package ml.sgworlds;
 
-import stargatetech2.api.StargateTechAPI;
 import ml.core.block.BlockDelegator;
 import ml.core.block.DelegateBlock;
 import ml.core.block.ItemBlockDelegate;
@@ -8,7 +7,6 @@ import ml.core.item.DelegateItem;
 import ml.core.item.ItemDelegator;
 import ml.core.network.PacketHandler;
 import ml.sgworlds.block.DelegateEngraved;
-import ml.sgworlds.block.tile.TileEntityEngraved;
 import ml.sgworlds.item.DelegateJournal;
 import ml.sgworlds.item.DelegateTablet;
 import ml.sgworlds.network.packet.PacketRegisterDimensions;
@@ -16,6 +14,7 @@ import ml.sgworlds.network.packet.PacketWorldData;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
+import stargatetech2.api.StargateTechAPI;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -56,7 +55,7 @@ public class Registry {
 
 	// TileEntities //
 	public static void registerTileEntities() {
-		GameRegistry.registerTileEntity(TileEntityEngraved.class, "TEEngraved");
+		
 	}
 
 	// Packets //
